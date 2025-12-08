@@ -9,11 +9,11 @@
  */
 {
   "sections": {
-    "swiper-slider": {
-      "type": "sheatera-hero-slider"
+    "elite-athletic-gear-megamenu": {
+      "type": "elite-athletic-gear-megamenu"
     }
   },
   "order": [
-    "swiper-slider",
+    "elite-athletic-gear-megamenu",
   ]
 }
