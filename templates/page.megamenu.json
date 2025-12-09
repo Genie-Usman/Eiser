@@ -1,19 +1,24 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "elite-athletic-gear-megamenu": {
-      "type": "elite-athletic-gear-megamenu"
+      "type": "elite-athletic-gear-megamenu",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "ORDERS SHIP WITHIN 1 BUSINESS DAY",
+        "announcement_bg": "#b91c1c",
+        "announcement_text_color": "#ffffff",
+        "header_top_bg": "#000000",
+        "header_top_text": "#ffffff",
+        "nav_bg": "#ffffff",
+        "nav_text": "#000000",
+        "main_menu": "elite-athletic-gear-menu",
+        "sidebar_title": "SHOP WITH CONFIDENCE!"
+      }
     }
   },
   "order": [
-    "elite-athletic-gear-megamenu",
+    "elite-athletic-gear-megamenu"
   ]
 }
