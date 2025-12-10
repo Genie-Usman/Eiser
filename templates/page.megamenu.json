@@ -29,21 +29,14 @@
     },
     "equus-now-megamenu": {
       "type": "equus-now-megamenu",
-      "settings": {
-        "logo_width": 120,
-        "main_menu": "main-menu",
-        "header_bg": "#ffffff",
-        "header_text": "#333333",
-        "accent_color": "#40bfb0",
-        "dropdown_bg": "#ffffff",
-        "sidebar_bg": "#f5f5f5"
-      },
       "blocks": {
         "dropdown_for_the_horse": {
           "type": "menu_dropdown",
           "settings": {
             "menu_title": "For The Horse",
+            "featured_image": "shopify://shop_images/b823b597933a0cf57b0c4aed8e6cb7ede9d25c3ec1320095a768092c628d17d6.jpg",
             "featured_title": "Gently Used Saddles",
+            "featured_link": "",
             "col1_title": "Saddles & Fittings",
             "col1_links": "Dressage Saddles|/collections/dressage-saddles\nHunter-Jumper Saddles|/collections/hunter-jumper-saddles\nGently Used Saddles|/collections/gently-used-saddles\nGirths|/collections/girths\nSaddle Accessories|/collections/saddle-accessories\nStirrup Irons & Pads|/collections/stirrup-irons-pads\nStirrup Leathers|/collections/stirrup-leathers",
             "col2_title": "Strap Goods",
@@ -59,12 +52,15 @@
           "settings": {
             "menu_title": "For The Rider",
             "featured_title": "Featured Apparel",
+            "featured_link": "",
             "col1_title": "Apparel",
             "col1_links": "Breeches|/collections/breeches\nShirts & Tops|/collections/shirts-tops\nJackets & Vests|/collections/jackets-vests\nShow Apparel|/collections/show-apparel",
             "col2_title": "Footwear",
             "col2_links": "Tall Boots|/collections/tall-boots\nPaddock Boots|/collections/paddock-boots\nHalf Chaps|/collections/half-chaps\nBoot Accessories|/collections/boot-accessories",
             "col3_title": "Helmets & Safety",
-            "col3_links": "Helmets|/collections/helmets\nSafety Vests|/collections/safety-vests\nGloves|/collections/gloves"
+            "col3_links": "Helmets|/collections/helmets\nSafety Vests|/collections/safety-vests\nGloves|/collections/gloves",
+            "col4_title": "",
+            "col4_links": ""
           }
         },
         "dropdown_for_the_barn": {
@@ -72,8 +68,15 @@
           "settings": {
             "menu_title": "For The Barn",
             "featured_title": "Barn Essentials",
+            "featured_link": "",
             "col1_title": "Barn Supplies",
-            "col1_links": "Buckets & Feeders|/collections/buckets-feeders\nBlankets & Sheets|/collections/blankets-sheets\nStable Supplies|/collections/stable-supplies"
+            "col1_links": "Buckets & Feeders|/collections/buckets-feeders\nBlankets & Sheets|/collections/blankets-sheets\nStable Supplies|/collections/stable-supplies",
+            "col2_title": "",
+            "col2_links": "",
+            "col3_title": "",
+            "col3_links": "",
+            "col4_title": "",
+            "col4_links": ""
           }
         }
       },
@@ -81,7 +84,17 @@
         "dropdown_for_the_horse",
         "dropdown_for_the_rider",
         "dropdown_for_the_barn"
-      ]
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/Modified_Logo.avif",
+        "logo_width": 120,
+        "main_menu": "equus-now-menu",
+        "header_bg": "#ffffff",
+        "header_text": "#333333",
+        "accent_color": "#40bfb0",
+        "dropdown_bg": "#ffffff",
+        "sidebar_bg": "#f5f5f5"
+      }
     }
   },
   "order": [
