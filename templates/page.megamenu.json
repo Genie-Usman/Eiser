@@ -26,9 +26,66 @@
         "sidebar_header_image": "shopify://shop_images/shop_with_confidence_1090x_f8fffb20-2ca5-40b3-89d0-8735f83fa7ea.webp",
         "sidebar_title": "SHOP WITH CONFIDENCE!"
       }
+    },
+    "equus-now-megamenu": {
+      "type": "equus-now-megamenu",
+      "settings": {
+        "logo_width": 120,
+        "main_menu": "main-menu",
+        "header_bg": "#ffffff",
+        "header_text": "#333333",
+        "accent_color": "#40bfb0",
+        "dropdown_bg": "#ffffff",
+        "sidebar_bg": "#f5f5f5"
+      },
+      "blocks": {
+        "dropdown_for_the_horse": {
+          "type": "menu_dropdown",
+          "settings": {
+            "menu_title": "For The Horse",
+            "featured_title": "Gently Used Saddles",
+            "col1_title": "Saddles & Fittings",
+            "col1_links": "Dressage Saddles|/collections/dressage-saddles\nHunter-Jumper Saddles|/collections/hunter-jumper-saddles\nGently Used Saddles|/collections/gently-used-saddles\nGirths|/collections/girths\nSaddle Accessories|/collections/saddle-accessories\nStirrup Irons & Pads|/collections/stirrup-irons-pads\nStirrup Leathers|/collections/stirrup-leathers",
+            "col2_title": "Strap Goods",
+            "col2_links": "Bridles|/collections/bridles\nBridle Parts|/collections/bridle-parts\nCustom Halters & Leads|/collections/custom-halters-leads\nHalters & Leads|/collections/halters-leads\nMartingales & Breastplates|/collections/martingales-breastplates\nPenn's Halters & Leads|/collections/penns-halters-leads\nReins|/collections/reins",
+            "col3_title": "Training Aids",
+            "col3_links": "Lunging Equipment|/collections/lunging-equipment\nSpurs & Spur Straps|/collections/spurs-spur-straps\nWhips, Bats & Crops|/collections/whips-bats-crops\nGeneral Training Aids|/collections/general-training-aids",
+            "col4_title": "Horse Bits",
+            "col4_links": "Bit Accessories|/collections/bit-accessories\nGerman Silver|/collections/german-silver\nEggbutt Bits|/collections/eggbutt-bits\nElevator & Gag Bits|/collections/elevator-gag-bits\nFull Cheek Bits|/collections/full-cheek-bits\nHappy Mouth Bits|/collections/happy-mouth-bits\nD-Ring Bits|/collections/d-ring-bits\nKimberwicke Bits|/collections/kimberwicke-bits\nLoose Ring Bits|/collections/loose-ring-bits\nPelham Bits|/collections/pelham-bits"
+          }
+        },
+        "dropdown_for_the_rider": {
+          "type": "menu_dropdown",
+          "settings": {
+            "menu_title": "For The Rider",
+            "featured_title": "Featured Apparel",
+            "col1_title": "Apparel",
+            "col1_links": "Breeches|/collections/breeches\nShirts & Tops|/collections/shirts-tops\nJackets & Vests|/collections/jackets-vests\nShow Apparel|/collections/show-apparel",
+            "col2_title": "Footwear",
+            "col2_links": "Tall Boots|/collections/tall-boots\nPaddock Boots|/collections/paddock-boots\nHalf Chaps|/collections/half-chaps\nBoot Accessories|/collections/boot-accessories",
+            "col3_title": "Helmets & Safety",
+            "col3_links": "Helmets|/collections/helmets\nSafety Vests|/collections/safety-vests\nGloves|/collections/gloves"
+          }
+        },
+        "dropdown_for_the_barn": {
+          "type": "menu_dropdown",
+          "settings": {
+            "menu_title": "For The Barn",
+            "featured_title": "Barn Essentials",
+            "col1_title": "Barn Supplies",
+            "col1_links": "Buckets & Feeders|/collections/buckets-feeders\nBlankets & Sheets|/collections/blankets-sheets\nStable Supplies|/collections/stable-supplies"
+          }
+        }
+      },
+      "block_order": [
+        "dropdown_for_the_horse",
+        "dropdown_for_the_rider",
+        "dropdown_for_the_barn"
+      ]
     }
   },
   "order": [
-    "elite-athletic-gear-megamenu"
+    "elite-athletic-gear-megamenu",
+    "equus-now-megamenu"
   ]
 }
