@@ -4,14 +4,38 @@
     "settings": [
       {
         "type": "header",
-        "content": "Header Settings"
+        "content": "Contact Bar"
       },
       {
+        "type": "checkbox",
+        "id": "show_contact_bar",
+        "label": "Show Contact Bar",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "contact_text",
+        "label": "Contact Bar Text",
+        "default": "CONTACT US 1-740-549-4959"
+      },
+      {
+        "type": "color",
+        "id": "contact_bar_bg",
+        "label": "Contact Bar Background",
+        "default": "#40bfb0"
+      }, {
+        "type": "color",
+        "id": "contact_bar_text",
+        "label": "Contact Bar Text Color",
+        "default": "#ffffff"
+      }, {
+        "type": "header",
+        "content": "Header Settings"
+      }, {
         "type": "image_picker",
         "id": "logo",
         "label": "Logo"
-      },
-      {
+      }, {
         "type": "range",
         "id": "logo_width",
         "min": 80,
@@ -20,13 +44,12 @@
         "unit": "px",
         "label": "Logo Width",
         "default": 120
-      },
-      {
+      }, {
         "type": "link_list",
         "id": "main_menu",
         "label": "Main Menu",
         "default": "main-menu",
-        "info": "Select 'equus-now-menu' from your Shopify admin"
+        "info": "Select your main navigation menu"
       }, {
         "type": "header",
         "content": "Colors"
@@ -54,38 +77,54 @@
         "type": "color",
         "id": "sidebar_bg",
         "label": "Left Sidebar Background",
-        "default": "#f5f5f5"
+        "default": "#ffffff"
       }
     ],
     "blocks": [
       {
-        "type": "menu_dropdown",
-        "name": "Menu Dropdown Config",
+        "type": "sidebar_item",
+        "name": "Sidebar Content",
         "settings": [
           {
-            "type": "text",
-            "id": "menu_title",
-            "label": "Parent Menu Title (Exact Match)",
-            "info": "e.g. 'For The Horse'"
-          },
-          {
             "type": "header",
-            "content": "Featured Image (Right Side)"
-          },
-          {
-            "type": "image_picker",
-            "id": "featured_image",
-            "label": "Featured Image"
+            "content": "Item Identification"
           },
           {
             "type": "text",
-            "id": "featured_title",
-            "label": "Featured Image Title",
-            "default": "Featured Product"
-          }, {
+            "id": "parent_menu",
+            "label": "Parent Menu Title",
+            "info": "Exact match, e.g., 'For The Horse'"
+          },
+          {
+            "type": "text",
+            "id": "sidebar_title",
+            "label": "Sidebar Item Title",
+            "info": "Exact match, e.g., 'Tack and Equipment'"
+          },
+          {
             "type": "url",
-            "id": "featured_link",
-            "label": "Featured Image Link"
+            "id": "sidebar_url",
+            "label": "Sidebar Item URL"
+          }, {
+            "type": "header",
+            "content": "Content Layout"
+          }, {
+            "type": "select",
+            "id": "content_type",
+            "label": "Content Type",
+            "options": [
+              {
+                "value": "columns",
+                "label": "Text Columns"
+              }, {
+                "value": "images",
+                "label": "Image Cards"
+              }, {
+                "value": "mixed",
+                "label": "Mixed (Columns + Featured Image)"
+              }
+            ],
+            "default": "columns"
           }, {
             "type": "header",
             "content": "Column 1"
@@ -97,7 +136,7 @@
             "type": "textarea",
             "id": "col1_links",
             "label": "Column 1 Links",
-            "info": "One link per line: Link Text|URL"
+            "info": "One per line: Link Text|URL"
           }, {
             "type": "header",
             "content": "Column 2"
@@ -108,8 +147,7 @@
           }, {
             "type": "textarea",
             "id": "col2_links",
-            "label": "Column 2 Links",
-            "info": "One link per line: Link Text|URL"
+            "label": "Column 2 Links"
           }, {
             "type": "header",
             "content": "Column 3"
@@ -120,8 +158,7 @@
           }, {
             "type": "textarea",
             "id": "col3_links",
-            "label": "Column 3 Links",
-            "info": "One link per line: Link Text|URL"
+            "label": "Column 3 Links"
           }, {
             "type": "header",
             "content": "Column 4"
@@ -132,8 +169,93 @@
           }, {
             "type": "textarea",
             "id": "col4_links",
-            "label": "Column 4 Links",
-            "info": "One link per line: Link Text|URL"
+            "label": "Column 4 Links"
+          }, {
+            "type": "header",
+            "content": "Column 5"
+          }, {
+            "type": "text",
+            "id": "col5_title",
+            "label": "Column 5 Title"
+          }, {
+            "type": "textarea",
+            "id": "col5_links",
+            "label": "Column 5 Links"
+          }, {
+            "type": "header",
+            "content": "Image Card 1"
+          }, {
+            "type": "image_picker",
+            "id": "image1",
+            "label": "Image 1"
+          }, {
+            "type": "text",
+            "id": "image1_title",
+            "label": "Image 1 Title"
+          }, {
+            "type": "url",
+            "id": "image1_url",
+            "label": "Image 1 URL"
+          }, {
+            "type": "header",
+            "content": "Image Card 2"
+          }, {
+            "type": "image_picker",
+            "id": "image2",
+            "label": "Image 2"
+          }, {
+            "type": "text",
+            "id": "image2_title",
+            "label": "Image 2 Title"
+          }, {
+            "type": "url",
+            "id": "image2_url",
+            "label": "Image 2 URL"
+          }, {
+            "type": "header",
+            "content": "Image Card 3"
+          }, {
+            "type": "image_picker",
+            "id": "image3",
+            "label": "Image 3"
+          }, {
+            "type": "text",
+            "id": "image3_title",
+            "label": "Image 3 Title"
+          }, {
+            "type": "url",
+            "id": "image3_url",
+            "label": "Image 3 URL"
+          }, {
+            "type": "header",
+            "content": "Image Card 4"
+          }, {
+            "type": "image_picker",
+            "id": "image4",
+            "label": "Image 4"
+          }, {
+            "type": "text",
+            "id": "image4_title",
+            "label": "Image 4 Title"
+          }, {
+            "type": "url",
+            "id": "image4_url",
+            "label": "Image 4 URL"
+          }, {
+            "type": "header",
+            "content": "Featured Image (for Mixed layout)"
+          }, {
+            "type": "image_picker",
+            "id": "featured_image",
+            "label": "Featured Image"
+          }, {
+            "type": "text",
+            "id": "featured_title",
+            "label": "Featured Image Title"
+          }, {
+            "type": "url",
+            "id": "featured_url",
+            "label": "Featured Image URL"
           }
         ]
       }
@@ -153,16 +275,29 @@
     --equus-accent: {{ section.settings.accent_color }};
     --equus-dropdown-bg: {{ section.settings.dropdown_bg }};
     --equus-sidebar-bg: {{ section.settings.sidebar_bg }};
+    --equus-contact-bg: {{ section.settings.contact_bar_bg }};
+    --equus-contact-text: {{ section.settings.contact_bar_text }};
+  }
+
+  [x-cloak] {
+    display: none !important;
   }
 {% endstyle %}
 
 <div
   x-data="{ mobileMenuOpen: false }"
-  class="w-full relative z-40 font-sans"
+  class="w-full relative z-50 font-sans"
   style="font-family: 'Inter', sans-serif;">
 
+  <!-- Contact Bar -->
+  {% if section.settings.show_contact_bar %}
+    <div class="w-full py-2 text-center text-xs font-semibold tracking-wide" style="background-color: var(--equus-contact-bg); color: var(--equus-contact-text);">
+      {{ section.settings.contact_text }}
+    </div>
+  {% endif %}
+
   <!-- Header -->
-  <header class="w-full border-b border-gray-100" style="background-color: var(--equus-header-bg);">
+  <header class="w-full" style="background-color: var(--equus-header-bg);">
     <div class="max-w-[1400px] mx-auto px-5 lg:px-8 h-[70px] flex items-center justify-between">
 
       <!-- Mobile Toggle -->
@@ -185,16 +320,17 @@
       </button>
 
       <!-- Logo -->
-      <a href="{{ routes.root_url }}" class="flex items-center">
+      <a href="{{ routes.root_url }}" class="flex items-center shrink-0">
         {% if section.settings.logo != blank %}
+          {% assign logo_width_2x = section.settings.logo_width | times: 2 %}
           <img
-            src="{{ section.settings.logo | image_url: width: section.settings.logo_width | times: 2 }}"
+            src="{{ section.settings.logo | image_url: width: logo_width_2x }}"
             alt="{{ shop.name }}"
-            style="width: {{ section.settings.logo_width }}px; max-height: 50px;"
+            style="width: {{ section.settings.logo_width }}px; max-height: 55px;"
             class="h-auto object-contain"
             loading="eager"
-            width="{{ section.settings.logo_width }}"
-            height="auto">
+            height="inherit"
+            width="inherit">
         {% else %}
           <span class="text-2xl font-extrabold" style="color: var(--equus-header-text);">{{ shop.name }}</span>
         {% endif %}
@@ -204,22 +340,40 @@
       <nav class="hidden lg:flex items-center gap-8 h-full">
         {% if section.settings.main_menu != blank %}
           {% for link in linklists[section.settings.main_menu].links %}
+          {% assign link_title_lower = link.title | downcase | strip %}
+
+            {% comment %} Check if this menu item has any sidebar content blocks {% endcomment %}
+            {% assign has_content = false %}
+            {% for block in section.blocks %}
+              {% if block.type == 'sidebar_item' %}
+                {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+                {% if block_parent == link_title_lower %}
+                  {% assign has_content = true %}
+                  {% break %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% assign show_dropdown = false %}
+            {% if link.links != blank or has_content %}
+              {% assign show_dropdown = true %}
+            {% endif %}
+
             <div
-              class="relative h-full flex items-center group"
-              x-data="{ open: false }"
+              class="h-full flex items-center"
+              x-data="{ open: false, activeSidebar: '' }"
               @mouseenter="open = true"
-              @mouseleave="open = false">
+              @mouseleave="open = false; activeSidebar = ''">
 
               <a
                 href="{{ link.url }}"
-                class="flex items-center gap-1 text-[14px] font-medium transition-colors duration-200 py-2"
+                class="flex items-center gap-1 text-sm font-medium transition-colors duration-200 py-2"
                 style="color: var(--equus-header-text);"
                 :style="open ? 'color: var(--equus-accent)' : ''"
-                {% if link.links != blank %}
-                onclick="event.preventDefault();"
-                {% endif %}>
+                {% if show_dropdown %}
+                @click.prevent{% endif %}>
                 {{ link.title }}
-                {% if link.links != blank %}
+                {% if show_dropdown %}
                   <svg
                     class="w-3 h-3 transition-transform duration-200"
                     :class="{'rotate-180': open}"
@@ -236,184 +390,369 @@
               </a>
 
               <!-- Megamenu Dropdown -->
-              {% if link.links != blank %}
+              {% if show_dropdown %}
                 <div
                   x-show="open"
                   x-transition:enter="transition ease-out duration-200"
-                  x-transition:enter-start="opacity-0 translate-y-2"
+                  x-transition:enter-start="opacity-0 translate-y-1"
                   x-transition:enter-end="opacity-100 translate-y-0"
                   x-transition:leave="transition ease-in duration-150"
-                  x-transition:leave-start="opacity-100 translate-y-0"
-                  x-transition:leave-end="opacity-0 translate-y-2"
                   x-cloak
-                  class="absolute left-1/2 top-full -translate-x-1/2 w-screen bg-white shadow-xl border-t border-gray-100 z-50"
+                  class="absolute left-0 top-full w-full bg-white shadow-xl border-t border-gray-100 z-50"
                   style="width: 100vw; left: 50%; transform: translateX(-50%); background-color: var(--equus-dropdown-bg);">
 
-                  <div class="max-w-[1400px] mx-auto flex min-h-[350px]">
+                  <div class="max-w-[1400px] mx-auto flex min-h-[400px]">
 
-                    <!-- Left Sidebar: Child Links -->
-                    <div class="w-[240px] shrink-0 py-5 border-r border-gray-100" style="background-color: var(--equus-sidebar-bg);">
-                      {% for child in link.links %}
-                        <a href="{{ child.url }}" class="flex items-center justify-between px-6 py-3 text-[13px] font-medium text-gray-700 hover:text-[var(--equus-accent)] hover:bg-white transition-all duration-200">
-                          {{ child.title }}
-                          <svg
-                            class="w-3 h-3 opacity-50"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M9 5l7 7-7 7" />
-                          </svg>
-                        </a>
-                      {% endfor %}
-                  </div>
-
-                    <!-- Center: Custom Columns from Block -->
-                    {% assign block_found = false %}
-                    {% assign link_title_down = link.title | downcase | strip %}
-
-                    {% for block in section.blocks %}
-                      {% if block.type == 'menu_dropdown' %}
-                        {% assign block_title = block.settings.menu_title | downcase | strip %}
-                          {% if block_title == link_title_down %}
-                          {% assign block_found = true %}
-
-                            <div class="flex-1 flex gap-10 py-8 px-10">
-                            {% comment %} Column 1 {% endcomment %}
-                            {% if block.settings.col1_title != blank %}
-                              <div class="min-w-[140px]">
-                                <h4 class="text-[13px] font-bold text-gray-800 mb-4">{{ block.settings.col1_title }}</h4>
-                                <ul class="space-y-2.5">
-                                  {% assign col1_lines = block.settings.col1_links | split: "\n" %}
-                                  {% for line in col1_lines %}
-                                    {% assign parts = line | split: "|" %}
-                                    {% if parts.size >= 2 %}
-                                      <li>
-                                        <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ parts[0] | strip }}</a>
-                                      </li>
-                                    {% elsif parts.size == 1 and parts[0] != blank %}
-                                      <li>
-                                        <a href="#" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ parts[0] | strip }}</a>
-                                      </li>
-                                    {% endif %}
-                                  {% endfor %}
-                                </ul>
-                              </div>
-                            {% endif %}
-
-                            {% comment %} Column 2 {% endcomment %}
-                            {% if block.settings.col2_title != blank %}
-                              <div class="min-w-[140px]">
-                                <h4 class="text-[13px] font-bold text-gray-800 mb-4">{{ block.settings.col2_title }}</h4>
-                                <ul class="space-y-2.5">
-                                  {% assign col2_lines = block.settings.col2_links | split: "\n" %}
-                                  {% for line in col2_lines %}
-                                    {% assign parts = line | split: "|" %}
-                                    {% if parts.size >= 2 %}
-                                      <li>
-                                        <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ parts[0] | strip }}</a>
-                                      </li>
-                                    {% elsif parts.size == 1 and parts[0] != blank %}
-                                      <li>
-                                        <a href="#" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ parts[0] | strip }}</a>
-                                      </li>
-                                    {% endif %}
-                                  {% endfor %}
-                                </ul>
-                              </div>
-                            {% endif %}
-
-                            {% comment %} Column 3 {% endcomment %}
-                            {% if block.settings.col3_title != blank %}
-                              <div class="min-w-[140px]">
-                                <h4 class="text-[13px] font-bold text-gray-800 mb-4">{{ block.settings.col3_title }}</h4>
-                                <ul class="space-y-2.5">
-                                  {% assign col3_lines = block.settings.col3_links | split: "\n" %}
-                                  {% for line in col3_lines %}
-                                    {% assign parts = line | split: "|" %}
-                                    {% if parts.size >= 2 %}
-                                      <li>
-                                        <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ parts[0] | strip }}</a>
-                                      </li>
-                                    {% elsif parts.size == 1 and parts[0] != blank %}
-                                      <li>
-                                        <a href="#" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ parts[0] | strip }}</a>
-                                      </li>
-                                    {% endif %}
-                                  {% endfor %}
-                                </ul>
-                              </div>
-                            {% endif %}
-
-                            {% comment %} Column 4 {% endcomment %}
-                            {% if block.settings.col4_title != blank %}
-                              <div class="min-w-[140px]">
-                                <h4 class="text-[13px] font-bold text-gray-800 mb-4">{{ block.settings.col4_title }}</h4>
-                                <ul class="space-y-2.5">
-                                  {% assign col4_lines = block.settings.col4_links | split: "\n" %}
-                                  {% for line in col4_lines %}
-                                    {% assign parts = line | split: "|" %}
-                                    {% if parts.size >= 2 %}
-                                      <li>
-                                        <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ parts[0] | strip }}</a>
-                                      </li>
-                                    {% elsif parts.size == 1 and parts[0] != blank %}
-                                      <li>
-                                        <a href="#" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ parts[0] | strip }}</a>
-                                      </li>
-                                    {% endif %}
-                                  {% endfor %}
-                                </ul>
-                              </div>
-                            {% endif %}
-                          </div>
-
-                          <!-- Featured Image -->
-                          {% if block.settings.featured_image != blank %}
-                            <div class="w-[220px] shrink-0 py-8 px-6 flex flex-col items-center justify-center">
-                              <a href="{{ block.settings.featured_link | default: '#' }}" class="block w-full rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                                <img
-                                  src="{{ block.settings.featured_image | image_url: width: 400 }}"
-                                  alt="{{ block.settings.featured_title }}"
-                                  class="w-full h-auto object-cover"
-                                  loading="lazy"
-                                  width="180"
-                                  height="auto">
-                              </a>
-                              {% if block.settings.featured_title != blank %}
-                                <span class="mt-3 text-[13px] font-medium text-gray-700 text-center">{{ block.settings.featured_title }}</span>
-                              {% endif %}
-                            </div>
+                    <!-- Left Sidebar -->
+                    <div class="w-[210px] shrink-0 py-4 border-r border-gray-200" style="background-color: var(--equus-sidebar-bg);">
+                      {% comment %} Collect unique sidebar items for this parent {% endcomment %}
+                      {% comment %} Collect unique sidebar items for this parent {% endcomment %}
+                      {% for block in section.blocks %}
+                        {% if block.type == 'sidebar_item' %}
+                          {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+                          {% if block_parent == link_title_lower %}
+                            <a
+                              href="{{ block.settings.sidebar_url | default: '#' }}"
+                              class="flex items-center justify-between px-4 py-2 text-[12px] font-medium transition-all duration-150 border-l-[3px]"
+                              :class="activeSidebar === '{{ block.id }}' ? 'text-(--equus-accent) bg-white border-(--equus-accent)' : 'text-gray-700 hover:bg-gray-50 border-transparent'"
+                              @mouseenter="activeSidebar = '{{ block.id }}'"
+                              {{ block.shopify_attributes }}>
+                              {{ block.settings.sidebar_title }}
+                              <svg
+                                class="w-2.5 h-2.5 opacity-40"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M9 5l7 7-7 7" />
+                              </svg>
+                            </a>
                           {% endif %}
-
-                          {% break %}
                         {% endif %}
-                      {% endif %}
-                    {% endfor %}
+                      {% endfor %}
 
-                    {% unless block_found %}
-                      <!-- Default: Show grandchild links if no block config -->
-                      <div class="flex-1 flex gap-10 py-8 px-10">
+                      {% comment %} Fallback: show Shopify menu children {% endcomment %}
+                      {% if has_content == false %}
                         {% for child in link.links %}
-                          {% if child.links != blank %}
-                            <div class="min-w-[140px]">
-                              <h4 class="text-[13px] font-bold text-gray-800 mb-4">{{ child.title }}</h4>
-                              <ul class="space-y-2.5">
-                                {% for grandchild in child.links %}
-                                  <li>
-                                    <a href="{{ grandchild.url }}" class="text-[13px] text-gray-600 hover:text-[var(--equus-accent)] transition-colors">{{ grandchild.title }}</a>
-                                  </li>
-                                {% endfor %}
-                              </ul>
+                          <a href="{{ child.url }}" class="flex items-center justify-between px-6 py-3 text-[13px] font-medium text-gray-700 hover:text-(--equus-accent) hover:bg-white transition-all duration-200">
+                            {{ child.title }}
+                            <svg
+                              class="w-3 h-3 opacity-50"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24">
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 5l7 7-7 7" />
+                            </svg>
+                          </a>
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                    <!-- Center Content Area -->
+                    <div class="flex-1 overflow-hidden">
+                      {% comment %} Show content for each sidebar block {% endcomment %}
+                      {% for block in section.blocks %}
+                        {% if block.type == 'sidebar_item' %}
+                          {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+                          {% if block_parent == link_title_lower %}
+                            <div
+                              x-show="activeSidebar === '{{ block.id }}' || (activeSidebar === '' && {{ forloop.first }})"
+                              x-transition:enter="transition ease-out duration-150"
+                              x-transition:enter-start="opacity-0"
+                              x-transition:enter-end="opacity-100"
+                              class="h-full">
+
+                              {% case block.settings.content_type %}
+
+                                {% when 'columns' %}
+                                  <!-- Text Columns Layout -->
+                                  <div class="flex gap-8 py-5 px-6">
+                                    {% if block.settings.col1_title != blank %}
+                                      <div class="min-w-[140px]">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col1_title }}</h4>
+                                        <ul class="space-y-1.5">
+                                          {% assign lines = block.settings.col1_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% elsif parts[0] != blank %}
+                                              <li>
+                                                <span class="text-[13px] text-gray-600">{{ parts[0] | strip }}</span>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% if block.settings.col2_title != blank %}
+                                      <div class="min-w-[140px]">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col2_title }}</h4>
+                                        <ul class="space-y-1.5">
+                                          {% assign lines = block.settings.col2_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% elsif parts[0] != blank %}
+                                              <li>
+                                                <span class="text-[13px] text-gray-600">{{ parts[0] | strip }}</span>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% if block.settings.col3_title != blank %}
+                                      <div class="min-w-[140px]">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col3_title }}</h4>
+                                        <ul class="space-y-1.5">
+                                          {% assign lines = block.settings.col3_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% elsif parts[0] != blank %}
+                                              <li>
+                                                <span class="text-[13px] text-gray-600">{{ parts[0] | strip }}</span>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% if block.settings.col4_title != blank %}
+                                      <div class="min-w-[140px]">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col4_title }}</h4>
+                                        <ul class="space-y-1.5">
+                                          {% assign lines = block.settings.col4_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% elsif parts[0] != blank %}
+                                              <li>
+                                                <span class="text-[13px] text-gray-600">{{ parts[0] | strip }}</span>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% if block.settings.col5_title != blank %}
+                                      <div class="min-w-[140px]">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col5_title }}</h4>
+                                        <ul class="space-y-1.5">
+                                          {% assign lines = block.settings.col5_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% elsif parts[0] != blank %}
+                                              <li>
+                                                <span class="text-[13px] text-gray-600">{{ parts[0] | strip }}</span>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+                                  </div>
+
+                                {% when 'images' %}
+                                  <!-- Image Cards Layout - Full Width -->
+                                  <div class="flex gap-6 h-full py-4 px-6">
+                                    {% if block.settings.image1 != blank %}
+                                      <a href="{{ block.settings.image1_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                          <img
+                                            src="{{ block.settings.image1 | image_url: width: 600 }}"
+                                            alt="{{ block.settings.image1_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        </div>
+                                        {% if block.settings.image1_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center">{{ block.settings.image1_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
+
+                                    {% if block.settings.image2 != blank %}
+                                      <a href="{{ block.settings.image2_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                          <img
+                                            src="{{ block.settings.image2 | image_url: width: 600 }}"
+                                            alt="{{ block.settings.image2_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        </div>
+                                        {% if block.settings.image2_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center">{{ block.settings.image2_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
+
+                                    {% if block.settings.image3 != blank %}
+                                      <a href="{{ block.settings.image3_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                          <img
+                                            src="{{ block.settings.image3 | image_url: width: 600 }}"
+                                            alt="{{ block.settings.image3_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        </div>
+                                        {% if block.settings.image3_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center">{{ block.settings.image3_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
+
+                                    {% if block.settings.image4 != blank %}
+                                      <a href="{{ block.settings.image4_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                          <img
+                                            src="{{ block.settings.image4 | image_url: width: 600 }}"
+                                            alt="{{ block.settings.image4_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        </div>
+                                        {% if block.settings.image4_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center">{{ block.settings.image4_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
+                                  </div>
+
+                                {% when 'mixed' %}
+                                  <!-- Mixed: Columns + Featured Image -->
+                                  <div class="flex gap-12 py-5 px-6 h-full">
+                                    <div class="flex-1 flex gap-8">
+                                      {% if block.settings.col1_title != blank %}
+                                        <div class="min-w-[140px]">
+                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col1_title }}</h4>
+                                          <ul class="space-y-1.5">
+                                            {% assign lines = block.settings.col1_links | newline_to_br | split: '<br />' %}
+                                            {% for line in lines %}
+                                              {% assign parts = line | split: '|' %}
+                                              {% if parts.size >= 2 %}
+                                                <li>
+                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                                </li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                        </div>
+                                      {% endif %}
+
+                                      {% if block.settings.col2_title != blank %}
+                                        <div class="min-w-[140px]">
+                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col2_title }}</h4>
+                                          <ul class="space-y-1.5">
+                                            {% assign lines = block.settings.col2_links | newline_to_br | split: '<br />' %}
+                                            {% for line in lines %}
+                                              {% assign parts = line | split: '|' %}
+                                              {% if parts.size >= 2 %}
+                                                <li>
+                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                                </li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                        </div>
+                                      {% endif %}
+
+                                      {% if block.settings.col3_title != blank %}
+                                        <div class="min-w-[140px]">
+                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col3_title }}</h4>
+                                          <ul class="space-y-1.5">
+                                            {% assign lines = block.settings.col3_links | newline_to_br | split: '<br />' %}
+                                            {% for line in lines %}
+                                              {% assign parts = line | split: '|' %}
+                                              {% if parts.size >= 2 %}
+                                                <li>
+                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                                </li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                        </div>
+                                      {% endif %}
+
+                                      {% if block.settings.col4_title != blank %}
+                                        <div class="min-w-[140px]">
+                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col4_title }}</h4>
+                                          <ul class="space-y-1.5">
+                                            {% assign lines = block.settings.col4_links | newline_to_br | split: '<br />' %}
+                                            {% for line in lines %}
+                                              {% assign parts = line | split: '|' %}
+                                              {% if parts.size >= 2 %}
+                                                <li>
+                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                                </li>
+                                              {% endif %}
+                                            {% endfor %}
+                                          </ul>
+                                        </div>
+                                      {% endif %}
+                                    </div>
+
+                                    {% if block.settings.featured_image != blank %}
+                                      <div class="w-[200px] shrink-0 flex flex-col">
+                                        <a href="{{ block.settings.featured_url | default: '#' }}" class="block group flex-1">
+                                          <div class="rounded-lg overflow-hidden shadow-md h-full" style="aspect-ratio: 3/4;">
+                                            <img
+                                              src="{{ block.settings.featured_image | image_url: width: 500 }}"
+                                              alt="{{ block.settings.featured_title }}"
+                                              height="inherit"
+                                              width="inherit"
+                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                          </div>
+                                        </a>
+                                        {% if block.settings.featured_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center mt-3">{{ block.settings.featured_title }}</p>
+                                        {% endif %}
+                                      </div>
+                                    {% endif %}
+                                  </div>
+
+                              {% endcase %}
                             </div>
                           {% endif %}
-                        {% endfor %}
-                      </div>
-                    {% endunless %}
+                        {% endif %}
+                      {% endfor %}
 
+                      {% comment %} Default content when no blocks configured {% endcomment %}
+                      {% if has_content == false %}
+                        <div class="text-gray-400 text-sm py-8">
+                          Add "Sidebar Content" blocks to configure this dropdown
+                        </div>
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
               {% endif %}
@@ -506,29 +845,20 @@
   <div
     x-show="mobileMenuOpen"
     x-cloak
-    class="lg:hidden fixed inset-0 z-[1000]">
-    <!-- Overlay -->
+    class="lg:hidden fixed inset-0 z-1000">
     <div
       class="fixed inset-0 bg-black/50"
       @click="mobileMenuOpen = false"
       x-transition:enter="transition ease-out duration-200"
       x-transition:enter-start="opacity-0"
-      x-transition:enter-end="opacity-100"
-      x-transition:leave="transition ease-in duration-150"
-      x-transition:leave-start="opacity-100"
-      x-transition:leave-end="opacity-0"></div>
+      x-transition:enter-end="opacity-100"></div>
 
-    <!-- Drawer -->
     <div
       class="fixed inset-y-0 left-0 w-[300px] bg-white shadow-xl overflow-y-auto"
       x-transition:enter="transition ease-out duration-300 transform"
       x-transition:enter-start="-translate-x-full"
-      x-transition:enter-end="translate-x-0"
-      x-transition:leave="transition ease-in duration-200 transform"
-      x-transition:leave-start="translate-x-0"
-      x-transition:leave-end="-translate-x-full">
+      x-transition:enter-end="translate-x-0">
 
-      <!-- Close Button -->
       <button @click="mobileMenuOpen = false" class="flex items-center gap-2 w-full p-5 border-b border-gray-100">
         <svg
           class="w-5 h-5"
@@ -544,13 +874,12 @@
         <span class="font-semibold text-sm">Close</span>
       </button>
 
-      <!-- Mobile Nav Links -->
       <ul class="py-4">
         {% if section.settings.main_menu != blank %}
           {% for link in linklists[section.settings.main_menu].links %}
             <li x-data="{ subOpen: false }" class="border-b border-gray-50">
               <div class="flex items-center justify-between">
-                <a href="{{ link.url }}" class="flex-1 px-5 py-4 text-[14px] font-medium text-gray-800">{{ link.title }}</a>
+                <a href="{{ link.url }}" class="flex-1 px-5 py-4 text-sm font-medium text-gray-800">{{ link.title }}</a>
                 {% if link.links != blank %}
                   <button @click="subOpen = !subOpen" class="p-4">
                     <svg

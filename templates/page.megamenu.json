@@ -9,34 +9,16 @@
  */
 {
   "sections": {
-    "elite-athletic-gear-megamenu": {
-      "type": "elite-athletic-gear-megamenu",
-      "settings": {
-        "show_announcement": true,
-        "announcement_text": "ORDERS SHIP WITHIN 1 BUSINESS DAY",
-        "announcement_bg": "#b91c1c",
-        "announcement_text_color": "#ffffff",
-        "header_top_bg": "#000000",
-        "header_top_text": "#ffffff",
-        "nav_bg": "#ffffff",
-        "nav_text": "#000000",
-        "main_menu": "elite-athletic-gear-menu",
-        "logo": "shopify://shop_images/large-white-eag-logo.avif",
-        "logo_width": 150,
-        "sidebar_header_image": "shopify://shop_images/shop_with_confidence_1090x_f8fffb20-2ca5-40b3-89d0-8735f83fa7ea.webp",
-        "sidebar_title": "SHOP WITH CONFIDENCE!"
-      }
-    },
     "equus-now-megamenu": {
       "type": "equus-now-megamenu",
       "blocks": {
-        "dropdown_for_the_horse": {
-          "type": "menu_dropdown",
+        "tack_equipment": {
+          "type": "sidebar_item",
           "settings": {
-            "menu_title": "For The Horse",
-            "featured_image": "shopify://shop_images/b823b597933a0cf57b0c4aed8e6cb7ede9d25c3ec1320095a768092c628d17d6.jpg",
-            "featured_title": "Gently Used Saddles",
-            "featured_link": "",
+            "parent_menu": "For The Horse",
+            "sidebar_title": "Tack and Equipment",
+            "sidebar_url": "/collections/tack-equipment",
+            "content_type": "mixed",
             "col1_title": "Saddles & Fittings",
             "col1_links": "Dressage Saddles|/collections/dressage-saddles\nHunter-Jumper Saddles|/collections/hunter-jumper-saddles\nGently Used Saddles|/collections/gently-used-saddles\nGirths|/collections/girths\nSaddle Accessories|/collections/saddle-accessories\nStirrup Irons & Pads|/collections/stirrup-irons-pads\nStirrup Leathers|/collections/stirrup-leathers",
             "col2_title": "Strap Goods",
@@ -44,48 +26,175 @@
             "col3_title": "Training Aids",
             "col3_links": "Lunging Equipment|/collections/lunging-equipment\nSpurs & Spur Straps|/collections/spurs-spur-straps\nWhips, Bats & Crops|/collections/whips-bats-crops\nGeneral Training Aids|/collections/general-training-aids",
             "col4_title": "Horse Bits",
-            "col4_links": "Bit Accessories|/collections/bit-accessories\nGerman Silver|/collections/german-silver\nEggbutt Bits|/collections/eggbutt-bits\nElevator & Gag Bits|/collections/elevator-gag-bits\nFull Cheek Bits|/collections/full-cheek-bits\nHappy Mouth Bits|/collections/happy-mouth-bits\nD-Ring Bits|/collections/d-ring-bits\nKimberwicke Bits|/collections/kimberwicke-bits\nLoose Ring Bits|/collections/loose-ring-bits\nPelham Bits|/collections/pelham-bits"
+            "col4_links": "Bit Accessories|/collections/bit-accessories\nGerman Silver|/collections/german-silver\nEggbutt Bits|/collections/eggbutt-bits\nElevator & Gag Bits|/collections/elevator-gag-bits\nFull Cheek Bits|/collections/full-cheek-bits\nHappy Mouth Bits|/collections/happy-mouth-bits\nD-Ring Bits|/collections/d-ring-bits",
+            "featured_image": "shopify://shop_images/b823b597933a0cf57b0c4aed8e6cb7ede9d25c3ec1320095a768092c628d17d6.jpg",
+            "featured_title": "Gently Used Saddles",
+            "featured_url": "/collections/gently-used-saddles"
           }
         },
-        "dropdown_for_the_rider": {
-          "type": "menu_dropdown",
+        "horse_boots": {
+          "type": "sidebar_item",
           "settings": {
-            "menu_title": "For The Rider",
-            "featured_title": "Featured Apparel",
-            "featured_link": "",
-            "col1_title": "Apparel",
-            "col1_links": "Breeches|/collections/breeches\nShirts & Tops|/collections/shirts-tops\nJackets & Vests|/collections/jackets-vests\nShow Apparel|/collections/show-apparel",
-            "col2_title": "Footwear",
-            "col2_links": "Tall Boots|/collections/tall-boots\nPaddock Boots|/collections/paddock-boots\nHalf Chaps|/collections/half-chaps\nBoot Accessories|/collections/boot-accessories",
-            "col3_title": "Helmets & Safety",
-            "col3_links": "Helmets|/collections/helmets\nSafety Vests|/collections/safety-vests\nGloves|/collections/gloves",
-            "col4_title": "",
-            "col4_links": ""
+            "parent_menu": "For The Horse",
+            "sidebar_title": "Horse Boots & Leg Protection",
+            "sidebar_url": "/collections/horse-boots",
+            "content_type": "images",
+            "image1_title": "Bandages & Quilts",
+            "image1_url": "/collections/bandages-quilts",
+            "image2_title": "Bell Boots",
+            "image2_url": "/collections/bell-boots",
+            "image3_title": "Exercise Boots",
+            "image3_url": "/collections/exercise-boots",
+            "image4_title": "Therapeutic Horse Boots",
+            "image4_url": "/collections/therapeutic-boots"
           }
         },
-        "dropdown_for_the_barn": {
-          "type": "menu_dropdown",
+        "horse_clothing": {
+          "type": "sidebar_item",
           "settings": {
-            "menu_title": "For The Barn",
-            "featured_title": "Barn Essentials",
-            "featured_link": "",
-            "col1_title": "Barn Supplies",
-            "col1_links": "Buckets & Feeders|/collections/buckets-feeders\nBlankets & Sheets|/collections/blankets-sheets\nStable Supplies|/collections/stable-supplies",
-            "col2_title": "",
-            "col2_links": "",
-            "col3_title": "",
-            "col3_links": "",
-            "col4_title": "",
-            "col4_links": ""
+            "parent_menu": "For The Horse",
+            "sidebar_title": "Horse Clothing",
+            "sidebar_url": "/collections/horse-clothing",
+            "content_type": "columns",
+            "col1_title": "Turnout Blankets",
+            "col1_links": "Turnout Sheets|/collections/turnout-sheets\nMedium Weight|/collections/medium-weight\nHeavy Weight|/collections/heavy-weight",
+            "col2_title": "Stable Blankets & Sheets",
+            "col2_links": "Stable Blankets and Liners|/collections/stable-blankets\nStable Sheets|/collections/stable-sheets",
+            "col3_title": "Coolers & Anti-Sweats",
+            "col3_links": "Coolers & Dress Sheets|/collections/coolers-dress\nExercise Sheets|/collections/exercise-sheets",
+            "col4_title": "Fly Sheets, Fly Masks & More",
+            "col4_links": "Fly Sheets & Masks|/collections/fly-sheets-masks\nFly & Insect Repellents|/collections/fly-repellents",
+            "col5_title": "Blanket Accessories",
+            "col5_links": "Blanket Accessories|/collections/blanket-accessories"
+          }
+        },
+        "horse_health": {
+          "type": "sidebar_item",
+          "settings": {
+            "parent_menu": "For The Horse",
+            "sidebar_title": "Horse Health Care",
+            "sidebar_url": "/collections/horse-health",
+            "content_type": "columns",
+            "col1_title": "First Aid",
+            "col1_links": "First Aid Kits|/collections/first-aid-kits\nWound Care|/collections/wound-care\nBandaging|/collections/bandaging",
+            "col2_title": "Supplements",
+            "col2_links": "Joint Health|/collections/joint-health\nDigestive Health|/collections/digestive-health\nHoof Care|/collections/hoof-care"
+          }
+        },
+        "grooming": {
+          "type": "sidebar_item",
+          "settings": {
+            "parent_menu": "For The Horse",
+            "sidebar_title": "Grooming Supplies",
+            "sidebar_url": "/collections/grooming",
+            "content_type": "columns",
+            "col1_title": "Grooming Tools",
+            "col1_links": "Brushes|/collections/brushes\nCurry Combs|/collections/curry-combs\nMane & Tail Care|/collections/mane-tail-care"
+          }
+        },
+        "fly_control": {
+          "type": "sidebar_item",
+          "settings": {
+            "parent_menu": "For The Horse",
+            "sidebar_title": "Fly & Insect Control",
+            "sidebar_url": "/collections/fly-insect-control",
+            "content_type": "images",
+            "image1_title": "Fly & Insect Repellents",
+            "image1_url": "/collections/fly-repellents",
+            "image2_title": "Fly Sheets & Masks",
+            "image2_url": "/collections/fly-sheets-masks"
+          }
+        },
+        "saddle_pads": {
+          "type": "sidebar_item",
+          "settings": {
+            "parent_menu": "For The Horse",
+            "sidebar_title": "Saddle Pads",
+            "sidebar_url": "/collections/saddle-pads",
+            "content_type": "mixed",
+            "col1_title": "Saddle Pads",
+            "col1_links": "Bareback Pads|/collections/bareback-pads\nFitted Show Pads|/collections/fitted-show-pads\nOgilvy Saddle Pads|/collections/ogilvy-saddle-pads\nThinLine Saddle Pads|/collections/thinline-saddle-pads",
+            "image1_title": "All Purpose & Close Contact Pads",
+            "image1_url": "/collections/all-purpose-pads",
+            "image2_title": "Half Pads",
+            "image2_url": "/collections/half-pads",
+            "image3_title": "Dressage Saddle Pads",
+            "image3_url": "/collections/dressage-saddle-pads"
+          }
+        },
+        "ear_bonnets": {
+          "type": "sidebar_item",
+          "settings": {
+            "parent_menu": "For The Horse",
+            "sidebar_title": "Ear Bonnets",
+            "sidebar_url": "/collections/ear-bonnets",
+            "content_type": "images",
+            "image1_title": "Custom Ear Bonnets",
+            "image1_url": "/collections/custom-ear-bonnets",
+            "image2_title": "Ready-Made Ear Bonnets",
+            "image2_url": "/collections/ready-made-ear-bonnets"
+          }
+        },
+        "rider_apparel": {
+          "type": "sidebar_item",
+          "settings": {
+            "parent_menu": "For The Rider",
+            "sidebar_title": "Apparel",
+            "sidebar_url": "/collections/rider-apparel",
+            "content_type": "columns",
+            "col1_title": "Show Apparel",
+            "col1_links": "Show Shirts|/collections/show-shirts\nShow Jackets|/collections/show-jackets\nShow Breeches|/collections/show-breeches",
+            "col2_title": "Everyday Wear",
+            "col2_links": "Casual Shirts|/collections/casual-shirts\nBreeches|/collections/breeches\nJackets & Vests|/collections/jackets-vests"
+          }
+        },
+        "rider_footwear": {
+          "type": "sidebar_item",
+          "settings": {
+            "parent_menu": "For The Rider",
+            "sidebar_title": "Footwear",
+            "sidebar_url": "/collections/rider-footwear",
+            "content_type": "images",
+            "image1_title": "Tall Boots",
+            "image1_url": "/collections/tall-boots",
+            "image2_title": "Paddock Boots",
+            "image2_url": "/collections/paddock-boots",
+            "image3_title": "Half Chaps",
+            "image3_url": "/collections/half-chaps"
+          }
+        },
+        "barn_supplies": {
+          "type": "sidebar_item",
+          "settings": {
+            "parent_menu": "For The Barn",
+            "sidebar_title": "Barn Supplies",
+            "sidebar_url": "/collections/barn-supplies",
+            "content_type": "columns",
+            "col1_title": "Barn Equipment",
+            "col1_links": "Buckets & Feeders|/collections/buckets-feeders\nHay Nets & Bags|/collections/hay-nets-bags\nStall Supplies|/collections/stall-supplies",
+            "col2_title": "Fencing & Storage",
+            "col2_links": "Electric Fencing|/collections/electric-fencing\nTrunks & Storage|/collections/trunks-storage"
           }
         }
       },
       "block_order": [
-        "dropdown_for_the_horse",
-        "dropdown_for_the_rider",
-        "dropdown_for_the_barn"
+        "tack_equipment",
+        "horse_boots",
+        "horse_clothing",
+        "horse_health",
+        "grooming",
+        "fly_control",
+        "saddle_pads",
+        "ear_bonnets",
+        "rider_apparel",
+        "rider_footwear",
+        "barn_supplies"
       ],
       "settings": {
+        "show_contact_bar": true,
+        "contact_text": "CONTACT US 1-740-549-4959",
+        "contact_bar_bg": "#40bfb0",
+        "contact_bar_text": "#ffffff",
         "logo": "shopify://shop_images/Modified_Logo.avif",
         "logo_width": 120,
         "main_menu": "equus-now-menu",
@@ -93,12 +202,11 @@
         "header_text": "#333333",
         "accent_color": "#40bfb0",
         "dropdown_bg": "#ffffff",
-        "sidebar_bg": "#f5f5f5"
+        "sidebar_bg": "#ffffff"
       }
     }
   },
   "order": [
-    "elite-athletic-gear-megamenu",
     "equus-now-megamenu"
   ]
 }
