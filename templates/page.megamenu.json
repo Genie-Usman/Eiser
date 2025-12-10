@@ -15,8 +15,8 @@
         "tack_equipment": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Horse",
             "sidebar_title": "Tack and Equipment",
+            "parent_menu": "For The Horse",
             "sidebar_url": "/collections/tack-equipment",
             "content_type": "mixed",
             "col1_title": "Saddles & Fittings",
@@ -45,8 +45,8 @@
         "horse_boots": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Horse",
             "sidebar_title": "Horse Boots & Leg Protection",
+            "parent_menu": "For The Horse",
             "sidebar_url": "/collections/horse-boots",
             "content_type": "images",
             "col1_title": "",
@@ -78,8 +78,8 @@
         "horse_clothing": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Horse",
             "sidebar_title": "Horse Clothing",
+            "parent_menu": "For The Horse",
             "sidebar_url": "/collections/horse-clothing",
             "content_type": "columns",
             "col1_title": "Turnout Blankets",
@@ -107,8 +107,8 @@
         "horse_health": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Horse",
             "sidebar_title": "Horse Health Care",
+            "parent_menu": "For The Horse",
             "sidebar_url": "/collections/horse-health",
             "content_type": "mixed",
             "col1_title": "Supplements",
@@ -140,12 +140,12 @@
         "grooming": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Horse",
             "sidebar_title": "Grooming Supplies",
+            "parent_menu": "For The Horse",
             "sidebar_url": "/collections/grooming",
-            "content_type": "columns",
-            "col1_title": "Grooming Tools",
-            "col1_links": "Brushes|/collections/brushes\nCurry Combs|/collections/curry-combs\nMane & Tail Care|/collections/mane-tail-care",
+            "content_type": "images",
+            "col1_title": "",
+            "col1_links": "",
             "col2_title": "",
             "col2_links": "",
             "col3_title": "",
@@ -154,13 +154,17 @@
             "col4_links": "",
             "col5_title": "",
             "col5_links": "",
-            "image1_title": "",
+            "image1": "shopify://shop_images/braiding-tools.webp",
+            "image1_title": "Braiding Tools",
             "image1_url": "",
-            "image2_title": "",
+            "image2": "shopify://shop_images/brushes-_-grooming-tools.webp",
+            "image2_title": "Brushes & Grooming Tools",
             "image2_url": "",
-            "image3_title": "",
+            "image3": "shopify://shop_images/clippers-_-accessories.webp",
+            "image3_title": "Clippers & Accessories",
             "image3_url": "",
-            "image4_title": "",
+            "image4": "shopify://shop_images/shampoos-conditioners-_-detanglers.jpg",
+            "image4_title": "Shampoos, Conditioners & Deranglers",
             "image4_url": "",
             "featured_title": "",
             "featured_url": ""
@@ -169,8 +173,8 @@
         "fly_control": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Horse",
             "sidebar_title": "Fly & Insect Control",
+            "parent_menu": "For The Horse",
             "sidebar_url": "/collections/fly-insect-control",
             "content_type": "images",
             "col1_title": "",
@@ -183,8 +187,10 @@
             "col4_links": "",
             "col5_title": "",
             "col5_links": "",
+            "image1": "shopify://shop_images/fly-_-insect-repellents.jpg",
             "image1_title": "Fly & Insect Repellents",
             "image1_url": "/collections/fly-repellents",
+            "image2": "shopify://shop_images/fly-sheets-_-masks.jpg",
             "image2_title": "Fly Sheets & Masks",
             "image2_url": "/collections/fly-sheets-masks",
             "image3_title": "",
@@ -198,8 +204,8 @@
         "saddle_pads": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Horse",
             "sidebar_title": "Saddle Pads",
+            "parent_menu": "For The Horse",
             "sidebar_url": "/collections/saddle-pads",
             "content_type": "mixed",
             "col1_title": "Saddle Pads",
@@ -212,10 +218,13 @@
             "col4_links": "",
             "col5_title": "",
             "col5_links": "",
+            "image1": "shopify://shop_images/all-purpose-_-close-contact-pads.webp",
             "image1_title": "All Purpose & Close Contact Pads",
             "image1_url": "/collections/all-purpose-pads",
+            "image2": "shopify://shop_images/half-pads.jpg",
             "image2_title": "Half Pads",
             "image2_url": "/collections/half-pads",
+            "image3": "shopify://shop_images/dressage-saddle-pads.webp",
             "image3_title": "Dressage Saddle Pads",
             "image3_url": "/collections/dressage-saddle-pads",
             "image4_title": "",
@@ -227,8 +236,8 @@
         "ear_bonnets": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Horse",
             "sidebar_title": "Ear Bonnets",
+            "parent_menu": "For The Horse",
             "sidebar_url": "/collections/ear-bonnets",
             "content_type": "images",
             "col1_title": "",
@@ -241,11 +250,14 @@
             "col4_links": "",
             "col5_title": "",
             "col5_links": "",
-            "image1_title": "Custom Ear Bonnets",
+            "image1": "shopify://shop_images/weatherbeeta-prime-ear-bonnet.png",
+            "image1_title": "Weatherbeeta Prime Ear Bonnet",
             "image1_url": "/collections/custom-ear-bonnets",
-            "image2_title": "Ready-Made Ear Bonnets",
+            "image2": "shopify://shop_images/arma-ear-bonnet.webp",
+            "image2_title": "Arma Ear Bonnet",
             "image2_url": "/collections/ready-made-ear-bonnets",
-            "image3_title": "",
+            "image3": "shopify://shop_images/lemieux-classic-ear-bonnet.png",
+            "image3_title": "LeMieux Ear Bonnet",
             "image3_url": "",
             "image4_title": "",
             "image4_url": "",
@@ -256,8 +268,8 @@
         "rider_apparel": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Rider",
             "sidebar_title": "Apparel",
+            "parent_menu": "For The Rider",
             "sidebar_url": "/collections/rider-apparel",
             "content_type": "columns",
             "col1_title": "Show Apparel",
@@ -285,8 +297,8 @@
         "rider_footwear": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Rider",
             "sidebar_title": "Footwear",
+            "parent_menu": "For The Rider",
             "sidebar_url": "/collections/rider-footwear",
             "content_type": "images",
             "col1_title": "",
@@ -314,8 +326,8 @@
         "barn_supplies": {
           "type": "sidebar_item",
           "settings": {
-            "parent_menu": "For The Barn",
             "sidebar_title": "Barn Supplies",
+            "parent_menu": "For The Barn",
             "sidebar_url": "/collections/barn-supplies",
             "content_type": "columns",
             "col1_title": "Barn Equipment",
