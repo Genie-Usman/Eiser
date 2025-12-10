@@ -578,6 +578,9 @@
   .ml-24 {
     margin-left: calc(var(--spacing) * 24);
   }
+  .ml-auto {
+    margin-left: auto;
+  }
   .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -830,6 +833,9 @@
   .w-\[110px\] {
     width: 110px;
   }
+  .w-\[140px\] {
+    width: 140px;
+  }
   .w-\[200px\] {
     width: 200px;
   }
@@ -919,6 +925,9 @@
   }
   .min-w-\[18px\] {
     min-width: 18px;
+  }
+  .min-w-\[130px\] {
+    min-width: 130px;
   }
   .min-w-\[140px\] {
     min-width: 140px;
