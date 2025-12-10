@@ -585,243 +585,240 @@
                                   <div class="flex gap-6 h-full py-4 px-6">
                                     {% if block.settings.image1 != blank %}
                                       <a href="{{ block.settings.image1_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
                                           <img
                                             src="{{ block.settings.image1 | image_url: width: 600 }}"
                                             alt="{{ block.settings.image1_title }}"
                                             height="inherit"
                                             width="inherit"
-                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            class="w-full h-full object-cover">
                                         </div>
                                         {% if block.settings.image1_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center">{{ block.settings.image1_title }}</p>
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image1_title }}</p>
                                         {% endif %}
                                       </a>
                                     {% endif %}
 
                                     {% if block.settings.image2 != blank %}
                                       <a href="{{ block.settings.image2_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
                                           <img
                                             src="{{ block.settings.image2 | image_url: width: 600 }}"
                                             alt="{{ block.settings.image2_title }}"
                                             height="inherit"
                                             width="inherit"
-                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            class="w-full h-full object-cover">
                                         </div>
                                         {% if block.settings.image2_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center">{{ block.settings.image2_title }}</p>
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image2_title }}</p>
                                         {% endif %}
                                       </a>
                                     {% endif %}
 
                                     {% if block.settings.image3 != blank %}
                                       <a href="{{ block.settings.image3_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
                                           <img
                                             src="{{ block.settings.image3 | image_url: width: 600 }}"
                                             alt="{{ block.settings.image3_title }}"
                                             height="inherit"
                                             width="inherit"
-                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            class="w-full h-full object-cover">
                                         </div>
                                         {% if block.settings.image3_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center">{{ block.settings.image3_title }}</p>
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image3_title }}</p>
                                         {% endif %}
                                       </a>
                                     {% endif %}
 
                                     {% if block.settings.image4 != blank %}
                                       <a href="{{ block.settings.image4_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
                                           <img
                                             src="{{ block.settings.image4 | image_url: width: 600 }}"
                                             alt="{{ block.settings.image4_title }}"
                                             height="inherit"
                                             width="inherit"
-                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            class="w-full h-full object-cover">
                                         </div>
                                         {% if block.settings.image4_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center">{{ block.settings.image4_title }}</p>
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image4_title }}</p>
                                         {% endif %}
                                       </a>
                                     {% endif %}
                                   </div>
 
                                 {% when 'mixed' %}
-                                  <!-- Mixed: Columns + Image Cards -->
+                                  <!-- Mixed: Columns + Image Cards (Equus Now Reference Style) -->
+                                  <!-- All content flows together, each element shares space equally -->
                                   <div class="flex gap-6 py-5 px-6 h-full">
-                                    <!-- Text Columns Section -->
-                                    <div class="flex gap-8">
-                                      {% if block.settings.col1_title != blank %}
-                                        <div class="min-w-[130px]">
-                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col1_title }}</h4>
-                                          <ul class="space-y-1.5">
-                                            {% assign lines = block.settings.col1_links | newline_to_br | split: '<br />' %}
-                                            {% for line in lines %}
-                                              {% assign parts = line | split: '|' %}
-                                              {% if parts.size >= 2 %}
-                                                <li>
-                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
-                                                </li>
-                                              {% endif %}
-                                            {% endfor %}
-                                          </ul>
+                                    {% comment %} Text Columns - each takes flex-1 {% endcomment %}
+                                    {% if block.settings.col1_title != blank %}
+                                      <div class="flex-1">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col1_title }}</h4>
+                                        <ul class="space-y-2">
+                                          {% assign lines = block.settings.col1_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% if block.settings.col2_title != blank %}
+                                      <div class="flex-1">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col2_title }}</h4>
+                                        <ul class="space-y-2">
+                                          {% assign lines = block.settings.col2_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% if block.settings.col3_title != blank %}
+                                      <div class="flex-1">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col3_title }}</h4>
+                                        <ul class="space-y-2">
+                                          {% assign lines = block.settings.col3_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% if block.settings.col4_title != blank %}
+                                      <div class="flex-1">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col4_title }}</h4>
+                                        <ul class="space-y-2">
+                                          {% assign lines = block.settings.col4_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% if block.settings.col5_title != blank %}
+                                      <div class="flex-1">
+                                        <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col5_title }}</h4>
+                                        <ul class="space-y-2">
+                                          {% assign lines = block.settings.col5_links | newline_to_br | split: '<br />' %}
+                                          {% for line in lines %}
+                                            {% assign parts = line | split: '|' %}
+                                            {% if parts.size >= 2 %}
+                                              <li>
+                                                <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
+                                              </li>
+                                            {% endif %}
+                                          {% endfor %}
+                                        </ul>
+                                      </div>
+                                    {% endif %}
+
+                                    {% comment %} Images - each takes flex-1 to share space equally {% endcomment %}
+                                    {% if block.settings.image1 != blank %}
+                                      <a href="{{ block.settings.image1_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                          <img
+                                            src="{{ block.settings.image1 | image_url: width: 500 }}"
+                                            alt="{{ block.settings.image1_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover">
                                         </div>
-                                      {% endif %}
+                                        {% if block.settings.image1_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image1_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
 
-                                      {% if block.settings.col2_title != blank %}
-                                        <div class="min-w-[130px]">
-                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col2_title }}</h4>
-                                          <ul class="space-y-1.5">
-                                            {% assign lines = block.settings.col2_links | newline_to_br | split: '<br />' %}
-                                            {% for line in lines %}
-                                              {% assign parts = line | split: '|' %}
-                                              {% if parts.size >= 2 %}
-                                                <li>
-                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
-                                                </li>
-                                              {% endif %}
-                                            {% endfor %}
-                                          </ul>
+                                    {% if block.settings.image2 != blank %}
+                                      <a href="{{ block.settings.image2_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                          <img
+                                            src="{{ block.settings.image2 | image_url: width: 500 }}"
+                                            alt="{{ block.settings.image2_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover">
                                         </div>
-                                      {% endif %}
+                                        {% if block.settings.image2_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image2_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
 
-                                      {% if block.settings.col3_title != blank %}
-                                        <div class="min-w-[130px]">
-                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col3_title }}</h4>
-                                          <ul class="space-y-1.5">
-                                            {% assign lines = block.settings.col3_links | newline_to_br | split: '<br />' %}
-                                            {% for line in lines %}
-                                              {% assign parts = line | split: '|' %}
-                                              {% if parts.size >= 2 %}
-                                                <li>
-                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
-                                                </li>
-                                              {% endif %}
-                                            {% endfor %}
-                                          </ul>
+                                    {% if block.settings.image3 != blank %}
+                                      <a href="{{ block.settings.image3_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                          <img
+                                            src="{{ block.settings.image3 | image_url: width: 500 }}"
+                                            alt="{{ block.settings.image3_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover">
                                         </div>
-                                      {% endif %}
+                                        {% if block.settings.image3_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image3_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
 
-                                      {% if block.settings.col4_title != blank %}
-                                        <div class="min-w-[130px]">
-                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col4_title }}</h4>
-                                          <ul class="space-y-1.5">
-                                            {% assign lines = block.settings.col4_links | newline_to_br | split: '<br />' %}
-                                            {% for line in lines %}
-                                              {% assign parts = line | split: '|' %}
-                                              {% if parts.size >= 2 %}
-                                                <li>
-                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
-                                                </li>
-                                              {% endif %}
-                                            {% endfor %}
-                                          </ul>
+                                    {% if block.settings.image4 != blank %}
+                                      <a href="{{ block.settings.image4_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                          <img
+                                            src="{{ block.settings.image4 | image_url: width: 500 }}"
+                                            alt="{{ block.settings.image4_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover">
                                         </div>
-                                      {% endif %}
+                                        {% if block.settings.image4_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image4_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
 
-                                      {% if block.settings.col5_title != blank %}
-                                        <div class="min-w-[130px]">
-                                          <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col5_title }}</h4>
-                                          <ul class="space-y-1.5">
-                                            {% assign lines = block.settings.col5_links | newline_to_br | split: '<br />' %}
-                                            {% for line in lines %}
-                                              {% assign parts = line | split: '|' %}
-                                              {% if parts.size >= 2 %}
-                                                <li>
-                                                  <a href="{{ parts[1] | strip }}" class="text-[13px] text-gray-600 hover:text-(--equus-accent) transition-colors">{{ parts[0] | strip }}</a>
-                                                </li>
-                                              {% endif %}
-                                            {% endfor %}
-                                          </ul>
+                                    {% comment %} Featured image - also flex-1 {% endcomment %}
+                                    {% if block.settings.featured_image != blank %}
+                                      <a href="{{ block.settings.featured_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                          <img
+                                            src="{{ block.settings.featured_image | image_url: width: 500 }}"
+                                            alt="{{ block.settings.featured_title }}"
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-full object-cover">
                                         </div>
-                                      {% endif %}
-                                    </div>
-
-                                    <!-- Image Cards Section -->
-                                    <div class="flex gap-4 ml-auto">
-                                      {% if block.settings.image1 != blank %}
-                                        <a href="{{ block.settings.image1_url | default: '#' }}" class="w-[140px] flex flex-col group">
-                                          <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-2" style="aspect-ratio: 3/4;">
-                                            <img
-                                              src="{{ block.settings.image1 | image_url: width: 400 }}"
-                                              alt="{{ block.settings.image1_title }}"
-                                              height="inherit"
-                                              width="inherit"
-                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                          </div>
-                                          {% if block.settings.image1_title != blank %}
-                                            <p class="text-xs font-medium text-gray-800 text-center">{{ block.settings.image1_title }}</p>
-                                          {% endif %}
-                                        </a>
-                                      {% endif %}
-
-                                      {% if block.settings.image2 != blank %}
-                                        <a href="{{ block.settings.image2_url | default: '#' }}" class="w-[140px] flex flex-col group">
-                                          <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-2" style="aspect-ratio: 3/4;">
-                                            <img
-                                              src="{{ block.settings.image2 | image_url: width: 400 }}"
-                                              alt="{{ block.settings.image2_title }}"
-                                              height="inherit"
-                                              width="inherit"
-                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                          </div>
-                                          {% if block.settings.image2_title != blank %}
-                                            <p class="text-xs font-medium text-gray-800 text-center">{{ block.settings.image2_title }}</p>
-                                          {% endif %}
-                                        </a>
-                                      {% endif %}
-
-                                      {% if block.settings.image3 != blank %}
-                                        <a href="{{ block.settings.image3_url | default: '#' }}" class="w-[140px] flex flex-col group">
-                                          <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-2" style="aspect-ratio: 3/4;">
-                                            <img
-                                              src="{{ block.settings.image3 | image_url: width: 400 }}"
-                                              alt="{{ block.settings.image3_title }}"
-                                              height="inherit"
-                                              width="inherit"
-                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                          </div>
-                                          {% if block.settings.image3_title != blank %}
-                                            <p class="text-xs font-medium text-gray-800 text-center">{{ block.settings.image3_title }}</p>
-                                          {% endif %}
-                                        </a>
-                                      {% endif %}
-
-                                      {% if block.settings.image4 != blank %}
-                                        <a href="{{ block.settings.image4_url | default: '#' }}" class="w-[140px] flex flex-col group">
-                                          <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-2" style="aspect-ratio: 3/4;">
-                                            <img
-                                              src="{{ block.settings.image4 | image_url: width: 400 }}"
-                                              alt="{{ block.settings.image4_title }}"
-                                              height="inherit"
-                                              width="inherit"
-                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                          </div>
-                                          {% if block.settings.image4_title != blank %}
-                                            <p class="text-xs font-medium text-gray-800 text-center">{{ block.settings.image4_title }}</p>
-                                          {% endif %}
-                                        </a>
-                                      {% endif %}
-
-                                      {% comment %} Also show featured image if set {% endcomment %}
-                                      {% if block.settings.featured_image != blank %}
-                                        <a href="{{ block.settings.featured_url | default: '#' }}" class="w-[140px] flex flex-col group">
-                                          <div class="flex-1 rounded-lg overflow-hidden bg-gray-100 mb-2" style="aspect-ratio: 3/4;">
-                                            <img
-                                              src="{{ block.settings.featured_image | image_url: width: 400 }}"
-                                              alt="{{ block.settings.featured_title }}"
-                                              height="inherit"
-                                              width="inherit"
-                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                          </div>
-                                          {% if block.settings.featured_title != blank %}
-                                            <p class="text-xs font-medium text-gray-800 text-center">{{ block.settings.featured_title }}</p>
-                                          {% endif %}
-                                        </a>
-                                      {% endif %}
-                                    </div>
+                                        {% if block.settings.featured_title != blank %}
+                                          <p class="text-sm font-medium text-(--equus-accent) text-center">{{ block.settings.featured_title }}</p>
+                                        {% endif %}
+                                      </a>
+                                    {% endif %}
                                   </div>
 
                               {% endcase %}
