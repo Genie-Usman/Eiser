@@ -209,6 +209,7 @@
         "announcement_right": "Over 300+ Five Star Reviews",
         "announcement_bg": "#1a1a1a",
         "announcement_text": "#ffffff",
+        "logo": "shopify://shop_images/slashcart.webp",
         "logo_width": 160,
         "main_menu": "slashcart-menu",
         "header_bg": "#ffffff",
