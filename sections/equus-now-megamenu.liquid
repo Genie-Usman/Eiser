@@ -78,18 +78,39 @@
         "id": "sidebar_bg",
         "label": "Left Sidebar Background",
         "default": "#ffffff"
+      }, {
+        "type": "header",
+        "content": "Widths"
+      }, {
+        "type": "range",
+        "id": "sidebar_width",
+        "min": 150,
+        "max": 300,
+        "step": 10,
+        "unit": "px",
+        "label": "Sidebar Width",
+        "default": 210
+      }, {
+        "type": "range",
+        "id": "image_max_width",
+        "min": 180,
+        "max": 400,
+        "step": 10,
+        "unit": "px",
+        "label": "Image Card Max Width",
+        "default": 280
       }
     ],
     "blocks": [
       {
         "type": "sidebar_item",
-        "name": "Sidebar Content",
+        "name": "Sidebar",
         "settings": [
           {
             "type": "text",
             "id": "sidebar_title",
             "label": "Sidebar Item Title",
-            "info": "Shows as block name in editor. Exact match, e.g., 'Tack and Equipment'"
+            "info": "Enter a name to identify this block (e.g., Tack and Equipment)"
           },
           {
             "type": "header",
@@ -125,6 +146,19 @@
               }
             ],
             "default": "columns"
+          }, {
+            "type": "header",
+            "content": "Image Settings"
+          }, {
+            "type": "range",
+            "id": "image_card_width",
+            "min": 150,
+            "max": 500,
+            "step": 10,
+            "unit": "px",
+            "label": "Image Card Width",
+            "default": 250,
+            "info": "Width of each image card. Height stays fixed."
           }, {
             "type": "header",
             "content": "Column 1"
@@ -185,13 +219,20 @@
             "type": "header",
             "content": "Image Card 1"
           }, {
+            "type": "collection",
+            "id": "image1_collection",
+            "label": "Collection 1",
+            "info": "Select a collection to auto-load its image and title"
+          }, {
             "type": "image_picker",
             "id": "image1",
-            "label": "Image 1"
+            "label": "Custom Image 1",
+            "info": "Overrides the collection image if set"
           }, {
             "type": "text",
             "id": "image1_title",
-            "label": "Image 1 Title"
+            "label": "Custom Title 1",
+            "info": "Overrides the collection title if set"
           }, {
             "type": "url",
             "id": "image1_url",
@@ -200,13 +241,20 @@
             "type": "header",
             "content": "Image Card 2"
           }, {
+            "type": "collection",
+            "id": "image2_collection",
+            "label": "Collection 2",
+            "info": "Select a collection to auto-load its image and title"
+          }, {
             "type": "image_picker",
             "id": "image2",
-            "label": "Image 2"
+            "label": "Custom Image 2",
+            "info": "Overrides the collection image if set"
           }, {
             "type": "text",
             "id": "image2_title",
-            "label": "Image 2 Title"
+            "label": "Custom Title 2",
+            "info": "Overrides the collection title if set"
           }, {
             "type": "url",
             "id": "image2_url",
@@ -215,13 +263,20 @@
             "type": "header",
             "content": "Image Card 3"
           }, {
+            "type": "collection",
+            "id": "image3_collection",
+            "label": "Collection 3",
+            "info": "Select a collection to auto-load its image and title"
+          }, {
             "type": "image_picker",
             "id": "image3",
-            "label": "Image 3"
+            "label": "Custom Image 3",
+            "info": "Overrides the collection image if set"
           }, {
             "type": "text",
             "id": "image3_title",
-            "label": "Image 3 Title"
+            "label": "Custom Title 3",
+            "info": "Overrides the collection title if set"
           }, {
             "type": "url",
             "id": "image3_url",
@@ -230,13 +285,20 @@
             "type": "header",
             "content": "Image Card 4"
           }, {
+            "type": "collection",
+            "id": "image4_collection",
+            "label": "Collection 4",
+            "info": "Select a collection to auto-load its image and title"
+          }, {
             "type": "image_picker",
             "id": "image4",
-            "label": "Image 4"
+            "label": "Custom Image 4",
+            "info": "Overrides the collection image if set"
           }, {
             "type": "text",
             "id": "image4_title",
-            "label": "Image 4 Title"
+            "label": "Custom Title 4",
+            "info": "Overrides the collection title if set"
           }, {
             "type": "url",
             "id": "image4_url",
@@ -277,6 +339,8 @@
     --equus-sidebar-bg: {{ section.settings.sidebar_bg }};
     --equus-contact-bg: {{ section.settings.contact_bar_bg }};
     --equus-contact-text: {{ section.settings.contact_bar_text }};
+    --equus-sidebar-width: {{ section.settings.sidebar_width }}px;
+    --equus-image-max-width: {{ section.settings.image_max_width }}px;
   }
 
   [x-cloak] {
@@ -291,7 +355,7 @@
 
   <!-- Contact Bar -->
   {% if section.settings.show_contact_bar %}
-    <div class="w-full py-2 text-center text-xs font-semibold tracking-wide" style="background-color: var(--equus-contact-bg); color: var(--equus-contact-text);">
+    <div class="w-full py-2 text-center text-xs font-semibold tracking-wide" style="background-color: #808080; color: var(--equus-contact-text);">
       {{ section.settings.contact_text }}
     </div>
   {% endif %}
@@ -373,20 +437,6 @@
                 {% if show_dropdown %}
                 @click.prevent{% endif %}>
                 {{ link.title }}
-                {% if show_dropdown %}
-                  <svg
-                    class="w-3 h-3 transition-transform duration-200"
-                    :class="{'rotate-180': open}"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 9l-7 7-7-7" />
-                  </svg>
-                {% endif %}
               </a>
 
               <!-- Megamenu Dropdown -->
@@ -404,7 +454,7 @@
                   <div class="max-w-[1400px] mx-auto flex min-h-[400px]">
 
                     <!-- Left Sidebar -->
-                    <div class="w-[210px] shrink-0 py-4 border-r border-gray-200" style="background-color: var(--equus-sidebar-bg);">
+                    <div class="shrink-0 py-4 border-r border-gray-200" style="background-color: ; width: 280px;">
                       {% comment %} Collect unique sidebar items for this parent {% endcomment %}
                       {% comment %} Collect unique sidebar items for this parent {% endcomment %}
                       {% for block in section.blocks %}
@@ -413,8 +463,8 @@
                           {% if block_parent == link_title_lower %}
                             <a
                               href="{{ block.settings.sidebar_url | default: '#' }}"
-                              class="flex items-center justify-between px-4 py-2 text-[12px] font-medium transition-all duration-150 border-l-[3px]"
-                              :class="activeSidebar === '{{ block.id }}' ? 'text-(--equus-accent) bg-white border-(--equus-accent)' : 'text-gray-700 hover:bg-gray-50 border-transparent'"
+                              class="flex items-center justify-between px-8 py-2 text-[12px] font-medium"
+                              :class="activeSidebar === '{{ block.id }}' ? 'text-(--equus-accent) bg-[#E5E5E5] border-(--equus-accent)' : 'text-gray-700 hover:bg-gray-50 border-transparent'"
                               @mouseenter="activeSidebar = '{{ block.id }}'"
                               {{ block.shopify_attributes }}>
                               {{ block.settings.sidebar_title }}
@@ -583,66 +633,134 @@
                                 {% when 'images' %}
                                   <!-- Image Cards Layout - Full Width -->
                                   <div class="flex gap-6 h-full py-4 px-6">
-                                    {% if block.settings.image1 != blank %}
-                                      <a href="{{ block.settings.image1_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                    {% comment %} Image Card 1 {% endcomment %}
+                                    {% assign img1 = block.settings.image1 %}
+                                    {% assign img1_title = block.settings.image1_title %}
+                                    {% assign img1_url = block.settings.image1_url %}
+                                    {% assign col1 = block.settings.image1_collection %}
+                                    {% if img1 == blank and col1 != blank %}
+                                      {% assign img1 = col1.image %}
+                                    {% endif %}
+                                    {% if img1_title == blank and col1 != blank %}
+                                      {% assign img1_title = col1.title %}
+                                    {% endif %}
+                                    {% if img1_url == blank and col1 != blank %}
+                                      {% assign img1_url = col1.url %}
+                                    {% endif %}
+                                    {% if img1 != blank %}
+                                      <a
+                                        href="{{ img1_url | default: '#' }}"
+                                        class="flex flex-col group"
+                                        style="width: {{ block.settings.image_card_width }}px; flex-shrink: 0;">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
-                                            src="{{ block.settings.image1 | image_url: width: 600 }}"
-                                            alt="{{ block.settings.image1_title }}"
+                                            src="{{ img1 | image_url: width: 600 }}"
+                                            alt="{{ img1_title }}"
                                             height="inherit"
                                             width="inherit"
                                             class="w-full h-full object-cover">
                                         </div>
-                                        {% if block.settings.image1_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image1_title }}</p>
+                                        {% if img1_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ img1_title }}</p>
                                         {% endif %}
                                       </a>
-                                    {% endif %}
+                                  {% endif %}
 
-                                    {% if block.settings.image2 != blank %}
-                                      <a href="{{ block.settings.image2_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                    {% comment %} Image Card 2 {% endcomment %}
+                                    {% assign img2 = block.settings.image2 %}
+                                    {% assign img2_title = block.settings.image2_title %}
+                                    {% assign img2_url = block.settings.image2_url %}
+                                    {% assign col2 = block.settings.image2_collection %}
+                                    {% if img2 == blank and col2 != blank %}
+                                      {% assign img2 = col2.image %}
+                                    {% endif %}
+                                    {% if img2_title == blank and col2 != blank %}
+                                      {% assign img2_title = col2.title %}
+                                    {% endif %}
+                                    {% if img2_url == blank and col2 != blank %}
+                                      {% assign img2_url = col2.url %}
+                                    {% endif %}
+                                    {% if img2 != blank %}
+                                      <a
+                                        href="{{ img2_url | default: '#' }}"
+                                        class="flex flex-col group"
+                                        style="width: {{ block.settings.image_card_width }}px; flex-shrink: 0;">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
-                                            src="{{ block.settings.image2 | image_url: width: 600 }}"
-                                            alt="{{ block.settings.image2_title }}"
+                                            src="{{ img2 | image_url: width: 600 }}"
+                                            alt="{{ img2_title }}"
                                             height="inherit"
                                             width="inherit"
                                             class="w-full h-full object-cover">
                                         </div>
-                                        {% if block.settings.image2_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image2_title }}</p>
+                                        {% if img2_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ img2_title }}</p>
                                         {% endif %}
                                       </a>
-                                    {% endif %}
+                                  {% endif %}
 
-                                    {% if block.settings.image3 != blank %}
-                                      <a href="{{ block.settings.image3_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                    {% comment %} Image Card 3 {% endcomment %}
+                                    {% assign img3 = block.settings.image3 %}
+                                    {% assign img3_title = block.settings.image3_title %}
+                                    {% assign img3_url = block.settings.image3_url %}
+                                    {% assign col3 = block.settings.image3_collection %}
+                                    {% if img3 == blank and col3 != blank %}
+                                      {% assign img3 = col3.image %}
+                                    {% endif %}
+                                    {% if img3_title == blank and col3 != blank %}
+                                      {% assign img3_title = col3.title %}
+                                    {% endif %}
+                                    {% if img3_url == blank and col3 != blank %}
+                                      {% assign img3_url = col3.url %}
+                                    {% endif %}
+                                    {% if img3 != blank %}
+                                      <a
+                                        href="{{ img3_url | default: '#' }}"
+                                        class="flex flex-col group"
+                                        style="width: {{ block.settings.image_card_width }}px; flex-shrink: 0;">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
-                                            src="{{ block.settings.image3 | image_url: width: 600 }}"
-                                            alt="{{ block.settings.image3_title }}"
+                                            src="{{ img3 | image_url: width: 600 }}"
+                                            alt="{{ img3_title }}"
                                             height="inherit"
                                             width="inherit"
                                             class="w-full h-full object-cover">
                                         </div>
-                                        {% if block.settings.image3_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image3_title }}</p>
+                                        {% if img3_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ img3_title }}</p>
                                         {% endif %}
                                       </a>
-                                    {% endif %}
+                                  {% endif %}
 
-                                    {% if block.settings.image4 != blank %}
-                                      <a href="{{ block.settings.image4_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3" style="aspect-ratio: 3/4;">
+                                    {% comment %} Image Card 4 {% endcomment %}
+                                    {% assign img4 = block.settings.image4 %}
+                                    {% assign img4_title = block.settings.image4_title %}
+                                    {% assign img4_url = block.settings.image4_url %}
+                                    {% assign col4 = block.settings.image4_collection %}
+                                    {% if img4 == blank and col4 != blank %}
+                                      {% assign img4 = col4.image %}
+                                    {% endif %}
+                                    {% if img4_title == blank and col4 != blank %}
+                                      {% assign img4_title = col4.title %}
+                                    {% endif %}
+                                    {% if img4_url == blank and col4 != blank %}
+                                      {% assign img4_url = col4.url %}
+                                    {% endif %}
+                                    {% if img4 != blank %}
+                                      <a
+                                        href="{{ img4_url | default: '#' }}"
+                                        class="flex flex-col group"
+                                        style="width: {{ block.settings.image_card_width }}px; flex-shrink: 0;">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
-                                            src="{{ block.settings.image4 | image_url: width: 600 }}"
-                                            alt="{{ block.settings.image4_title }}"
+                                            src="{{ img4 | image_url: width: 600 }}"
+                                            alt="{{ img4_title }}"
                                             height="inherit"
                                             width="inherit"
                                             class="w-full h-full object-cover">
                                         </div>
-                                        {% if block.settings.image4_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image4_title }}</p>
+                                        {% if img4_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ img4_title }}</p>
                                         {% endif %}
                                       </a>
                                     {% endif %}
@@ -651,7 +769,7 @@
                                 {% when 'mixed' %}
                                   <!-- Mixed: Columns + Image Cards (Equus Now Reference Style) -->
                                   <!-- All content flows together, each element shares space equally -->
-                                  <div class="flex gap-6 py-5 px-6 h-full">
+                                  <div class="flex items-start gap-6 py-5 px-6 h-full">
                                     {% comment %} Text Columns - each takes flex-1 {% endcomment %}
                                     {% if block.settings.col1_title != blank %}
                                       <div class="flex-1">
@@ -736,69 +854,125 @@
                                           {% endfor %}
                                         </ul>
                                       </div>
-                                    {% endif %}
+                                  {% endif %}
 
                                     {% comment %} Images - each takes flex-1 to share space equally {% endcomment %}
-                                    {% if block.settings.image1 != blank %}
-                                      <a href="{{ block.settings.image1_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                    {% comment %} Image Card 1 in Mixed Layout {% endcomment %}
+                                    {% assign mimg1 = block.settings.image1 %}
+                                    {% assign mimg1_title = block.settings.image1_title %}
+                                    {% assign mimg1_url = block.settings.image1_url %}
+                                    {% assign mcol1 = block.settings.image1_collection %}
+                                    {% if mimg1 == blank and mcol1 != blank %}
+                                      {% assign mimg1 = mcol1.image %}
+                                    {% endif %}
+                                    {% if mimg1_title == blank and mcol1 != blank %}
+                                      {% assign mimg1_title = mcol1.title %}
+                                    {% endif %}
+                                    {% if mimg1_url == blank and mcol1 != blank %}
+                                      {% assign mimg1_url = mcol1.url %}
+                                    {% endif %}
+                                    {% if mimg1 != blank %}
+                                      <a href="{{ mimg1_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
-                                            src="{{ block.settings.image1 | image_url: width: 500 }}"
-                                            alt="{{ block.settings.image1_title }}"
+                                            src="{{ mimg1 | image_url: width: 500 }}"
+                                            alt="{{ mimg1_title }}"
                                             height="inherit"
                                             width="inherit"
                                             class="w-full h-full object-cover">
                                         </div>
-                                        {% if block.settings.image1_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image1_title }}</p>
+                                        {% if mimg1_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ mimg1_title }}</p>
                                         {% endif %}
                                       </a>
-                                    {% endif %}
+                                  {% endif %}
 
-                                    {% if block.settings.image2 != blank %}
-                                      <a href="{{ block.settings.image2_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                    {% comment %} Image Card 2 in Mixed Layout {% endcomment %}
+                                    {% assign mimg2 = block.settings.image2 %}
+                                    {% assign mimg2_title = block.settings.image2_title %}
+                                    {% assign mimg2_url = block.settings.image2_url %}
+                                    {% assign mcol2 = block.settings.image2_collection %}
+                                    {% if mimg2 == blank and mcol2 != blank %}
+                                      {% assign mimg2 = mcol2.image %}
+                                    {% endif %}
+                                    {% if mimg2_title == blank and mcol2 != blank %}
+                                      {% assign mimg2_title = mcol2.title %}
+                                    {% endif %}
+                                    {% if mimg2_url == blank and mcol2 != blank %}
+                                      {% assign mimg2_url = mcol2.url %}
+                                    {% endif %}
+                                    {% if mimg2 != blank %}
+                                      <a href="{{ mimg2_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
-                                            src="{{ block.settings.image2 | image_url: width: 500 }}"
-                                            alt="{{ block.settings.image2_title }}"
+                                            src="{{ mimg2 | image_url: width: 500 }}"
+                                            alt="{{ mimg2_title }}"
                                             height="inherit"
                                             width="inherit"
                                             class="w-full h-full object-cover">
                                         </div>
-                                        {% if block.settings.image2_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image2_title }}</p>
+                                        {% if mimg2_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ mimg2_title }}</p>
                                         {% endif %}
                                       </a>
-                                    {% endif %}
+                                  {% endif %}
 
-                                    {% if block.settings.image3 != blank %}
-                                      <a href="{{ block.settings.image3_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                    {% comment %} Image Card 3 in Mixed Layout {% endcomment %}
+                                    {% assign mimg3 = block.settings.image3 %}
+                                    {% assign mimg3_title = block.settings.image3_title %}
+                                    {% assign mimg3_url = block.settings.image3_url %}
+                                    {% assign mcol3 = block.settings.image3_collection %}
+                                    {% if mimg3 == blank and mcol3 != blank %}
+                                      {% assign mimg3 = mcol3.image %}
+                                    {% endif %}
+                                    {% if mimg3_title == blank and mcol3 != blank %}
+                                      {% assign mimg3_title = mcol3.title %}
+                                    {% endif %}
+                                    {% if mimg3_url == blank and mcol3 != blank %}
+                                      {% assign mimg3_url = mcol3.url %}
+                                    {% endif %}
+                                    {% if mimg3 != blank %}
+                                      <a href="{{ mimg3_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
-                                            src="{{ block.settings.image3 | image_url: width: 500 }}"
-                                            alt="{{ block.settings.image3_title }}"
+                                            src="{{ mimg3 | image_url: width: 500 }}"
+                                            alt="{{ mimg3_title }}"
                                             height="inherit"
                                             width="inherit"
                                             class="w-full h-full object-cover">
                                         </div>
-                                        {% if block.settings.image3_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image3_title }}</p>
+                                        {% if mimg3_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ mimg3_title }}</p>
                                         {% endif %}
                                       </a>
-                                    {% endif %}
+                                  {% endif %}
 
-                                    {% if block.settings.image4 != blank %}
-                                      <a href="{{ block.settings.image4_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                    {% comment %} Image Card 4 in Mixed Layout {% endcomment %}
+                                    {% assign mimg4 = block.settings.image4 %}
+                                    {% assign mimg4_title = block.settings.image4_title %}
+                                    {% assign mimg4_url = block.settings.image4_url %}
+                                    {% assign mcol4 = block.settings.image4_collection %}
+                                    {% if mimg4 == blank and mcol4 != blank %}
+                                      {% assign mimg4 = mcol4.image %}
+                                    {% endif %}
+                                    {% if mimg4_title == blank and mcol4 != blank %}
+                                      {% assign mimg4_title = mcol4.title %}
+                                    {% endif %}
+                                    {% if mimg4_url == blank and mcol4 != blank %}
+                                      {% assign mimg4_url = mcol4.url %}
+                                    {% endif %}
+                                    {% if mimg4 != blank %}
+                                      <a href="{{ mimg4_url | default: '#' }}" class="flex-1 flex flex-col group">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
-                                            src="{{ block.settings.image4 | image_url: width: 500 }}"
-                                            alt="{{ block.settings.image4_title }}"
+                                            src="{{ mimg4 | image_url: width: 500 }}"
+                                            alt="{{ mimg4_title }}"
                                             height="inherit"
                                             width="inherit"
                                             class="w-full h-full object-cover">
                                         </div>
-                                        {% if block.settings.image4_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ block.settings.image4_title }}</p>
+                                        {% if mimg4_title != blank %}
+                                          <p class="text-sm font-medium text-gray-800 text-center group-hover:text-(--equus-accent)">{{ mimg4_title }}</p>
                                         {% endif %}
                                       </a>
                                     {% endif %}
@@ -806,7 +980,7 @@
                                     {% comment %} Featured image - also flex-1 {% endcomment %}
                                     {% if block.settings.featured_image != blank %}
                                       <a href="{{ block.settings.featured_url | default: '#' }}" class="flex-1 flex flex-col group">
-                                        <div class="flex-1 overflow-hidden bg-gray-100 mb-3">
+                                        <div class="overflow-hidden bg-gray-100 mb-3" style="height: 320px;">
                                           <img
                                             src="{{ block.settings.featured_image | image_url: width: 500 }}"
                                             alt="{{ block.settings.featured_title }}"
@@ -926,23 +1100,36 @@
   <div
     x-show="mobileMenuOpen"
     x-cloak
+    @keydown.escape.window="mobileMenuOpen = false"
     class="lg:hidden fixed inset-0 z-1000">
+
+    <!-- Overlay -->
     <div
-      class="fixed inset-0 bg-black/50"
-      @click="mobileMenuOpen = false"
-      x-transition:enter="transition ease-out duration-200"
+      x-show="mobileMenuOpen"
+      x-transition:enter="transition-opacity ease-out duration-300"
       x-transition:enter-start="opacity-0"
-      x-transition:enter-end="opacity-100"></div>
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition-opacity ease-in duration-200"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="fixed inset-0 bg-black/50"
+      @click="mobileMenuOpen = false"></div>
 
+    <!-- Drawer -->
     <div
-      class="fixed inset-y-0 left-0 w-[300px] bg-white shadow-xl overflow-y-auto"
-      x-transition:enter="transition ease-out duration-300 transform"
+      x-show="mobileMenuOpen"
+      x-transition:enter="transition ease-out duration-300"
       x-transition:enter-start="-translate-x-full"
-      x-transition:enter-end="translate-x-0">
+      x-transition:enter-end="translate-x-0"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="translate-x-0"
+      x-transition:leave-end="-translate-x-full"
+      class="fixed inset-y-0 left-0 w-[85vw] max-w-[380px] bg-white shadow-xl overflow-y-auto">
 
-      <button @click="mobileMenuOpen = false" class="flex items-center gap-2 w-full p-5 border-b border-gray-100">
+      <!-- Close Button -->
+      <button @click="mobileMenuOpen = false" class="flex items-center gap-2 w-full px-5 py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
         <svg
-          class="w-5 h-5"
+          class="w-5 h-5 text-gray-600"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24">
@@ -952,48 +1139,125 @@
             stroke-width="2"
             d="M6 18L18 6M6 6l12 12" />
         </svg>
-        <span class="font-semibold text-sm">Close</span>
       </button>
 
-      <ul class="py-4">
+      <nav class="overflow-y-auto">
         {% if section.settings.main_menu != blank %}
           {% for link in linklists[section.settings.main_menu].links %}
-            <li x-data="{ subOpen: false }" class="border-b border-gray-50">
-              <div class="flex items-center justify-between">
-                <a href="{{ link.url }}" class="flex-1 px-5 py-4 text-sm font-medium text-gray-800">{{ link.title }}</a>
-                {% if link.links != blank %}
-                  <button @click="subOpen = !subOpen" class="p-4">
-                    <svg
-                      class="w-4 h-4 text-gray-400 transition-transform"
-                      :class="{'rotate-180': subOpen}"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
+          {% assign link_title_lower = link.title | downcase | strip %}
+
+            {% comment %} Check if this menu item has sidebar blocks {% endcomment %}
+            {% assign has_blocks = false %}
+            {% for block in section.blocks %}
+              {% if block.type == 'sidebar_item' %}
+                {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+                {% if block_parent == link_title_lower %}
+                  {% assign has_blocks = true %}
+                  {% break %}
                 {% endif %}
-              </div>
-              {% if link.links != blank %}
-                <ul
-                  x-show="subOpen"
-                  x-collapse
-                  class="bg-gray-50 px-5 pb-4">
-                  {% for child in link.links %}
-                    <li>
-                      <a href="{{ child.url }}" class="block py-2 text-[13px] text-gray-600">{{ child.title }}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
               {% endif %}
-            </li>
+            {% endfor %}
+
+            {% assign has_children = false %}
+            {% if has_blocks or link.links != blank %}
+              {% assign has_children = true %}
+            {% endif %}
+
+            <!-- Level 1: Main menu item -->
+            <div x-data="{ open: false }" class="border-b border-gray-100">
+              {% if has_children %}
+                <button @click="open = !open" class="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-gray-50 transition-colors duration-200">
+                  <span class="text-sm font-medium text-gray-800">{{ link.title }}</span>
+                  <span class="mobile-toggle-icon text-gray-400" :data-open="open"></span>
+                </button>
+
+                <!-- Level 2: Sidebar blocks or Shopify children -->
+                <div class="mobile-accordion" :data-open="open">
+                  <div class="mobile-accordion-content bg-gray-50">
+                    <!-- View All link for parent -->
+                    <a href="{{ link.url }}" class="block pl-8 pr-5 py-3 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200">
+                      View All
+                    </a>
+
+                    {% if has_blocks %}
+                      <!-- Sidebar blocks with their column links -->
+                      {% for block in section.blocks %}
+                        {% if block.type == 'sidebar_item' %}
+                          {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+                          {% if block_parent == link_title_lower %}
+                            {% assign has_col_links = false %}
+                            {% if block.settings.col1_links != blank or block.settings.col2_links != blank or block.settings.col3_links != blank or block.settings.col4_links != blank or block.settings.col5_links != blank %}
+                              {% assign has_col_links = true %}
+                            {% endif %}
+
+                            <div x-data="{ subOpen: false }">
+                              {% if has_col_links %}
+                                <!-- Expandable block with column links -->
+                                <button @click="subOpen = !subOpen" class="w-full flex items-center justify-between pl-8 pr-5 py-3 text-left hover:bg-gray-100 transition-colors duration-200">
+                                  <span class="text-sm text-gray-700">{{ block.settings.sidebar_title }}</span>
+                                  <span class="mobile-toggle-icon text-gray-400" :data-open="subOpen"></span>
+                                </button>
+
+                                <!-- Level 3: Column titles only (Saddles & Fittings, Strap Goods, etc.) -->
+                                <div class="mobile-accordion" :data-open="subOpen">
+                                  <div class="mobile-accordion-content bg-white">
+                                    {% if block.settings.sidebar_url != blank %}
+                                      <a href="{{ block.settings.sidebar_url }}" class="block pl-12 pr-5 py-2.5 text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200">
+                                        View All
+                                      </a>
+                                    {% endif %}
+                                    {% for col_num in (1..5) %}
+                                      {% assign col_title_key = 'col' | append: col_num | append: '_title' %}
+                                      {% assign col_title = block.settings[col_title_key] %}
+                                      {% assign col_links_key = 'col' | append: col_num | append: '_links' %}
+                                      {% assign col_links = block.settings[col_links_key] %}
+                                      {% if col_title != blank and col_links != blank %}
+                                        {% comment %} Get the first link URL to use for the column title {% endcomment %}
+                                        {% assign lines = col_links | newline_to_br | split: '<br />' %}
+                                        {% assign first_line = lines | first %}
+                                        {% assign parts = first_line | split: '|' %}
+                                        {% if parts.size >= 2 %}
+                                          <a href="{{ parts[1] | strip }}" class="block pl-12 pr-5 py-2.5 text-sm text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200">
+                                            {{ col_title }}
+                                          </a>
+                                        {% else %}
+                                          <span class="block pl-12 pr-5 py-2.5 text-sm text-gray-500">
+                                            {{ col_title }}
+                                          </span>
+                                        {% endif %}
+                                      {% endif %}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              {% else %}
+                                <!-- Simple block link -->
+                                <a href="{{ block.settings.sidebar_url | default: '#' }}" class="block pl-8 pr-5 py-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200">
+                                  {{ block.settings.sidebar_title }}
+                                </a>
+                              {% endif %}
+                            </div>
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <!-- Fallback: Shopify menu children -->
+                      {% for child in link.links %}
+                        <a href="{{ child.url }}" class="block pl-8 pr-5 py-3 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200">
+                          {{ child.title }}
+                        </a>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+              {% else %}
+                <a href="{{ link.url }}" class="block px-5 py-3.5 text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors duration-200">
+                  {{ link.title }}
+                </a>
+              {% endif %}
+            </div>
           {% endfor %}
         {% endif %}
-      </ul>
+      </nav>
     </div>
   </div>
 

@@ -1,23 +1,109 @@
 @import "tailwindcss";
 
 /* --- Import Google Font --- */
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap");
 
 @layer base {
-  html, body {
-    font-family: 'Heebo', sans-serif;
+  html,
+  body {
+    font-family: "Heebo", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   /* Headings */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Heebo', sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Heebo", sans-serif;
     line-height: 1.2;
   }
 
   /* Buttons, links, and inputs */
-  button, a, input, select, textarea {
-    font-family: 'Heebo', sans-serif;
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    font-family: "Heebo", sans-serif;
+  }
+}
+
+/* Mobile Menu Animations */
+@layer utilities {
+  /* Dropdown container with grid animation */
+  .mobile-accordion {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-in-out;
+  }
+
+  .mobile-accordion[data-open="true"] {
+    grid-template-rows: 1fr;
+  }
+
+  /* Inner content wrapper - must have overflow hidden and min-height 0 */
+  .mobile-accordion-content {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* Plus icon that rotates to minus */
+  .mobile-toggle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .mobile-toggle-icon::before,
+  .mobile-toggle-icon::after {
+    content: "";
+    position: absolute;
+    background-color: currentColor;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+
+  /* Horizontal line (always visible = minus) */
+  .mobile-toggle-icon::before {
+    width: 12px;
+    height: 2px;
+  }
+
+  /* Vertical line (becomes hidden = minus) */
+  .mobile-toggle-icon::after {
+    width: 2px;
+    height: 12px;
+  }
+
+  /* When open, hide vertical line to show minus */
+  .mobile-toggle-icon[data-open="true"]::after {
+    transform: rotate(90deg);
+    opacity: 0;
+  }
+
+  /* Mobile Nav Drawer Animation */
+  .mobile-nav-overlay {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .mobile-nav-overlay[data-open="true"] {
+    opacity: 1;
+  }
+
+  .mobile-nav-drawer {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .mobile-nav-drawer[data-open="true"] {
+    transform: translateX(0);
   }
 }
