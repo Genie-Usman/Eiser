@@ -1,0 +1,1125 @@
+{% comment %} 
+                  SlashCart Megamenu
+                  A pixel-perfect replica of the SlashCart design with: 
+                  - Announcement bar with 3-column layout 
+                  - Main header with logo, navigation, and CTAs 
+                  - Dropdown megamenus with image-based menu items 
+                  - Optional CTA section per dropdown 
+                  - Mobile responsive navigation 
+{% endcomment %}
+
+<style>
+  /* SlashCart Megamenu Styles */
+  .slashcart-megamenu {
+    --primary-green: {{ section.settings.primary_color }};
+    --dark-bg: {{ section.settings.announcement_bg }};
+    --header-bg: {{ section.settings.header_bg }};
+    --text-dark: {{ section.settings.text_color }};
+  }
+
+  /* Dropdown animation */
+  .slashcart-dropdown {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.25s ease-out;
+  }
+
+  .slashcart-nav-item:hover .slashcart-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* Mobile accordion animation */
+  .slashcart-mobile-accordion {
+    display: grid;
+    grid-template-rows: 0;
+    transition: grid-template-rows 0.3s ease-out;
+  }
+
+  .slashcart-mobile-accordion[data-open="true"] {
+    grid-template-rows: 1fr;
+  }
+
+  .slashcart-mobile-accordion-content {
+    overflow: hidden;
+  }
+
+  /* Mobile toggle icon */
+  .slashcart-toggle-icon::before {
+    content: '+';
+  }
+
+  .slashcart-toggle-icon[data-open="true"]::before {
+    content: '−';
+  }
+
+  /* Mobile drawer */
+  .slashcart-mobile-overlay {
+    transition: opacity 0.3s ease-out;
+  }
+
+  .slashcart-mobile-drawer {
+    transition: transform 0.3s ease-out;
+  }
+</style>
+
+<div class="slashcart-megamenu" x-data="{ mobileOpen: false }">
+
+  {% comment %} ===== ANNOUNCEMENT BAR ===== {% endcomment %}
+  {% if section.settings.show_announcement %}
+    <div class="w-full py-2.5 px-4" style="background-color: {{ section.settings.announcement_bg }};">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs md:text-sm" style="color: {{ section.settings.announcement_text }};">
+
+        <!-- Left: Find Us On Shopify -->
+        <div class="flex items-center gap-2">
+          <svg
+            class="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="currentColor">
+            <path d="M15.337 23.979l7.216-1.561s-2.604-17.613-2.625-17.745c-.021-.128-.145-.207-.271-.194l-1.962.167c-.168-.52-.462-1-.865-1.391-.711-.69-1.61-1.04-2.626-1.04-.165 0-.335.01-.508.029-.247-.315-.544-.56-.893-.734-.77-.383-1.72-.469-2.682-.24-2.023.479-3.94 2.376-5.182 5.093-.87 1.907-1.363 4.257-1.154 6.084.088.767.304 1.406.644 1.906.602.884 1.569 1.293 2.708 1.184.863-.082 1.8-.438 2.705-1.011-.06.52-.092 1.061-.094 1.618v.04l-.004 7.796h5.593z" />
+          </svg>
+          <span>{{ section.settings.announcement_left }}</span>
+        </div>
+
+        <!-- Center: Award Text -->
+        <div class="hidden md:flex items-center gap-2">
+          <svg
+            class="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+          <span>{{ section.settings.announcement_center }}</span>
+        </div>
+
+        <!-- Right: Reviews -->
+        <div class="flex items-center gap-2">
+          <svg
+            class="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="currentColor">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+          <span>{{ section.settings.announcement_right }}</span>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% comment %} ===== MAIN HEADER ===== {% endcomment %}
+  <header class="w-full py-4 px-4 md:px-6 shadow-sm" style="background-color: {{ section.settings.header_bg }};">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+
+      <!-- Logo -->
+      <a href="/" class="flex-shrink-0">
+        {% if section.settings.logo %}
+          <img
+            src="{{ section.settings.logo | image_url: width: 400 }}"
+            alt="{{ shop.name }}"
+            class="h-auto"
+            style="width: {{ section.settings.logo_width }}px;"
+            loading="eager">
+        {% else %}
+          <span class="text-2xl font-bold" style="color: {{ section.settings.text_color }};">{{ shop.name }}</span>
+        {% endif %}
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center gap-1">
+        {% for link in linklists[section.settings.main_menu].links %}
+          {% comment %} Check for custom blocks (dropdown_item or menu_group) {% endcomment %}
+          {% assign has_custom_blocks = false %}
+          {% assign link_title_lower = link.title | downcase | strip %}
+          {% for block in section.blocks %}
+            {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+            {% if block_parent == link_title_lower %}
+              {% if block.type == 'dropdown_item' or block.type == 'menu_group' %}
+                {% assign has_custom_blocks = true %}
+                {% break %}
+              {% endif %}
+            {% endif %}
+        {% endfor %}
+
+          {% comment %} Check for native Shopify child links {% endcomment %}
+          {% assign has_child_links = false %}
+          {% if link.links.size > 0 %}
+            {% assign has_child_links = true %}
+        {% endif %}
+
+          {% comment %} Show dropdown if either custom blocks OR native child links exist {% endcomment %}
+          {% assign has_dropdown = false %}
+          {% if has_custom_blocks or has_child_links %}
+            {% assign has_dropdown = true %}
+          {% endif %}
+
+          <div class="slashcart-nav-item relative group">
+            <a
+              href="{{ link.url }}"
+              class="px-4 py-2 text-sm font-medium transition-colors duration-200 hover:opacity-70"
+              style="color: {{ section.settings.text_color }};"
+              {% if has_dropdown %}
+              onclick="event.preventDefault();"
+              {% endif %}>
+              {{ link.title }}
+            </a>
+
+            {% comment %} ===== DROPDOWN MENU ===== {% endcomment %}
+            {% if has_dropdown %}
+              <div class="slashcart-dropdown absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50">
+                <div class="bg-white rounded-lg shadow-xl border border-gray-100 p-6 min-w-[500px]">
+
+                  <!-- Menu Items Grid -->
+                  <div class="grid grid-cols-2 gap-4">
+                    {% comment %} First, show custom blocks if any {% endcomment %}
+                    {% if has_custom_blocks %}
+                      {% for block in section.blocks %}
+                        {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+                          {% if block_parent == link_title_lower %}
+                          {% comment %} Render dropdown_item blocks {% endcomment %}
+                          {% if block.type == 'dropdown_item' %}
+                            <a
+                              href="{{ block.settings.item_url | default: '#' }}"
+                              class="flex items-start gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group/item"
+                              {{ block.shopify_attributes }}>
+                              {% if block.settings.item_image %}
+                                <div class="w-10 h-10 shrink-0 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center p-1.5">
+                                  <img
+                                    src="{{ block.settings.item_image | image_url: width: 80, height: 80, crop: 'center' }}"
+                                    alt="{{ block.settings.item_title }}"
+                                    class="w-full h-full object-contain"
+                                    width="40"
+                                    height="40"
+                                    loading="lazy">
+                                </div>
+                              {% else %}
+                                <div class="w-10 h-10 shrink-0 rounded-lg bg-gray-100 flex items-center justify-center">
+                                  <svg
+                                    class="w-5 h-5 text-gray-400"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                  </svg>
+                                </div>
+                              {% endif %}
+                              <div class="flex flex-col">
+                                <span class="text-sm text-gray-700 group-hover/item:text-gray-900">
+                                  {{ block.settings.item_title }}{% if block.settings.item_bold_text != blank %}
+                                    <strong class="font-semibold">{{ block.settings.item_bold_text }}</strong>
+                                  {% endif %}
+                                </span>
+                                {% if block.settings.item_subtitle != blank %}
+                                  <span class="text-xs text-gray-400 mt-0.5">{{ block.settings.item_subtitle }}</span>
+                                {% endif %}
+                              </div>
+                            </a>
+                          {% endif %}
+
+                          {% comment %} Render menu_group block items {% endcomment %}
+                          {% if block.type == 'menu_group' %}
+                            {% for i in (1..8) %}
+                              {% assign title_key = 'item' | append: i | append: '_title' %}
+                              {% assign title = block.settings[title_key] %}
+                              {% if title != blank %}
+                                {% assign image_key = 'item' | append: i | append: '_image' %}
+                                {% assign bold_key = 'item' | append: i | append: '_bold' %}
+                                {% assign subtitle_key = 'item' | append: i | append: '_subtitle' %}
+                                {% assign url_key = 'item' | append: i | append: '_url' %}
+                                <a
+                                  href="{{ block.settings[url_key] | default: '#' }}"
+                                  class="flex items-start gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group/item"
+                                  {{ block.shopify_attributes }}>
+                                  {% if block.settings[image_key] %}
+                                    <div class="w-10 h-10 shrink-0 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center p-1.5">
+                                      <img
+                                        src="{{ block.settings[image_key] | image_url: width: 80, height: 80, crop: 'center' }}"
+                                        alt="{{ title }}"
+                                        class="w-full h-full object-contain"
+                                        width="40"
+                                        height="40"
+                                        loading="lazy">
+                                    </div>
+                                  {% else %}
+                                    <div class="w-10 h-10 shrink-0 rounded-lg bg-gray-100 flex items-center justify-center">
+                                      <svg
+                                        class="w-5 h-5 text-gray-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                      </svg>
+                                    </div>
+                                  {% endif %}
+                                  <div class="flex flex-col">
+                                    <span class="text-sm text-gray-700 group-hover/item:text-gray-900">
+                                      {{ title }}{% if block.settings[bold_key] != blank %}
+                                        <strong class="font-semibold">{{ block.settings[bold_key] }}</strong>
+                                      {% endif %}
+                                    </span>
+                                    {% if block.settings[subtitle_key] != blank %}
+                                      <span class="text-xs text-gray-400 mt-0.5">{{ block.settings[subtitle_key] }}</span>
+                                    {% endif %}
+                                  </div>
+                                </a>
+                              {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+
+                    {% comment %} Then, show native Shopify child links if no custom blocks {% endcomment %}
+                    {% if has_child_links and has_custom_blocks == false %}
+                      {% for child in link.links %}
+                        <a href="{{ child.url }}" class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 group/item">
+                          <div class="w-10 h-10 flex-shrink-0 rounded-lg bg-gray-100 flex items-center justify-center">
+                            <svg
+                              class="w-5 h-5 text-gray-400"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24">
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                          </div>
+                          <span class="text-sm font-medium text-gray-700 group-hover/item:text-gray-900">
+                            {{ child.title }}
+                          </span>
+                        </a>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+
+                  <!-- Optional CTA Section -->
+                  {% for block in section.blocks %}
+                    {% if block.type == 'dropdown_cta' %}
+                      {% assign cta_parent = block.settings.parent_menu | downcase | strip %}
+                      {% assign link_title = link.title | downcase | strip %}
+                      {% if cta_parent == link_title %}
+                        <div class="mt-6 pt-6 border-t border-gray-100 flex items-center justify-between gap-4" {{ block.shopify_attributes }}>
+                          <div>
+                            <p class="text-sm font-semibold text-gray-900">{{ block.settings.cta_title }}</p>
+                            <p class="text-xs text-gray-500 mt-0.5">{{ block.settings.cta_subtitle }}</p>
+                          </div>
+                          <a
+                            href="{{ block.settings.cta_url | default: '#' }}"
+                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors duration-200"
+                            style="background-color: {{ section.settings.primary_color }};">
+                            {{ block.settings.cta_button_text }}
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24">
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                          </a>
+                        </div>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </nav>
+
+      <!-- CTA Buttons -->
+      <div class="hidden lg:flex items-center gap-3">
+        {% if section.settings.cta1_text != blank %}
+          <a
+            href="{{ section.settings.cta1_url | default: '#' }}"
+            class="px-5 py-2.5 text-sm font-medium text-white rounded-lg transition-all duration-200 hover:opacity-90"
+            style="background-color: {{ section.settings.primary_color }};">
+            {{ section.settings.cta1_text }}
+          </a>
+        {% endif %}
+
+        {% if section.settings.cta2_text != blank %}
+          <a
+            href="{{ section.settings.cta2_url | default: '#' }}"
+            class="px-5 py-2.5 text-sm font-medium text-white rounded-lg transition-all duration-200 hover:opacity-90"
+            style="background-color: {{ section.settings.cta2_bg }};">
+            {{ section.settings.cta2_text }}
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        @click="mobileOpen = true"
+        class="lg:hidden p-2"
+        aria-label="Open menu">
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          style="color: {{ section.settings.text_color }};">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  {% comment %} ===== MOBILE NAVIGATION ===== {% endcomment %}
+  <template x-teleport="body">
+    <!-- Overlay -->
+    <div
+      x-show="mobileOpen"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      @click="mobileOpen = false"
+      class="slashcart-mobile-overlay fixed inset-0 bg-black/50 z-[9998]"
+      x-cloak></div>
+
+    <!-- Drawer -->
+    <div
+      x-show="mobileOpen"
+      x-transition:enter="transition ease-out duration-300"
+      x-transition:enter-start="-translate-x-full"
+      x-transition:enter-end="translate-x-0"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="translate-x-0"
+      x-transition:leave-end="-translate-x-full"
+      @keydown.escape.window="mobileOpen = false"
+      class="slashcart-mobile-drawer fixed left-0 top-0 h-full w-[85vw] max-w-[400px] bg-white z-[9999] overflow-y-auto"
+      x-cloak>
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between p-4 border-b border-gray-100">
+        <a href="/" class="flex-shrink-0">
+          {% if section.settings.logo %}
+            <img
+              src="{{ section.settings.logo | image_url: width: 300 }}"
+              alt="{{ shop.name }}"
+              class="h-auto"
+              style="width: {{ section.settings.logo_width | times: 0.8 }}px;">
+          {% else %}
+            <span class="text-xl font-bold" style="color: {{ section.settings.text_color }};">{{ shop.name }}</span>
+          {% endif %}
+        </a>
+        <button
+          @click="mobileOpen = false"
+          class="p-2 text-gray-500 hover:text-gray-700"
+          aria-label="Close menu">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Items -->
+      <div class="py-4">
+        {% for link in linklists[section.settings.main_menu].links %}
+          {% comment %} Check for custom blocks (dropdown_item or menu_group) {% endcomment %}
+          {% assign has_custom_blocks = false %}
+          {% assign link_title_lower = link.title | downcase | strip %}
+          {% for block in section.blocks %}
+            {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+            {% if block_parent == link_title_lower %}
+              {% if block.type == 'dropdown_item' or block.type == 'menu_group' %}
+                {% assign has_custom_blocks = true %}
+                {% break %}
+              {% endif %}
+            {% endif %}
+        {% endfor %}
+
+          {% comment %} Check for native Shopify child links {% endcomment %}
+          {% assign has_child_links = false %}
+          {% if link.links.size > 0 %}
+            {% assign has_child_links = true %}
+        {% endif %}
+
+          {% comment %} Show dropdown if either custom blocks OR native child links exist {% endcomment %}
+          {% assign has_dropdown = false %}
+          {% if has_custom_blocks or has_child_links %}
+            {% assign has_dropdown = true %}
+          {% endif %}
+
+          {% if has_dropdown %}
+            <div x-data="{ open: false }">
+              <button @click="open = !open" class="w-full flex items-center justify-between px-5 py-3 text-left hover:bg-gray-50 transition-colors duration-200">
+                <span class="text-base font-medium text-gray-800">{{ link.title }}</span>
+                <span class="slashcart-toggle-icon text-gray-400 text-xl font-light" :data-open="open"></span>
+              </button>
+
+              <!-- Dropdown Content -->
+              <div class="slashcart-mobile-accordion" :data-open="open">
+                <div class="slashcart-mobile-accordion-content bg-gray-50">
+                  {% comment %} Show custom blocks if any {% endcomment %}
+                  {% if has_custom_blocks %}
+                    {% for block in section.blocks %}
+                      {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+                        {% if block_parent == link_title_lower %}
+                        {% comment %} Render dropdown_item blocks {% endcomment %}
+                        {% if block.type == 'dropdown_item' %}
+                          <a href="{{ block.settings.item_url | default: '#' }}" class="flex items-start gap-3 px-8 py-3 hover:bg-gray-100 transition-colors duration-200">
+                            {% if block.settings.item_image %}
+                              <div class="w-8 h-8 shrink-0 rounded-md overflow-hidden bg-white p-1">
+                                <img
+                                  src="{{ block.settings.item_image | image_url: width: 64, height: 64, crop: 'center' }}"
+                                  alt="{{ block.settings.item_title }}"
+                                  class="w-full h-full object-contain"
+                                  width="32"
+                                  height="32"
+                                  loading="lazy">
+                              </div>
+                            {% endif %}
+                            <div class="flex flex-col">
+                              <span class="text-sm text-gray-700">
+                                {{ block.settings.item_title }}{% if block.settings.item_bold_text != blank %}
+                                  <strong class="font-semibold">{{ block.settings.item_bold_text }}</strong>
+                                {% endif %}
+                              </span>
+                              {% if block.settings.item_subtitle != blank %}
+                                <span class="text-xs text-gray-400">{{ block.settings.item_subtitle }}</span>
+                              {% endif %}
+                            </div>
+                          </a>
+                        {% endif %}
+
+                        {% comment %} Render menu_group block items {% endcomment %}
+                        {% if block.type == 'menu_group' %}
+                          {% for i in (1..8) %}
+                            {% assign title_key = 'item' | append: i | append: '_title' %}
+                            {% assign title = block.settings[title_key] %}
+                            {% if title != blank %}
+                              {% assign image_key = 'item' | append: i | append: '_image' %}
+                              {% assign bold_key = 'item' | append: i | append: '_bold' %}
+                              {% assign subtitle_key = 'item' | append: i | append: '_subtitle' %}
+                              {% assign url_key = 'item' | append: i | append: '_url' %}
+                              <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-start gap-3 px-8 py-3 hover:bg-gray-100 transition-colors duration-200">
+                                {% if block.settings[image_key] %}
+                                  <div class="w-8 h-8 shrink-0 rounded-md overflow-hidden bg-white p-1">
+                                    <img
+                                      src="{{ block.settings[image_key] | image_url: width: 64, height: 64, crop: 'center' }}"
+                                      alt="{{ title }}"
+                                      class="w-full h-full object-contain"
+                                      width="32"
+                                      height="32"
+                                      loading="lazy">
+                                  </div>
+                                {% endif %}
+                                <div class="flex flex-col">
+                                  <span class="text-sm text-gray-700">
+                                    {{ title }}{% if block.settings[bold_key] != blank %}
+                                      <strong class="font-semibold">{{ block.settings[bold_key] }}</strong>
+                                    {% endif %}
+                                  </span>
+                                  {% if block.settings[subtitle_key] != blank %}
+                                    <span class="text-xs text-gray-400">{{ block.settings[subtitle_key] }}</span>
+                                  {% endif %}
+                                </div>
+                              </a>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+
+                  {% comment %} Show native Shopify child links if no custom blocks {% endcomment %}
+                  {% if has_child_links and has_custom_blocks == false %}
+                    {% for child in link.links %}
+                      <a href="{{ child.url }}" class="flex items-center gap-3 px-8 py-3 hover:bg-gray-100 transition-colors duration-200">
+                        <span class="text-sm text-gray-700">{{ child.title }}</span>
+                      </a>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <a href="{{ link.url }}" class="block px-5 py-3 text-base font-medium text-gray-800 hover:bg-gray-50 transition-colors duration-200">
+              {{ link.title }}
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Mobile CTAs -->
+      <div class="p-5 border-t border-gray-100 space-y-3">
+        {% if section.settings.cta1_text != blank %}
+          <a
+            href="{{ section.settings.cta1_url | default: '#' }}"
+            class="block w-full px-5 py-3 text-center text-sm font-medium text-white rounded-lg"
+            style="background-color: {{ section.settings.primary_color }};">
+            {{ section.settings.cta1_text }}
+          </a>
+        {% endif %}
+
+        {% if section.settings.cta2_text != blank %}
+          <a
+            href="{{ section.settings.cta2_url | default: '#' }}"
+            class="block w-full px-5 py-3 text-center text-sm font-medium text-white rounded-lg"
+            style="background-color: {{ section.settings.cta2_bg }};">
+            {{ section.settings.cta2_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </template>
+
+</div>
+
+{% schema %}
+  {
+    "name": "SlashCart Megamenu",
+    "tag": "section",
+    "class": "slashcart-megamenu-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Announcement Bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_announcement",
+        "label": "Show announcement bar",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "announcement_left",
+        "label": "Left text",
+        "default": "Find Us On Shopify"
+      },
+      {
+        "type": "text",
+        "id": "announcement_center",
+        "label": "Center text",
+        "default": "Award-Winning Shopify Plus Engineering Firm"
+      }, {
+        "type": "text",
+        "id": "announcement_right",
+        "label": "Right text",
+        "default": "Over 300+ Five Star Reviews"
+      }, {
+        "type": "color",
+        "id": "announcement_bg",
+        "label": "Announcement background",
+        "default": "#1a1a1a"
+      }, {
+        "type": "color",
+        "id": "announcement_text",
+        "label": "Announcement text color",
+        "default": "#ffffff"
+      }, {
+        "type": "header",
+        "content": "Header"
+      }, {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      }, {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Logo width",
+        "min": 80,
+        "max": 300,
+        "step": 10,
+        "default": 160,
+        "unit": "px"
+      }, {
+        "type": "link_list",
+        "id": "main_menu",
+        "label": "Main menu",
+        "default": "main-menu"
+      }, {
+        "type": "color",
+        "id": "header_bg",
+        "label": "Header background",
+        "default": "#ffffff"
+      }, {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text color",
+        "default": "#1f2937"
+      }, {
+        "type": "color",
+        "id": "primary_color",
+        "label": "Primary/Accent color",
+        "default": "#22c55e"
+      }, {
+        "type": "header",
+        "content": "CTA Buttons"
+      }, {
+        "type": "text",
+        "id": "cta1_text",
+        "label": "Primary CTA text",
+        "default": "Get Started"
+      }, {
+        "type": "url",
+        "id": "cta1_url",
+        "label": "Primary CTA link"
+      }, {
+        "type": "text",
+        "id": "cta2_text",
+        "label": "Secondary CTA text",
+        "default": "Book a Call"
+      }, {
+        "type": "url",
+        "id": "cta2_url",
+        "label": "Secondary CTA link"
+      }, {
+        "type": "color",
+        "id": "cta2_bg",
+        "label": "Secondary CTA background",
+        "default": "#1f2937"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "dropdown_item",
+        "name": "Dropdown Item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parent_menu",
+            "label": "Parent menu item",
+            "info": "Enter the exact title of the parent menu item (e.g., 'Manage')"
+          },
+          {
+            "type": "image_picker",
+            "id": "item_image",
+            "label": "Item image/icon"
+          },
+          {
+            "type": "text",
+            "id": "item_title",
+            "label": "Item title",
+            "default": "Menu Item"
+          },
+          {
+            "type": "text",
+            "id": "item_bold_text",
+            "label": "Bold text (optional)",
+            "info": "Text to display in bold after the title, e.g., 'Shopify' for 'Migrate to Shopify'"
+          }, {
+            "type": "text",
+            "id": "item_subtitle",
+            "label": "Subtitle (optional)",
+            "info": "Secondary text line, e.g., 'from Magento'"
+          }, {
+            "type": "url",
+            "id": "item_url",
+            "label": "Item link"
+          }
+        ]
+      }, {
+        "type": "dropdown_cta",
+        "name": "Dropdown CTA",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parent_menu",
+            "label": "Parent menu item",
+            "info": "Enter the exact title of the parent menu item (e.g., 'Manage')"
+          },
+          {
+            "type": "text",
+            "id": "cta_title",
+            "label": "CTA title",
+            "default": "Get a Quote for any Shopify Customizations"
+          },
+          {
+            "type": "text",
+            "id": "cta_subtitle",
+            "label": "CTA subtitle",
+            "default": "Complete Shopify Tasks Quickly with Bulk Hours."
+          },
+          {
+            "type": "text",
+            "id": "cta_button_text",
+            "label": "Button text",
+            "default": "Get Started"
+          }, {
+            "type": "url",
+            "id": "cta_url",
+            "label": "Button link"
+          }
+        ]
+      }, {
+        "type": "menu_group",
+        "name": "Menu Group",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parent_menu",
+            "label": "Parent menu item",
+            "info": "Enter the exact title of the parent menu item (e.g., 'Migrate')"
+          },
+          {
+            "type": "header",
+            "content": "Item 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "item1_image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "item1_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item1_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item1_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item1_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 2"
+          }, {
+            "type": "image_picker",
+            "id": "item2_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item2_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item2_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item2_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item2_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 3"
+          }, {
+            "type": "image_picker",
+            "id": "item3_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item3_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item3_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item3_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item3_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 4"
+          }, {
+            "type": "image_picker",
+            "id": "item4_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item4_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item4_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item4_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item4_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 5"
+          }, {
+            "type": "image_picker",
+            "id": "item5_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item5_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item5_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item5_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item5_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 6"
+          }, {
+            "type": "image_picker",
+            "id": "item6_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item6_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item6_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item6_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item6_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 7"
+          }, {
+            "type": "image_picker",
+            "id": "item7_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item7_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item7_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item7_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item7_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 8"
+          }, {
+            "type": "image_picker",
+            "id": "item8_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item8_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item8_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item8_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item8_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 9"
+          }, {
+            "type": "image_picker",
+            "id": "item9_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item9_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item9_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item9_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item9_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 10"
+          }, {
+            "type": "image_picker",
+            "id": "item10_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item10_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item10_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item10_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item10_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 11"
+          }, {
+            "type": "image_picker",
+            "id": "item11_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item11_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item11_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item11_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item11_url",
+            "label": "Link"
+          }, {
+            "type": "header",
+            "content": "Item 12"
+          }, {
+            "type": "image_picker",
+            "id": "item12_image",
+            "label": "Image"
+          }, {
+            "type": "text",
+            "id": "item12_title",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "item12_bold",
+            "label": "Bold text"
+          }, {
+            "type": "text",
+            "id": "item12_subtitle",
+            "label": "Subtitle"
+          }, {
+            "type": "url",
+            "id": "item12_url",
+            "label": "Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "SlashCart Megamenu",
+        "blocks": [
+          {
+            "type": "dropdown_item",
+            "settings": {
+              "parent_menu": "Manage",
+              "item_title": "Theme Customizations"
+            }
+          },
+          {
+            "type": "dropdown_item",
+            "settings": {
+              "parent_menu": "Manage",
+              "item_title": "Search Engine Optimization"
+            }
+          },
+          {
+            "type": "dropdown_item",
+            "settings": {
+              "parent_menu": "Manage",
+              "item_title": "AOV Improvements"
+            }
+          },
+          {
+            "type": "dropdown_item",
+            "settings": {
+              "parent_menu": "Manage",
+              "item_title": "Site Speed Improvements"
+            }
+          }, {
+            "type": "dropdown_item",
+            "settings": {
+              "parent_menu": "Manage",
+              "item_title": "Conversion Rate Optimization"
+            }
+          }, {
+            "type": "dropdown_item",
+            "settings": {
+              "parent_menu": "Manage",
+              "item_title": "Ongoing Support & Maintenance"
+            }
+          }, {
+            "type": "dropdown_cta",
+            "settings": {
+              "parent_menu": "Manage",
+              "cta_title": "Get a Quote for any Shopify Customizations",
+              "cta_subtitle": "Complete Shopify Tasks Quickly with Bulk Hours.",
+              "cta_button_text": "Get Started"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

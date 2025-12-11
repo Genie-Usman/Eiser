@@ -398,10 +398,92 @@
     //     "dropdown_bg": "#ffffff",
     //     "sidebar_bg": "#ffffff"
     //   }
-    // }
+    // },
+    "slashcart-megamenu": {
+      "type": "slashcart-megamenu",
+      "blocks": {
+        "item_1": {
+          "type": "dropdown_item",
+          "settings": {
+            "parent_menu": "Manage",
+            "item_title": "Theme Customizations"
+          }
+        },
+        "item_2": {
+          "type": "dropdown_item",
+          "settings": {
+            "parent_menu": "Manage",
+            "item_title": "Search Engine Optimization"
+          }
+        },
+        "item_3": {
+          "type": "dropdown_item",
+          "settings": {
+            "parent_menu": "Manage",
+            "item_title": "AOV Improvements"
+          }
+        },
+        "item_4": {
+          "type": "dropdown_item",
+          "settings": {
+            "parent_menu": "Manage",
+            "item_title": "Site Speed Improvements"
+          }
+        },
+        "item_5": {
+          "type": "dropdown_item",
+          "settings": {
+            "parent_menu": "Manage",
+            "item_title": "Conversion Rate Optimization"
+          }
+        },
+        "item_6": {
+          "type": "dropdown_item",
+          "settings": {
+            "parent_menu": "Manage",
+            "item_title": "Ongoing Support & Maintenance"
+          }
+        },
+        "cta_1": {
+          "type": "dropdown_cta",
+          "settings": {
+            "parent_menu": "Manage",
+            "cta_title": "Get a Quote for any Shopify Customizations",
+            "cta_subtitle": "Complete Shopify Tasks Quickly with Bulk Hours.",
+            "cta_button_text": "Get Started"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5",
+        "item_6",
+        "cta_1"
+      ],
+      "settings": {
+        "show_announcement": true,
+        "announcement_left": "Find Us On Shopify",
+        "announcement_center": "Award-Winning Shopify Plus Engineering Firm",
+        "announcement_right": "Over 300+ Five Star Reviews",
+        "announcement_bg": "#1a1a1a",
+        "announcement_text": "#ffffff",
+        "logo_width": 160,
+        "main_menu": "slashcart-menu",
+        "header_bg": "#ffffff",
+        "text_color": "#1f2937",
+        "primary_color": "#22c55e",
+        "cta1_text": "Get Started",
+        "cta2_text": "Book a Call",
+        "cta2_bg": "#1f2937"
+      }
+    }
   },
   "order": [
     // "elite-athletic-gear-megamenu",
-    // "equus-now-megamenu"
+    // "equus-now-megamenu",
+    "slashcart-megamenu"
   ]
 }
