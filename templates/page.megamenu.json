@@ -12,6 +12,26 @@
     "slashcart-megamenu": {
       "type": "slashcart-megamenu",
       "blocks": {
+        "dropdown_cta_J33RkC": {
+          "type": "dropdown_cta",
+          "settings": {
+            "parent_menu": "Manage",
+            "cta_title": "Get a Quote for any Shopify Customizations",
+            "cta_subtitle": "Complete Shopify Tasks Quickly with Bulk Hours.",
+            "cta_button_text": "Get Started",
+            "cta_url": ""
+          }
+        },
+        "dropdown_cta_KGxxdQ": {
+          "type": "dropdown_cta",
+          "settings": {
+            "parent_menu": "Build",
+            "cta_title": "Get a Quote for any Shopify Customizations",
+            "cta_subtitle": "Complete Shopify Tasks Quickly with Bulk Hours.",
+            "cta_button_text": "Get Started",
+            "cta_url": ""
+          }
+        },
         "menu_group_ikaGFF": {
           "type": "menu_group",
           "settings": {
@@ -198,6 +218,8 @@
         }
       },
       "block_order": [
+        "dropdown_cta_J33RkC",
+        "dropdown_cta_KGxxdQ",
         "menu_group_ikaGFF",
         "menu_group_UTyqfP",
         "menu_group_mXGfEF"
