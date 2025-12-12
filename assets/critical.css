@@ -1509,6 +1509,12 @@
   .border-gray-600 {
     border-color: var(--color-gray-600);
   }
+  .border-gray-600\/30 {
+    border-color: color-mix(in srgb, oklch(44.6% 0.03 256.802) 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-gray-600) 30%, transparent);
+    }
+  }
   .border-gray-700 {
     border-color: var(--color-gray-700);
   }
@@ -3853,6 +3859,21 @@
       --tw-brightness: initial;
       --tw-contrast: initial;
       --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+      --tw-duration: initial;
+      --tw-ease: initial;
+    }
+  }
+}
+initial;
       --tw-hue-rotate: initial;
       --tw-invert: initial;
       --tw-opacity: initial;

@@ -635,69 +635,27 @@
     "dees-pecan-megamenu": {
       "type": "dees-pecan-megamenu",
       "blocks": {
-        "link_coffee": {
-          "type": "dropdown_link",
+        "products_menu": {
+          "type": "menu_group",
           "settings": {
             "parent_menu": "Products",
-            "link_title": "coffee",
-            "link_url": ""
-          }
-        },
-        "link_pecans": {
-          "type": "dropdown_link",
-          "settings": {
-            "parent_menu": "Products",
-            "link_title": "pecans",
-            "link_url": ""
-          }
-        },
-        "link_candies": {
-          "type": "dropdown_link",
-          "settings": {
-            "parent_menu": "Products",
-            "link_title": "pecan candies & confections",
-            "link_url": ""
-          }
-        },
-        "link_sauces": {
-          "type": "dropdown_link",
-          "settings": {
-            "parent_menu": "Products",
-            "link_title": "sauces & seasonings",
-            "link_url": ""
-          }
-        },
-        "link_honey": {
-          "type": "dropdown_link",
-          "settings": {
-            "parent_menu": "Products",
-            "link_title": "honey & pantry essentials",
-            "link_url": ""
-          }
-        },
-        "link_all": {
-          "type": "dropdown_link",
-          "settings": {
-            "parent_menu": "Products",
-            "link_title": "all products",
-            "link_url": ""
-          }
-        },
-        "image_products": {
-          "type": "dropdown_image",
-          "settings": {
-            "parent_menu": "Products"
+            "item1_title": "coffee",
+            "item1_url": "",
+            "item2_title": "pecans",
+            "item2_url": "",
+            "item3_title": "pecan candies & confections",
+            "item3_url": "",
+            "item4_title": "sauces & seasonings",
+            "item4_url": "",
+            "item5_title": "honey & pantry essentials",
+            "item5_url": "",
+            "item6_title": "all products",
+            "item6_url": ""
           }
         }
       },
       "block_order": [
-        "link_coffee",
-        "link_pecans",
-        "link_candies",
-        "link_sauces",
-        "link_honey",
-        "link_all",
-        "image_products"
+        "products_menu"
       ],
       "settings": {
         "main_menu": "dees-pecan-menu",

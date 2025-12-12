@@ -1,9 +1,9 @@
 {% comment %} 
-  Dees Pecan Megamenu
-  A megamenu section matching the Dees Pecan design with: 
-  - Dark header with logo, search, cart/account 
-  - Navigation with Products dropdown 
-  - Dropdown shows links on left, image on right 
+          Dees Pecan Megamenu
+          A megamenu section matching the Dees Pecan design with: 
+          - Dark header with logo, search, cart/account 
+          - Navigation with Products dropdown 
+          - Dropdown shows links on left, image on right 
 {% endcomment %}
 
 <style>
@@ -85,25 +85,47 @@
 
         <!-- Right Side: Search + Nav + Icons -->
         <div class="flex items-center gap-6">
-          
+
           <!-- Search Bar (Desktop) -->
           <div class="hidden lg:flex items-center">
-            <form action="{{ routes.search_url }}" method="get" class="relative">
+            <form
+              action="{{ routes.search_url }}"
+              method="get"
+              class="relative">
               <input
                 type="search"
                 name="q"
                 placeholder="SEARCH"
                 class="dees-search-input w-48 pl-10 pr-4 py-2 rounded text-sm uppercase tracking-wider">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </form>
           </div>
 
           <!-- Cart -->
-          <a href="{{ routes.cart_url }}" class="p-1 relative" style="color: var(--header-text);">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          <a
+            href="{{ routes.cart_url }}"
+            class="p-1 relative"
+            style="color: var(--header-text);">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             {% if cart.item_count > 0 %}
               <span class="absolute -top-1 -right-1 w-4 h-4 text-xs flex items-center justify-center rounded-full" style="background-color: var(--accent-color); color: var(--header-bg);">
@@ -113,16 +135,38 @@
           </a>
 
           <!-- Account -->
-          <a href="{{ routes.account_url }}" class="p-1" style="color: var(--header-text);">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          <a
+            href="{{ routes.account_url }}"
+            class="p-1"
+            style="color: var(--header-text);">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </a>
 
           <!-- Mobile Menu Button -->
-          <button @click="mobileOpen = true" class="lg:hidden p-1" style="color: var(--header-text);">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <button
+            @click="mobileOpen = true"
+            class="lg:hidden p-1"
+            style="color: var(--header-text);">
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
         </div>
@@ -136,7 +180,7 @@
 
           {% comment %} Check if this link has dropdown blocks {% endcomment %}
           {% for block in section.blocks %}
-            {% if block.type == 'dropdown_link' or block.type == 'dropdown_image' %}
+            {% if block.type == 'menu_group' %}
               {% assign block_parent = block.settings.parent_menu | downcase | strip %}
               {% if block_parent == link_title_lower %}
                 {% assign has_dropdown = true %}
@@ -153,8 +197,16 @@
                 style="color: var(--header-text);"
                 onclick="event.preventDefault();">
                 {{ link.title }}
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                <svg
+                  class="w-3 h-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7" />
                 </svg>
               </a>
 
@@ -165,15 +217,22 @@
                   <!-- Links Section -->
                   <div class="w-2/5 py-6 px-6" style="background-color: var(--dropdown-bg);">
                     {% for block in section.blocks %}
-                      {% if block.type == 'dropdown_link' %}
+                      {% if block.type == 'menu_group' %}
                         {% assign block_parent = block.settings.parent_menu | downcase | strip %}
                         {% if block_parent == link_title_lower %}
-                          <a
-                            href="{{ block.settings.link_url | default: '#' }}"
-                            class="block py-3 text-sm border-b border-gray-600 last:border-0 transition-colors hover:opacity-80"
-                            style="color: var(--header-bg);">
-                            {{ block.settings.link_title }}
-                          </a>
+                          {% for i in (1..8) %}
+                            {% assign title_key = 'item' | append: i | append: '_title' %}
+                            {% assign url_key = 'item' | append: i | append: '_url' %}
+                            {% assign title = block.settings[title_key] %}
+                            {% if title != blank %}
+                              <a
+                                href="{{ block.settings[url_key] | default: '#' }}"
+                                class="block py-3 text-sm border-b border-gray-600/30 last:border-0 transition-colors hover:opacity-80"
+                                style="color: var(--header-bg);">
+                                {{ title }}
+                              </a>
+                            {% endif %}
+                          {% endfor %}
                         {% endif %}
                       {% endif %}
                     {% endfor %}
@@ -182,11 +241,11 @@
                   <!-- Image Section -->
                   <div class="w-3/5">
                     {% for block in section.blocks %}
-                      {% if block.type == 'dropdown_image' %}
+                      {% if block.type == 'menu_group' %}
                         {% assign block_parent = block.settings.parent_menu | downcase | strip %}
-                        {% if block_parent == link_title_lower and block.settings.image %}
+                        {% if block_parent == link_title_lower and block.settings.featured_image %}
                           <img
-                            src="{{ block.settings.image | image_url: width: 600 }}"
+                            src="{{ block.settings.featured_image | image_url: width: 600 }}"
                             alt="{{ link.title }}"
                             class="w-full h-full object-cover"
                             loading="lazy">
@@ -303,7 +362,7 @@
         {% assign has_dropdown = false %}
 
         {% for block in section.blocks %}
-          {% if block.type == 'dropdown_link' %}
+          {% if block.type == 'menu_group' %}
             {% assign block_parent = block.settings.parent_menu | downcase | strip %}
             {% if block_parent == link_title_lower %}
               {% assign has_dropdown = true %}
@@ -335,12 +394,19 @@
               x-transition
               class="bg-gray-50 py-2">
               {% for block in section.blocks %}
-                {% if block.type == 'dropdown_link' %}
+                {% if block.type == 'menu_group' %}
                   {% assign block_parent = block.settings.parent_menu | downcase | strip %}
                   {% if block_parent == link_title_lower %}
-                    <a href="{{ block.settings.link_url | default: '#' }}" class="block px-8 py-3 text-sm text-gray-700 hover:text-gray-900">
-                      {{ block.settings.link_title }}
-                    </a>
+                    {% for i in (1..8) %}
+                      {% assign title_key = 'item' | append: i | append: '_title' %}
+                      {% assign url_key = 'item' | append: i | append: '_url' %}
+                      {% assign title = block.settings[title_key] %}
+                      {% if title != blank %}
+                        <a href="{{ block.settings[url_key] | default: '#' }}" class="block px-8 py-3 text-sm text-gray-700 hover:text-gray-900">
+                          {{ title }}
+                        </a>
+                      {% endif %}
+                    {% endfor %}
                   {% endif %}
                 {% endif %}
               {% endfor %}
@@ -410,38 +476,109 @@
     ],
     "blocks": [
       {
-        "type": "dropdown_link",
-        "name": "Dropdown Link",
+        "type": "menu_group",
+        "name": "Menu Group",
         "settings": [
           {
             "type": "text",
             "id": "parent_menu",
             "label": "Parent menu item",
             "info": "Enter the exact title of the parent menu item (e.g., 'Products')"
-          }, {
+          },
+          {
+            "type": "image_picker",
+            "id": "featured_image",
+            "label": "Featured image (right side)"
+          },
+          {
+            "type": "header",
+            "content": "Link 1"
+          },
+          {
             "type": "text",
-            "id": "link_title",
-            "label": "Link title",
-            "default": "Menu Item"
+            "id": "item1_title",
+            "label": "Title"
           }, {
             "type": "url",
-            "id": "link_url",
-            "label": "Link URL"
-          }
-        ]
-      }, {
-        "type": "dropdown_image",
-        "name": "Dropdown Image",
-        "settings": [
-          {
-            "type": "text",
-            "id": "parent_menu",
-            "label": "Parent menu item",
-            "info": "Enter the exact title of the parent menu item (e.g., 'Products')"
+            "id": "item1_url",
+            "label": "URL"
           }, {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Featured image"
+            "type": "header",
+            "content": "Link 2"
+          }, {
+            "type": "text",
+            "id": "item2_title",
+            "label": "Title"
+          }, {
+            "type": "url",
+            "id": "item2_url",
+            "label": "URL"
+          }, {
+            "type": "header",
+            "content": "Link 3"
+          }, {
+            "type": "text",
+            "id": "item3_title",
+            "label": "Title"
+          }, {
+            "type": "url",
+            "id": "item3_url",
+            "label": "URL"
+          }, {
+            "type": "header",
+            "content": "Link 4"
+          }, {
+            "type": "text",
+            "id": "item4_title",
+            "label": "Title"
+          }, {
+            "type": "url",
+            "id": "item4_url",
+            "label": "URL"
+          }, {
+            "type": "header",
+            "content": "Link 5"
+          }, {
+            "type": "text",
+            "id": "item5_title",
+            "label": "Title"
+          }, {
+            "type": "url",
+            "id": "item5_url",
+            "label": "URL"
+          }, {
+            "type": "header",
+            "content": "Link 6"
+          }, {
+            "type": "text",
+            "id": "item6_title",
+            "label": "Title"
+          }, {
+            "type": "url",
+            "id": "item6_url",
+            "label": "URL"
+          }, {
+            "type": "header",
+            "content": "Link 7"
+          }, {
+            "type": "text",
+            "id": "item7_title",
+            "label": "Title"
+          }, {
+            "type": "url",
+            "id": "item7_url",
+            "label": "URL"
+          }, {
+            "type": "header",
+            "content": "Link 8"
+          }, {
+            "type": "text",
+            "id": "item8_title",
+            "label": "Title"
+          }, {
+            "type": "url",
+            "id": "item8_url",
+            "label": "URL"
           }
         ]
       }
