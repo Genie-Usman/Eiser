@@ -236,12 +236,10 @@
         "main_menu": "slashcart-menu",
         "header_bg": "#ffffff",
         "text_color": "#1f2937",
-        "primary_color": "#22c55e",
         "cta1_text": "Get Started",
         "cta1_url": "",
         "cta2_text": "Book a Call",
-        "cta2_url": "",
-        "cta2_bg": "#1f2937"
+        "cta2_url": ""
       }
     }
   },
