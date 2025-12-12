@@ -48,7 +48,7 @@
         "logo": "shopify://shop_images/Pecan-logo.avif",
         "logo_width": 100,
         "main_menu": "dees-pecan-menu",
-        "header_bg": "#1a1a1a",
+        "header_bg": "#321e00",
         "header_text": "#ffffff",
         "accent_color": "#b8860b",
         "dropdown_bg": "#c9a227"
