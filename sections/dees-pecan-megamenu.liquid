@@ -1,9 +1,9 @@
 {% comment %} 
-          Dees Pecan Megamenu
-          A megamenu section matching the Dees Pecan design with: 
-          - Dark header with logo, search, cart/account 
-          - Navigation with Products dropdown 
-          - Dropdown shows links on left, image on right 
+            Dees Pecan Megamenu
+            A megamenu section matching the Dees Pecan design with: 
+            - Dark header with logo, search, cart/account 
+            - Navigation with Products dropdown 
+            - Dropdown shows links on left, image on right 
 {% endcomment %}
 
 <style>
@@ -212,14 +212,17 @@
 
               <!-- Dropdown -->
               <div class="dees-dropdown absolute left-0 top-full pt-4 z-50">
-                <div class="flex shadow-2xl overflow-hidden" style="min-width: 600px;">
+                {% for block in section.blocks %}
+                  {% if block.type == 'menu_group' %}
+                    {% assign block_parent = block.settings.parent_menu | downcase | strip %}
+                    {% if block_parent == link_title_lower %}
+                      <div
+                        class="flex shadow-2xl overflow-hidden"
+                        style="min-width: 600px;"
+                        x-data="{ activeImage: 1 }">
 
-                  <!-- Links Section -->
-                  <div class="w-2/5 py-6 px-6" style="background-color: var(--dropdown-bg);">
-                    {% for block in section.blocks %}
-                      {% if block.type == 'menu_group' %}
-                        {% assign block_parent = block.settings.parent_menu | downcase | strip %}
-                        {% if block_parent == link_title_lower %}
+                        <!-- Links Section -->
+                        <div class="w-2/5 py-6 px-6" style="background-color: var(--dropdown-bg);">
                           {% for i in (1..8) %}
                             {% assign title_key = 'item' | append: i | append: '_title' %}
                             {% assign url_key = 'item' | append: i | append: '_url' %}
@@ -228,35 +231,35 @@
                               <a
                                 href="{{ block.settings[url_key] | default: '#' }}"
                                 class="block py-3 text-sm border-b border-gray-600/30 last:border-0 transition-colors hover:opacity-80"
-                                style="color: var(--header-bg);">
+                                style="color: var(--header-bg);"
+                                @mouseenter="activeImage = {{ i }}">
                                 {{ title }}
                               </a>
                             {% endif %}
                           {% endfor %}
-                        {% endif %}
-                      {% endif %}
-                    {% endfor %}
-                  </div>
+                        </div>
 
-                  <!-- Image Section -->
-                  <div class="w-3/5">
-                    {% for block in section.blocks %}
-                      {% if block.type == 'menu_group' %}
-                        {% assign block_parent = block.settings.parent_menu | downcase | strip %}
-                        {% if block_parent == link_title_lower and block.settings.featured_image %}
-                          <img
-                            src="{{ block.settings.featured_image | image_url: width: 600 }}"
-                            alt="{{ link.title }}"
-                            height="inherit"
-                            width="inherit"
-                            class="w-full h-full object-cover"
-                            loading="lazy">
-                          {% break %}
-                        {% endif %}
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-                </div>
+                        <!-- Image Section -->
+                        <div class="w-3/5 relative" style="min-height: 300px;">
+                          {% for i in (1..8) %}
+                            {% assign image_key = 'item' | append: i | append: '_image' %}
+                            {% assign title_key = 'item' | append: i | append: '_title' %}
+                            {% if block.settings[image_key] and block.settings[title_key] != blank %}
+                              <img
+                                src="{{ block.settings[image_key] | image_url: width: 600 }}"
+                                alt="{{ block.settings[title_key] }}"
+                                height="inherit"
+                                width="inherit"
+                                class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+                                :class="activeImage === {{ i }} ? 'opacity-100' : 'opacity-0'"
+                                loading="lazy">
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
               </div>
             </div>
           {% else %}
@@ -490,11 +493,6 @@
             "info": "Enter the exact title of the parent menu item (e.g., 'Products')"
           },
           {
-            "type": "image_picker",
-            "id": "featured_image",
-            "label": "Featured image (right side)"
-          },
-          {
             "type": "header",
             "content": "Link 1"
           },
@@ -502,146 +500,116 @@
             "type": "text",
             "id": "item1_title",
             "label": "Title"
-          },
-          {
+          }, {
             "type": "url",
             "id": "item1_url",
             "label": "URL"
-          },
-          {
+          }, {
             "type": "image_picker",
             "id": "item1_image",
             "label": "Image"
-          },
-          {
+          }, {
             "type": "header",
             "content": "Link 2"
-          },
-          {
+          }, {
             "type": "text",
             "id": "item2_title",
             "label": "Title"
-          },
-          {
+          }, {
             "type": "url",
             "id": "item2_url",
             "label": "URL"
-          },
-          {
+          }, {
             "type": "image_picker",
             "id": "item2_image",
             "label": "Image"
-          },
-          {
+          }, {
             "type": "header",
             "content": "Link 3"
-          },
-          {
+          }, {
             "type": "text",
             "id": "item3_title",
             "label": "Title"
-          },
-          {
+          }, {
             "type": "url",
             "id": "item3_url",
             "label": "URL"
-          },
-          {
+          }, {
             "type": "image_picker",
             "id": "item3_image",
             "label": "Image"
-          },
-          {
+          }, {
             "type": "header",
             "content": "Link 4"
-          },
-          {
+          }, {
             "type": "text",
             "id": "item4_title",
             "label": "Title"
-          },
-          {
+          }, {
             "type": "url",
             "id": "item4_url",
             "label": "URL"
-          },
-          {
+          }, {
             "type": "image_picker",
             "id": "item4_image",
             "label": "Image"
-          },
-          {
+          }, {
             "type": "header",
             "content": "Link 5"
-          },
-          {
+          }, {
             "type": "text",
             "id": "item5_title",
             "label": "Title"
-          },
-          {
+          }, {
             "type": "url",
             "id": "item5_url",
             "label": "URL"
-          },
-          {
+          }, {
             "type": "image_picker",
             "id": "item5_image",
             "label": "Image"
-          },
-          {
+          }, {
             "type": "header",
             "content": "Link 6"
-          },
-          {
+          }, {
             "type": "text",
             "id": "item6_title",
             "label": "Title"
-          },
-          {
+          }, {
             "type": "url",
             "id": "item6_url",
             "label": "URL"
-          },
-          {
+          }, {
             "type": "image_picker",
             "id": "item6_image",
             "label": "Image"
-          },
-          {
+          }, {
             "type": "header",
             "content": "Link 7"
-          },
-          {
+          }, {
             "type": "text",
             "id": "item7_title",
             "label": "Title"
-          },
-          {
+          }, {
             "type": "url",
             "id": "item7_url",
             "label": "URL"
-          },
-          {
+          }, {
             "type": "image_picker",
             "id": "item7_image",
             "label": "Image"
-          },
-          {
+          }, {
             "type": "header",
             "content": "Link 8"
-          },
-          {
+          }, {
             "type": "text",
             "id": "item8_title",
             "label": "Title"
-          },
-          {
+          }, {
             "type": "url",
             "id": "item8_url",
             "label": "URL"
-          },
-          {
+          }, {
             "type": "image_picker",
             "id": "item8_image",
             "label": "Image"
