@@ -247,6 +247,8 @@
                           <img
                             src="{{ block.settings.featured_image | image_url: width: 600 }}"
                             alt="{{ link.title }}"
+                            height="inherit"
+                            width="inherit"
                             class="w-full h-full object-cover"
                             loading="lazy">
                           {% break %}
@@ -349,6 +351,8 @@
           src="{{ section.settings.logo | image_url: width: 200 }}"
           alt="{{ shop.name }}"
           class="h-auto"
+          height="inherit"
+          width="inherit"
           style="width: {{ section.settings.logo_width | times: 0.7 }}px;">
       {% endif %}
 
@@ -498,87 +502,149 @@
             "type": "text",
             "id": "item1_title",
             "label": "Title"
-          }, {
+          },
+          {
             "type": "url",
             "id": "item1_url",
             "label": "URL"
-          }, {
+          },
+          {
+            "type": "image_picker",
+            "id": "item1_image",
+            "label": "Image"
+          },
+          {
             "type": "header",
             "content": "Link 2"
-          }, {
+          },
+          {
             "type": "text",
             "id": "item2_title",
             "label": "Title"
-          }, {
+          },
+          {
             "type": "url",
             "id": "item2_url",
             "label": "URL"
-          }, {
+          },
+          {
+            "type": "image_picker",
+            "id": "item2_image",
+            "label": "Image"
+          },
+          {
             "type": "header",
             "content": "Link 3"
-          }, {
+          },
+          {
             "type": "text",
             "id": "item3_title",
             "label": "Title"
-          }, {
+          },
+          {
             "type": "url",
             "id": "item3_url",
             "label": "URL"
-          }, {
+          },
+          {
+            "type": "image_picker",
+            "id": "item3_image",
+            "label": "Image"
+          },
+          {
             "type": "header",
             "content": "Link 4"
-          }, {
+          },
+          {
             "type": "text",
             "id": "item4_title",
             "label": "Title"
-          }, {
+          },
+          {
             "type": "url",
             "id": "item4_url",
             "label": "URL"
-          }, {
+          },
+          {
+            "type": "image_picker",
+            "id": "item4_image",
+            "label": "Image"
+          },
+          {
             "type": "header",
             "content": "Link 5"
-          }, {
+          },
+          {
             "type": "text",
             "id": "item5_title",
             "label": "Title"
-          }, {
+          },
+          {
             "type": "url",
             "id": "item5_url",
             "label": "URL"
-          }, {
+          },
+          {
+            "type": "image_picker",
+            "id": "item5_image",
+            "label": "Image"
+          },
+          {
             "type": "header",
             "content": "Link 6"
-          }, {
+          },
+          {
             "type": "text",
             "id": "item6_title",
             "label": "Title"
-          }, {
+          },
+          {
             "type": "url",
             "id": "item6_url",
             "label": "URL"
-          }, {
+          },
+          {
+            "type": "image_picker",
+            "id": "item6_image",
+            "label": "Image"
+          },
+          {
             "type": "header",
             "content": "Link 7"
-          }, {
+          },
+          {
             "type": "text",
             "id": "item7_title",
             "label": "Title"
-          }, {
+          },
+          {
             "type": "url",
             "id": "item7_url",
             "label": "URL"
-          }, {
+          },
+          {
+            "type": "image_picker",
+            "id": "item7_image",
+            "label": "Image"
+          },
+          {
             "type": "header",
             "content": "Link 8"
-          }, {
+          },
+          {
             "type": "text",
             "id": "item8_title",
             "label": "Title"
-          }, {
+          },
+          {
             "type": "url",
             "id": "item8_url",
             "label": "URL"
+          },
+          {
+            "type": "image_picker",
+            "id": "item8_image",
+            "label": "Image"
           }
         ]
       }
