@@ -75,8 +75,7 @@
             "col2_title": "MEN'S",
             "col2_links": "Crewneck Jerseys|/collections/mens-crewneck\nV-Neck Jerseys|/collections/mens-vneck\nPolos|/collections/mens-polos\nT-Shirts|/collections/mens-tshirts\nSweatshirts|/collections/mens-sweatshirts\nHoodies|/collections/mens-hoodies\nLong Sleeve Shirt|/collections/mens-long-sleeve\nTank Tops|/collections/mens-tank-tops\nV-Neck Shirts|/collections/mens-vneck-shirts",
             "col3_title": "FEATURED",
-            "col3_links": "Sale|/collections/sale\nBig/Little|/collections/big-little\nSets|/collections/sets\nGraduation Stoles|/collections/graduation-stoles\nBet On Yourself|/collections/bet-on-yourself\nChristmas|/collections/christmas",
-            "tagline": "Custom gear for every sorority and fraternity. Designed to stand out."
+            "col3_links": "Sale|/collections/sale\nBig/Little|/collections/big-little\nSets|/collections/sets\nGraduation Stoles|/collections/graduation-stoles\nBet On Yourself|/collections/bet-on-yourself\nChristmas|/collections/christmas"
           }
         },
         "new_trending_gallery": {
@@ -162,8 +161,6 @@
         "nav_text": "#ffffff",
         "dropdown_bg": "#1e6b9a",
         "dropdown_text": "#ffffff",
-        "show_custom_apparel": true,
-        "custom_apparel_text": "Custom Apparel",
         "logo_width": 150,
         "main_menu": "go-greek-menu"
       }
