@@ -1,10 +1,10 @@
 {% comment %} 
-                                Go Greek Megamenu
-                                A megamenu section matching the Go Greek store design with: 
-                                - Announcement bar with social icons 
-                                - Dark header with currency, centered logo, user/search/cart 
-                                - Grid dropdowns for Fraternity/Sorority (logo + title) 
-                                - Multiple dropdown layout types 
+                                                Go Greek Megamenu
+                                                A megamenu section matching the Go Greek store design with: 
+                                                - Announcement bar with social icons 
+                                                - Dark header with currency, centered logo, user/search/cart 
+                                                - Grid dropdowns for Fraternity/Sorority (logo + title) 
+                                                - Multiple dropdown layout types 
 {% endcomment %}
 
 {% schema %}
@@ -1126,7 +1126,7 @@
           </button>
 
           <!-- Currency (Desktop) -->
-          <div class="hidden lg:flex items-center gap-1 text-sm" style="color: var(--gogreek-header-text);">
+          <div class="hidden lg:flex items-center gap-1 text-xs" style="color: var(--gogreek-header-text);">
             <span>United States (USD $)</span>
             <svg
               class="w-3 h-3"
@@ -1148,6 +1148,8 @@
             <img
               src="{{ section.settings.logo | image_url: width: 300 }}"
               alt="{{ shop.name }}"
+              height="inherit"
+              width="inherit"
               style="width: {{ section.settings.logo_width }}px; max-height: 60px;"
               class="h-auto object-contain"
               loading="eager">
@@ -1188,21 +1190,6 @@
             </svg>
           </button>
 
-          <!-- Wishlist -->
-          <a href="#" class="hidden lg:block hover:opacity-75 transition-opacity">
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-          </a>
-
           <!-- Cart -->
           <a href="{{ routes.cart_url }}" class="relative hover:opacity-75 transition-opacity">
             <svg
@@ -1227,7 +1214,7 @@
     </div>
 
     <!-- Navigation Bar -->
-    <nav class="hidden lg:block w-full border-t border-gray-800 relative" style="background-color: var(--gogreek-nav-bg);">
+    <nav class="hidden lg:block w-full relative" style="background-color: var(--gogreek-nav-bg);">
       <div class="max-w-[1400px] mx-auto px-4 lg:px-8">
         <div class="flex items-center justify-center gap-6">
           {% if section.settings.main_menu != blank %}
@@ -1291,6 +1278,8 @@
                                           <img
                                             src="{{ block.settings[img_key] | image_url: width: 80 }}"
                                             alt="{{ block.settings[title_key] }}"
+                                            height="inherit"
+                                            width="inherit"
                                             class="w-10 h-10 rounded-full object-cover shrink-0">
                                         {% else %}
                                           <div class="w-10 h-10 rounded-full bg-white/20 shrink-0 flex items-center justify-center text-xs" style="color: var(--gogreek-dropdown-text);">
@@ -1388,21 +1377,31 @@
 
                                   <!-- Featured Images (Right Side) -->
                                   {% if block.settings.featured_image1 != blank or block.settings.featured_image2 != blank %}
-                                    <div class="ml-auto flex gap-4">
+                                    <div class="ml-auto flex gap-6" style="flex-shrink: 0;">
                                       {% if block.settings.featured_image1 != blank %}
-                                        <a href="{{ block.settings.featured_url1 | default: '#' }}" class="block hover:opacity-90 transition-opacity">
+                                        <a
+                                          href="{{ block.settings.featured_url1 | default: '#' }}"
+                                          class="block hover:opacity-90 transition-opacity"
+                                          style="flex: 0 0 auto;">
                                           <img
-                                            src="{{ block.settings.featured_image1 | image_url: width: 400 }}"
+                                            src="{{ block.settings.featured_image1 | image_url: width: 600, height: 400, crop: 'center' }}"
                                             alt="Featured Product"
-                                            class="w-48 h-64 object-cover rounded">
+                                            height="inherit"
+                                            width="inherit"
+                                            style="width: 300px; height: 200px; object-fit: cover;">
                                         </a>
                                       {% endif %}
                                       {% if block.settings.featured_image2 != blank %}
-                                        <a href="{{ block.settings.featured_url2 | default: '#' }}" class="block hover:opacity-90 transition-opacity">
+                                        <a
+                                          href="{{ block.settings.featured_url2 | default: '#' }}"
+                                          class="block hover:opacity-90 transition-opacity"
+                                          style="flex: 0 0 auto;">
                                           <img
-                                            src="{{ block.settings.featured_image2 | image_url: width: 400 }}"
+                                            src="{{ block.settings.featured_image2 | image_url: width: 600, height: 400, crop: 'center' }}"
                                             alt="Featured Product"
-                                            class="w-48 h-64 object-cover rounded">
+                                            height="inherit"
+                                            width="inherit"
+                                            style="width: 300px; height: 200px; object-fit: cover;">
                                         </a>
                                       {% endif %}
                                     </div>
@@ -1421,11 +1420,13 @@
                                     <a href="{{ block.settings.section1_url | default: '#' }}" class="block group">
                                       <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section1_title }}</h4>
                                       {% if block.settings.section1_image != blank %}
-                                        <div class="overflow-hidden rounded-lg">
+                                        <div class="overflow-hidden">
                                           <img
                                             src="{{ block.settings.section1_image | image_url: width: 400 }}"
                                             alt="{{ block.settings.section1_title }}"
-                                            class="w-full h-auto object-cover group-hover:opacity-90 transition-opacity">
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-72 object-cover group-hover:opacity-90 transition-opacity">
                                         </div>
                                       {% endif %}
                                     </a>
@@ -1434,11 +1435,13 @@
                                     <a href="{{ block.settings.section2_url | default: '#' }}" class="block group">
                                       <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section2_title }}</h4>
                                       {% if block.settings.section2_image != blank %}
-                                        <div class="overflow-hidden rounded-lg">
+                                        <div class="overflow-hidden">
                                           <img
                                             src="{{ block.settings.section2_image | image_url: width: 400 }}"
                                             alt="{{ block.settings.section2_title }}"
-                                            class="w-full h-auto object-cover group-hover:opacity-90 transition-opacity">
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-72 object-cover group-hover:opacity-90 transition-opacity">
                                         </div>
                                       {% endif %}
                                     </a>
@@ -1447,11 +1450,13 @@
                                     <a href="{{ block.settings.section3_url | default: '#' }}" class="block group">
                                       <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section3_title }}</h4>
                                       {% if block.settings.section3_image != blank %}
-                                        <div class="overflow-hidden rounded-lg">
+                                        <div class="overflow-hidden">
                                           <img
                                             src="{{ block.settings.section3_image | image_url: width: 400 }}"
                                             alt="{{ block.settings.section3_title }}"
-                                            class="w-full h-auto object-cover group-hover:opacity-90 transition-opacity">
+                                            height="inherit"
+                                            width="inherit"
+                                            class="w-full h-72 object-cover group-hover:opacity-90 transition-opacity">
                                         </div>
                                       {% endif %}
                                     </a>
@@ -1471,6 +1476,8 @@
                                           <img
                                             src="{{ block.settings[img_key] | image_url: width: 120 }}"
                                             alt="{{ block.settings[title_key] }}"
+                                            height="inherit"
+                                            width="inherit"
                                             class="w-14 h-14 object-cover rounded shrink-0">
                                         {% else %}
                                           <div class="w-14 h-14 bg-white/20 rounded shrink-0 flex items-center justify-center" style="color: var(--gogreek-dropdown-text);">
@@ -1504,6 +1511,8 @@
                                           <img
                                             src="{{ block.settings[img_key] | image_url: width: 200 }}"
                                             alt="{{ block.settings[title_key] }}"
+                                            height="inherit"
+                                            width="inherit"
                                             class="w-20 h-20 object-cover rounded shrink-0">
                                         {% else %}
                                           <div class="w-20 h-20 bg-white/20 rounded shrink-0 flex items-center justify-center" style="color: var(--gogreek-dropdown-text);">
@@ -1584,6 +1593,8 @@
         <img
           src="{{ section.settings.logo | image_url: width: 200 }}"
           alt="{{ shop.name }}"
+          height="inherit"
+          width="inherit"
           style="width: {{ section.settings.logo_width | times: 0.7 }}px;"
           class="h-auto">
       {% endif %}
