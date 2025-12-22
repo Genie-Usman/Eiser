@@ -188,10 +188,13 @@
             "parent_menu": "New & Trending",
             "section1_title": "NEW ARRIVALS",
             "section1_url": "/collections/new-arrivals",
+            "section1_image": "",
             "section2_title": "BIG/LITTLE",
             "section2_url": "/collections/big-little",
+            "section2_image": "",
             "section3_title": "SALE",
-            "section3_url": "/collections/sale"
+            "section3_url": "/collections/sale",
+            "section3_image": ""
           }
         },
         "accessories_thumbnail": {
