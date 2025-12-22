@@ -188,13 +188,13 @@
             "parent_menu": "New & Trending",
             "section1_title": "NEW ARRIVALS",
             "section1_url": "/collections/new-arrivals",
-            "section1_image": "",
+            "section1_image": "shopify://shop_images/new_arrivals_image_Mesa_de_trabajo_1.webp",
             "section2_title": "BIG/LITTLE",
             "section2_url": "/collections/big-little",
-            "section2_image": "",
+            "section2_image": "shopify://shop_images/big_little_menu_image_Mesa_de_trabajo_1_Mesa_de_trabajo_1.webp",
             "section3_title": "SALE",
             "section3_url": "/collections/sale",
-            "section3_image": ""
+            "section3_image": "shopify://shop_images/PhiSigmaSigmaHandSignSororityT-Shirt.webp"
           }
         },
         "accessories_thumbnail": {
