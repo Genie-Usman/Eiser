@@ -65,11 +65,90 @@
             "item8_title": "Phi Delta Theta",
             "item8_url": "/collections/phi-delta-theta"
           }
+        },
+        "apparel_columns": {
+          "type": "columns_menu",
+          "settings": {
+            "parent_menu": "Apparel",
+            "col1_title": "WOMEN'S",
+            "col1_links": "Crewneck Jerseys|/collections/womens-crewneck\nV-Neck Jerseys|/collections/womens-vneck\nPolos|/collections/womens-polos\nT-Shirts|/collections/womens-tshirts\nSweatshirts|/collections/womens-sweatshirts\nHoodies|/collections/womens-hoodies\nLong Sleeve Shirt|/collections/womens-long-sleeve\nTank Tops|/collections/womens-tank-tops\nV-Neck Shirts|/collections/womens-vneck-shirts\nFitted Tees|/collections/womens-fitted-tees",
+            "col2_title": "MEN'S",
+            "col2_links": "Crewneck Jerseys|/collections/mens-crewneck\nV-Neck Jerseys|/collections/mens-vneck\nPolos|/collections/mens-polos\nT-Shirts|/collections/mens-tshirts\nSweatshirts|/collections/mens-sweatshirts\nHoodies|/collections/mens-hoodies\nLong Sleeve Shirt|/collections/mens-long-sleeve\nTank Tops|/collections/mens-tank-tops\nV-Neck Shirts|/collections/mens-vneck-shirts",
+            "col3_title": "FEATURED",
+            "col3_links": "Sale|/collections/sale\nBig/Little|/collections/big-little\nSets|/collections/sets\nGraduation Stoles|/collections/graduation-stoles\nBet On Yourself|/collections/bet-on-yourself\nChristmas|/collections/christmas",
+            "tagline": "Custom gear for every sorority and fraternity. Designed to stand out."
+          }
+        },
+        "new_trending_gallery": {
+          "type": "image_gallery_menu",
+          "settings": {
+            "parent_menu": "New & Trending",
+            "section1_title": "NEW ARRIVALS",
+            "section1_url": "/collections/new-arrivals",
+            "section2_title": "BIG/LITTLE",
+            "section2_url": "/collections/big-little",
+            "section3_title": "SALE",
+            "section3_url": "/collections/sale"
+          }
+        },
+        "accessories_thumbnail": {
+          "type": "thumbnail_grid_menu",
+          "settings": {
+            "parent_menu": "Accessories & Gifts",
+            "columns": 4,
+            "item1_title": "Bags, Totes & Wallets",
+            "item1_url": "/collections/bags",
+            "item2_title": "Blanket & Towels",
+            "item2_url": "/collections/blankets",
+            "item3_title": "Hats & Wraps",
+            "item3_url": "/collections/hats",
+            "item4_title": "License Plate",
+            "item4_url": "/collections/license-plates",
+            "item5_title": "Beauty & Wellness",
+            "item5_url": "/collections/beauty",
+            "item6_title": "Flip Flops & Slippers",
+            "item6_url": "/collections/flip-flops",
+            "item7_title": "Jewelry",
+            "item7_url": "/collections/jewelry",
+            "item8_title": "Pins",
+            "item8_url": "/collections/pins",
+            "item9_title": "Decor",
+            "item9_url": "/collections/decor",
+            "item10_title": "Drinkware",
+            "item10_url": "/collections/drinkware",
+            "item11_title": "Key Chains",
+            "item11_url": "/collections/key-chains",
+            "item12_title": "Stationery & Pens",
+            "item12_url": "/collections/stationery",
+            "item13_title": "Stickers & Decals",
+            "item13_url": "/collections/stickers"
+          }
+        },
+        "school_org_grid": {
+          "type": "product_grid_menu",
+          "settings": {
+            "parent_menu": "School Org",
+            "columns": 3,
+            "item1_title": "International Studies Virtual Academy",
+            "item1_url": "/collections/isva",
+            "item2_title": "SVA",
+            "item2_url": "/collections/sva",
+            "item3_title": "CPA",
+            "item3_url": "/collections/cpa",
+            "item4_title": "Mater Academy Virtual",
+            "item4_url": "/collections/mav",
+            "item5_title": "MVA",
+            "item5_url": "/collections/mva"
+          }
         }
       },
       "block_order": [
         "sorority_grid",
-        "fraternity_grid"
+        "fraternity_grid",
+        "apparel_columns",
+        "new_trending_gallery",
+        "accessories_thumbnail",
+        "school_org_grid"
       ],
       "settings": {
         "show_announcement": true,
@@ -81,8 +160,10 @@
         "header_text": "#ffffff",
         "nav_bg": "#1a1a1a",
         "nav_text": "#ffffff",
-        "dropdown_bg": "#ffffff",
-        "accent_color": "#1a1a1a",
+        "dropdown_bg": "#1e6b9a",
+        "dropdown_text": "#ffffff",
+        "show_custom_apparel": true,
+        "custom_apparel_text": "Custom Apparel",
         "logo_width": 150,
         "main_menu": "go-greek-menu"
       }

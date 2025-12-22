@@ -1,10 +1,10 @@
 {% comment %} 
-          Go Greek Megamenu
-          A megamenu section matching the Go Greek store design with: 
-          - Announcement bar with social icons 
-          - Dark header with currency, centered logo, user/search/cart 
-          - Grid dropdowns for Fraternity/Sorority (logo + title) 
-          - Multiple dropdown layout types 
+                          Go Greek Megamenu
+                          A megamenu section matching the Go Greek store design with: 
+                          - Announcement bar with social icons 
+                          - Dark header with currency, centered logo, user/search/cart 
+                          - Grid dropdowns for Fraternity/Sorority (logo + title) 
+                          - Multiple dropdown layout types 
 {% endcomment %}
 
 {% schema %}
@@ -107,12 +107,12 @@
         "type": "color",
         "id": "dropdown_bg",
         "label": "Dropdown Background",
-        "default": "#ffffff"
+        "default": "#1e6b9a"
       }, {
         "type": "color",
-        "id": "accent_color",
-        "label": "Accent Color",
-        "default": "#1a1a1a"
+        "id": "dropdown_text",
+        "label": "Dropdown Text Color",
+        "default": "#000000"
       }
     ],
     "blocks": [
@@ -378,7 +378,8 @@
             "label": "URL 16"
           }
         ]
-      }, {
+      },
+      {
         "type": "columns_menu",
         "name": "Columns Menu",
         "settings": [
@@ -437,19 +438,448 @@
             "label": "Column 4 Links"
           }, {
             "type": "header",
-            "content": "Featured Image"
+            "content": "Featured Images"
           }, {
             "type": "image_picker",
-            "id": "featured_image",
-            "label": "Featured Image"
-          }, {
-            "type": "text",
-            "id": "featured_title",
-            "label": "Featured Title"
+            "id": "featured_image1",
+            "label": "Featured Image 1"
           }, {
             "type": "url",
-            "id": "featured_url",
-            "label": "Featured URL"
+            "id": "featured_url1",
+            "label": "Image 1 URL"
+          }, {
+            "type": "image_picker",
+            "id": "featured_image2",
+            "label": "Featured Image 2"
+          }, {
+            "type": "url",
+            "id": "featured_url2",
+            "label": "Image 2 URL"
+          }
+        ]
+      },
+      {
+        "type": "image_gallery_menu",
+        "name": "Image Gallery Menu",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parent_menu",
+            "label": "Parent Menu Title",
+            "info": "Exact match to nav link, e.g., 'New & Trending'"
+          },
+          {
+            "type": "header",
+            "content": "Section 1"
+          },
+          {
+            "type": "text",
+            "id": "section1_title",
+            "label": "Section 1 Title",
+            "default": "NEW ARRIVALS"
+          },
+          {
+            "type": "url",
+            "id": "section1_url",
+            "label": "Section 1 URL"
+          }, {
+            "type": "image_picker",
+            "id": "section1_img1",
+            "label": "Image 1"
+          }, {
+            "type": "image_picker",
+            "id": "section1_img2",
+            "label": "Image 2"
+          }, {
+            "type": "image_picker",
+            "id": "section1_img3",
+            "label": "Image 3"
+          }, {
+            "type": "image_picker",
+            "id": "section1_img4",
+            "label": "Image 4"
+          }, {
+            "type": "header",
+            "content": "Section 2"
+          }, {
+            "type": "text",
+            "id": "section2_title",
+            "label": "Section 2 Title",
+            "default": "BIG/LITTLE"
+          }, {
+            "type": "url",
+            "id": "section2_url",
+            "label": "Section 2 URL"
+          }, {
+            "type": "image_picker",
+            "id": "section2_img1",
+            "label": "Image 1"
+          }, {
+            "type": "image_picker",
+            "id": "section2_img2",
+            "label": "Image 2"
+          }, {
+            "type": "image_picker",
+            "id": "section2_img3",
+            "label": "Image 3"
+          }, {
+            "type": "header",
+            "content": "Section 3"
+          }, {
+            "type": "text",
+            "id": "section3_title",
+            "label": "Section 3 Title",
+            "default": "SALE"
+          }, {
+            "type": "url",
+            "id": "section3_url",
+            "label": "Section 3 URL"
+          }, {
+            "type": "image_picker",
+            "id": "section3_img1",
+            "label": "Image 1"
+          }, {
+            "type": "image_picker",
+            "id": "section3_img2",
+            "label": "Image 2"
+          }, {
+            "type": "image_picker",
+            "id": "section3_img3",
+            "label": "Image 3"
+          }, {
+            "type": "image_picker",
+            "id": "section3_img4",
+            "label": "Image 4"
+          }
+        ]
+      },
+      {
+        "type": "thumbnail_grid_menu",
+        "name": "Thumbnail Grid Menu",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parent_menu",
+            "label": "Parent Menu Title",
+            "info": "Exact match to nav link, e.g., 'Accessories & Gifts'"
+          },
+          {
+            "type": "range",
+            "id": "columns",
+            "min": 2,
+            "max": 5,
+            "step": 1,
+            "label": "Number of Columns",
+            "default": 4
+          },
+          {
+            "type": "header",
+            "content": "Item 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "item1_image",
+            "label": "Thumbnail 1"
+          }, {
+            "type": "text",
+            "id": "item1_title",
+            "label": "Title 1"
+          }, {
+            "type": "url",
+            "id": "item1_url",
+            "label": "URL 1"
+          }, {
+            "type": "header",
+            "content": "Item 2"
+          }, {
+            "type": "image_picker",
+            "id": "item2_image",
+            "label": "Thumbnail 2"
+          }, {
+            "type": "text",
+            "id": "item2_title",
+            "label": "Title 2"
+          }, {
+            "type": "url",
+            "id": "item2_url",
+            "label": "URL 2"
+          }, {
+            "type": "header",
+            "content": "Item 3"
+          }, {
+            "type": "image_picker",
+            "id": "item3_image",
+            "label": "Thumbnail 3"
+          }, {
+            "type": "text",
+            "id": "item3_title",
+            "label": "Title 3"
+          }, {
+            "type": "url",
+            "id": "item3_url",
+            "label": "URL 3"
+          }, {
+            "type": "header",
+            "content": "Item 4"
+          }, {
+            "type": "image_picker",
+            "id": "item4_image",
+            "label": "Thumbnail 4"
+          }, {
+            "type": "text",
+            "id": "item4_title",
+            "label": "Title 4"
+          }, {
+            "type": "url",
+            "id": "item4_url",
+            "label": "URL 4"
+          }, {
+            "type": "header",
+            "content": "Item 5"
+          }, {
+            "type": "image_picker",
+            "id": "item5_image",
+            "label": "Thumbnail 5"
+          }, {
+            "type": "text",
+            "id": "item5_title",
+            "label": "Title 5"
+          }, {
+            "type": "url",
+            "id": "item5_url",
+            "label": "URL 5"
+          }, {
+            "type": "header",
+            "content": "Item 6"
+          }, {
+            "type": "image_picker",
+            "id": "item6_image",
+            "label": "Thumbnail 6"
+          }, {
+            "type": "text",
+            "id": "item6_title",
+            "label": "Title 6"
+          }, {
+            "type": "url",
+            "id": "item6_url",
+            "label": "URL 6"
+          }, {
+            "type": "header",
+            "content": "Item 7"
+          }, {
+            "type": "image_picker",
+            "id": "item7_image",
+            "label": "Thumbnail 7"
+          }, {
+            "type": "text",
+            "id": "item7_title",
+            "label": "Title 7"
+          }, {
+            "type": "url",
+            "id": "item7_url",
+            "label": "URL 7"
+          }, {
+            "type": "header",
+            "content": "Item 8"
+          }, {
+            "type": "image_picker",
+            "id": "item8_image",
+            "label": "Thumbnail 8"
+          }, {
+            "type": "text",
+            "id": "item8_title",
+            "label": "Title 8"
+          }, {
+            "type": "url",
+            "id": "item8_url",
+            "label": "URL 8"
+          }, {
+            "type": "header",
+            "content": "Item 9"
+          }, {
+            "type": "image_picker",
+            "id": "item9_image",
+            "label": "Thumbnail 9"
+          }, {
+            "type": "text",
+            "id": "item9_title",
+            "label": "Title 9"
+          }, {
+            "type": "url",
+            "id": "item9_url",
+            "label": "URL 9"
+          }, {
+            "type": "header",
+            "content": "Item 10"
+          }, {
+            "type": "image_picker",
+            "id": "item10_image",
+            "label": "Thumbnail 10"
+          }, {
+            "type": "text",
+            "id": "item10_title",
+            "label": "Title 10"
+          }, {
+            "type": "url",
+            "id": "item10_url",
+            "label": "URL 10"
+          }, {
+            "type": "header",
+            "content": "Item 11"
+          }, {
+            "type": "image_picker",
+            "id": "item11_image",
+            "label": "Thumbnail 11"
+          }, {
+            "type": "text",
+            "id": "item11_title",
+            "label": "Title 11"
+          }, {
+            "type": "url",
+            "id": "item11_url",
+            "label": "URL 11"
+          }, {
+            "type": "header",
+            "content": "Item 12"
+          }, {
+            "type": "image_picker",
+            "id": "item12_image",
+            "label": "Thumbnail 12"
+          }, {
+            "type": "text",
+            "id": "item12_title",
+            "label": "Title 12"
+          }, {
+            "type": "url",
+            "id": "item12_url",
+            "label": "URL 12"
+          }, {
+            "type": "header",
+            "content": "Item 13"
+          }, {
+            "type": "image_picker",
+            "id": "item13_image",
+            "label": "Thumbnail 13"
+          }, {
+            "type": "text",
+            "id": "item13_title",
+            "label": "Title 13"
+          }, {
+            "type": "url",
+            "id": "item13_url",
+            "label": "URL 13"
+          }
+        ]
+      }, {
+        "type": "product_grid_menu",
+        "name": "Product Grid Menu",
+        "settings": [
+          {
+            "type": "text",
+            "id": "parent_menu",
+            "label": "Parent Menu Title",
+            "info": "Exact match to nav link, e.g., 'School Org'"
+          },
+          {
+            "type": "range",
+            "id": "columns",
+            "min": 2,
+            "max": 4,
+            "step": 1,
+            "label": "Number of Columns",
+            "default": 3
+          },
+          {
+            "type": "header",
+            "content": "Item 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "item1_image",
+            "label": "Product Image 1"
+          }, {
+            "type": "text",
+            "id": "item1_title",
+            "label": "Title 1"
+          }, {
+            "type": "url",
+            "id": "item1_url",
+            "label": "URL 1"
+          }, {
+            "type": "header",
+            "content": "Item 2"
+          }, {
+            "type": "image_picker",
+            "id": "item2_image",
+            "label": "Product Image 2"
+          }, {
+            "type": "text",
+            "id": "item2_title",
+            "label": "Title 2"
+          }, {
+            "type": "url",
+            "id": "item2_url",
+            "label": "URL 2"
+          }, {
+            "type": "header",
+            "content": "Item 3"
+          }, {
+            "type": "image_picker",
+            "id": "item3_image",
+            "label": "Product Image 3"
+          }, {
+            "type": "text",
+            "id": "item3_title",
+            "label": "Title 3"
+          }, {
+            "type": "url",
+            "id": "item3_url",
+            "label": "URL 3"
+          }, {
+            "type": "header",
+            "content": "Item 4"
+          }, {
+            "type": "image_picker",
+            "id": "item4_image",
+            "label": "Product Image 4"
+          }, {
+            "type": "text",
+            "id": "item4_title",
+            "label": "Title 4"
+          }, {
+            "type": "url",
+            "id": "item4_url",
+            "label": "URL 4"
+          }, {
+            "type": "header",
+            "content": "Item 5"
+          }, {
+            "type": "image_picker",
+            "id": "item5_image",
+            "label": "Product Image 5"
+          }, {
+            "type": "text",
+            "id": "item5_title",
+            "label": "Title 5"
+          }, {
+            "type": "url",
+            "id": "item5_url",
+            "label": "URL 5"
+          }, {
+            "type": "header",
+            "content": "Item 6"
+          }, {
+            "type": "image_picker",
+            "id": "item6_image",
+            "label": "Product Image 6"
+          }, {
+            "type": "text",
+            "id": "item6_title",
+            "label": "Title 6"
+          }, {
+            "type": "url",
+            "id": "item6_url",
+            "label": "URL 6"
           }
         ]
       }
@@ -469,7 +899,7 @@
     --gogreek-nav-bg: {{ section.settings.nav_bg }};
     --gogreek-nav-text: {{ section.settings.nav_text }};
     --gogreek-dropdown-bg: {{ section.settings.dropdown_bg }};
-    --gogreek-accent: {{ section.settings.accent_color }};
+    --gogreek-dropdown-text: {{ section.settings.dropdown_text }};
     --gogreek-announcement-bg: {{ section.settings.announcement_bg }};
     --gogreek-announcement-text: {{ section.settings.announcement_text_color }};
   }
@@ -727,13 +1157,13 @@
               {% endfor %}
 
               <div
-                class="relative"
+                class="static"
                 @mouseenter="openDropdown = '{{ link.title | handleize }}'"
                 @mouseleave="openDropdown = null">
 
                 <a
                   href="{{ link.url }}"
-                  class="gogreek-nav-link py-4 text-xs font-medium uppercase tracking-wider transition-colors inline-block"
+                  class="gogreek-nav-link py-4 text-xs font-medium uppercase tracking-wider transition-colors inline-block relative"
                   style="color: var(--gogreek-nav-text);"
                   {% if has_dropdown %}
                   @click.prevent{% endif %}>
@@ -749,8 +1179,8 @@
                     x-transition:enter-end="opacity-100"
                     x-transition:leave="transition ease-in duration-150"
                     x-cloak
-                    class="gogreek-dropdown fixed inset-x-0"
-                    :style="`z-index: 9999; top: ${navBottom}px;`">
+                    class="gogreek-dropdown absolute left-0 right-0 top-full w-full"
+                    style="z-index: 9999;">
 
                     <div class="w-full py-6 px-8 shadow-xl" style="background-color: var(--gogreek-dropdown-bg);">
                       <div class="max-w-[1200px] mx-auto">
@@ -768,18 +1198,18 @@
                                     {% assign url_key = 'item' | append: i | append: '_url' %}
 
                                     {% if block.settings[title_key] != blank %}
-                                      <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 transition-colors group">
+                                      <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-colors group">
                                         {% if block.settings[img_key] != blank %}
                                           <img
                                             src="{{ block.settings[img_key] | image_url: width: 80 }}"
                                             alt="{{ block.settings[title_key] }}"
-                                            class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                                            class="w-10 h-10 rounded-full object-cover shrink-0">
                                         {% else %}
-                                          <div class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-xs text-gray-500">
+                                          <div class="w-10 h-10 rounded-full bg-white/20 shrink-0 flex items-center justify-center text-xs" style="color: var(--gogreek-dropdown-text);">
                                             {{ block.settings[title_key] | slice: 0, 3 | upcase }}
                                           </div>
                                         {% endif %}
-                                        <span class="text-sm text-gray-700 group-hover:text-black">{{ block.settings[title_key] }}</span>
+                                        <span class="text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
                                       </a>
                                     {% endif %}
                                   {% endfor %}
@@ -790,14 +1220,17 @@
                                 <div class="flex gap-8">
                                   {% if block.settings.col1_title != blank %}
                                     <div class="min-w-[140px]">
-                                      <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col1_title }}</h4>
+                                      <h4 class="text-sm font-bold mb-3" style="color: var(--gogreek-dropdown-text);">{{ block.settings.col1_title }}</h4>
                                       <ul class="space-y-2">
                                         {% assign lines = block.settings.col1_links | newline_to_br | split: '<br />' %}
                                         {% for line in lines %}
                                           {% assign parts = line | split: '|' %}
                                           {% if parts.size >= 2 %}
                                             <li>
-                                              <a href="{{ parts[1] | strip }}" class="text-sm text-gray-600 hover:text-black transition-colors">{{ parts[0] | strip }}</a>
+                                              <a
+                                                href="{{ parts[1] | strip }}"
+                                                class="text-sm hover:opacity-70 transition-opacity"
+                                                style="color: var(--gogreek-dropdown-text);">{{ parts[0] | strip }}</a>
                                             </li>
                                           {% endif %}
                                         {% endfor %}
@@ -807,14 +1240,17 @@
 
                                   {% if block.settings.col2_title != blank %}
                                     <div class="min-w-[140px]">
-                                      <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col2_title }}</h4>
+                                      <h4 class="text-sm font-bold mb-3" style="color: var(--gogreek-dropdown-text);">{{ block.settings.col2_title }}</h4>
                                       <ul class="space-y-2">
                                         {% assign lines = block.settings.col2_links | newline_to_br | split: '<br />' %}
                                         {% for line in lines %}
                                           {% assign parts = line | split: '|' %}
                                           {% if parts.size >= 2 %}
                                             <li>
-                                              <a href="{{ parts[1] | strip }}" class="text-sm text-gray-600 hover:text-black transition-colors">{{ parts[0] | strip }}</a>
+                                              <a
+                                                href="{{ parts[1] | strip }}"
+                                                class="text-sm hover:opacity-70 transition-opacity"
+                                                style="color: var(--gogreek-dropdown-text);">{{ parts[0] | strip }}</a>
                                             </li>
                                           {% endif %}
                                         {% endfor %}
@@ -824,14 +1260,17 @@
 
                                   {% if block.settings.col3_title != blank %}
                                     <div class="min-w-[140px]">
-                                      <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col3_title }}</h4>
+                                      <h4 class="text-sm font-bold mb-3" style="color: var(--gogreek-dropdown-text);">{{ block.settings.col3_title }}</h4>
                                       <ul class="space-y-2">
                                         {% assign lines = block.settings.col3_links | newline_to_br | split: '<br />' %}
                                         {% for line in lines %}
                                           {% assign parts = line | split: '|' %}
                                           {% if parts.size >= 2 %}
                                             <li>
-                                              <a href="{{ parts[1] | strip }}" class="text-sm text-gray-600 hover:text-black transition-colors">{{ parts[0] | strip }}</a>
+                                              <a
+                                                href="{{ parts[1] | strip }}"
+                                                class="text-sm hover:opacity-70 transition-opacity"
+                                                style="color: var(--gogreek-dropdown-text);">{{ parts[0] | strip }}</a>
                                             </li>
                                           {% endif %}
                                         {% endfor %}
@@ -841,14 +1280,17 @@
 
                                   {% if block.settings.col4_title != blank %}
                                     <div class="min-w-[140px]">
-                                      <h4 class="text-sm font-bold text-gray-800 mb-3">{{ block.settings.col4_title }}</h4>
+                                      <h4 class="text-sm font-bold mb-3" style="color: var(--gogreek-dropdown-text);">{{ block.settings.col4_title }}</h4>
                                       <ul class="space-y-2">
                                         {% assign lines = block.settings.col4_links | newline_to_br | split: '<br />' %}
                                         {% for line in lines %}
                                           {% assign parts = line | split: '|' %}
                                           {% if parts.size >= 2 %}
                                             <li>
-                                              <a href="{{ parts[1] | strip }}" class="text-sm text-gray-600 hover:text-black transition-colors">{{ parts[0] | strip }}</a>
+                                              <a
+                                                href="{{ parts[1] | strip }}"
+                                                class="text-sm hover:opacity-70 transition-opacity"
+                                                style="color: var(--gogreek-dropdown-text);">{{ parts[0] | strip }}</a>
                                             </li>
                                           {% endif %}
                                         {% endfor %}
@@ -856,24 +1298,174 @@
                                     </div>
                                   {% endif %}
 
-                                  {% if block.settings.featured_image != blank %}
-                                    <div class="ml-auto">
-                                      <a href="{{ block.settings.featured_url | default: '#' }}" class="block">
-                                        <img
-                                          src="{{ block.settings.featured_image | image_url: width: 300 }}"
-                                          alt="{{ block.settings.featured_title }}"
-                                          class="w-48 h-48 object-cover rounded-lg">
-                                        {% if block.settings.featured_title != blank %}
-                                          <p class="text-sm font-medium text-gray-800 mt-2 text-center">{{ block.settings.featured_title }}</p>
-                                        {% endif %}
-                                      </a>
+                                  <!-- Featured Images (Right Side) -->
+                                  {% if block.settings.featured_image1 != blank or block.settings.featured_image2 != blank %}
+                                    <div class="ml-auto flex gap-4">
+                                      {% if block.settings.featured_image1 != blank %}
+                                        <a href="{{ block.settings.featured_url1 | default: '#' }}" class="block hover:opacity-90 transition-opacity">
+                                          <img
+                                            src="{{ block.settings.featured_image1 | image_url: width: 400 }}"
+                                            alt="Featured Product"
+                                            class="w-48 h-64 object-cover rounded">
+                                        </a>
+                                      {% endif %}
+                                      {% if block.settings.featured_image2 != blank %}
+                                        <a href="{{ block.settings.featured_url2 | default: '#' }}" class="block hover:opacity-90 transition-opacity">
+                                          <img
+                                            src="{{ block.settings.featured_image2 | image_url: width: 400 }}"
+                                            alt="Featured Product"
+                                            class="w-48 h-64 object-cover rounded">
+                                        </a>
+                                      {% endif %}
                                     </div>
                                   {% endif %}
+                                </div>
+
+                                <!-- Tagline -->
+                                {% if block.settings.tagline != blank %}
+                                  <p class="mt-4 text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings.tagline }}</p>
+                                {% endif %}
+
+                              {% when 'image_gallery_menu' %}
+                                <!-- Image Gallery Layout (New & Trending) -->
+                                <div class="flex gap-8">
+                                  {% if block.settings.section1_title != blank %}
+                                    <div class="flex-1">
+                                      <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section1_title }}</h4>
+                                      <div class="grid grid-cols-4 gap-3">
+                                        {% for i in (1..4) %}
+                                          {% assign img_key = 'section1_img' | append: i %}
+                                          {% if block.settings[img_key] != blank %}
+                                            <a href="{{ block.settings.section1_url | default: '#' }}" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
+                                              <img
+                                                src="{{ block.settings[img_key] | image_url: width: 200 }}"
+                                                alt="{{ block.settings.section1_title }}"
+                                                class="w-full h-auto object-cover">
+                                            </a>
+                                          {% endif %}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                  {% endif %}
+                                  {% if block.settings.section2_title != blank %}
+                                    <div class="flex-1">
+                                      <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section2_title }}</h4>
+                                      <div class="grid grid-cols-3 gap-3">
+                                        {% for i in (1..3) %}
+                                          {% assign img_key = 'section2_img' | append: i %}
+                                          {% if block.settings[img_key] != blank %}
+                                            <a href="{{ block.settings.section2_url | default: '#' }}" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
+                                              <img
+                                                src="{{ block.settings[img_key] | image_url: width: 200 }}"
+                                                alt="{{ block.settings.section2_title }}"
+                                                class="w-full h-auto object-cover">
+                                            </a>
+                                          {% endif %}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                  {% endif %}
+                                  {% if block.settings.section3_title != blank %}
+                                    <div class="flex-1">
+                                      <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section3_title }}</h4>
+                                      <div class="grid grid-cols-4 gap-3">
+                                        {% for i in (1..4) %}
+                                          {% assign img_key = 'section3_img' | append: i %}
+                                          {% if block.settings[img_key] != blank %}
+                                            <a href="{{ block.settings.section3_url | default: '#' }}" class="block overflow-hidden rounded-lg hover:opacity-90 transition-opacity">
+                                              <img
+                                                src="{{ block.settings[img_key] | image_url: width: 200 }}"
+                                                alt="{{ block.settings.section3_title }}"
+                                                class="w-full h-auto object-cover">
+                                            </a>
+                                          {% endif %}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                  {% endif %}
+                                </div>
+
+                              {% when 'thumbnail_grid_menu' %}
+                                <!-- Thumbnail Grid Layout (Accessories & Gifts) -->
+                                <div class="grid gap-6" style="grid-template-columns: repeat({{ block.settings.columns }}, minmax(0, 1fr));">
+                                  {% for i in (1..13) %}
+                                    {% assign img_key = 'item' | append: i | append: '_image' %}
+                                    {% assign title_key = 'item' | append: i | append: '_title' %}
+                                    {% assign url_key = 'item' | append: i | append: '_url' %}
+                                    {% if block.settings[title_key] != blank %}
+                                      <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-center gap-3 group hover:opacity-80 transition-opacity">
+                                        {% if block.settings[img_key] != blank %}
+                                          <img
+                                            src="{{ block.settings[img_key] | image_url: width: 120 }}"
+                                            alt="{{ block.settings[title_key] }}"
+                                            class="w-14 h-14 object-cover rounded shrink-0">
+                                        {% else %}
+                                          <div class="w-14 h-14 bg-white/20 rounded shrink-0 flex items-center justify-center" style="color: var(--gogreek-dropdown-text);">
+                                            <svg
+                                              class="w-6 h-6"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              viewBox="0 0 24 24"><path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                          </div>
+                                        {% endif %}
+                                        <span class="text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
+                                      </a>
+                                    {% endif %}
+                                  {% endfor %}
+                                </div>
+
+                              {% when 'product_grid_menu' %}
+                                <!-- Product Grid Layout (School Org) -->
+                                <div class="grid gap-6" style="grid-template-columns: repeat({{ block.settings.columns }}, minmax(0, 1fr));">
+                                  {% for i in (1..6) %}
+                                    {% assign img_key = 'item' | append: i | append: '_image' %}
+                                    {% assign title_key = 'item' | append: i | append: '_title' %}
+                                    {% assign url_key = 'item' | append: i | append: '_url' %}
+                                    {% if block.settings[title_key] != blank %}
+                                      <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-center gap-4 group hover:opacity-80 transition-opacity">
+                                        {% if block.settings[img_key] != blank %}
+                                          <img
+                                            src="{{ block.settings[img_key] | image_url: width: 200 }}"
+                                            alt="{{ block.settings[title_key] }}"
+                                            class="w-20 h-20 object-cover rounded shrink-0">
+                                        {% else %}
+                                          <div class="w-20 h-20 bg-white/20 rounded shrink-0 flex items-center justify-center" style="color: var(--gogreek-dropdown-text);">
+                                            <svg
+                                              class="w-8 h-8"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              viewBox="0 0 24 24"><path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                          </div>
+                                        {% endif %}
+                                        <span class="text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
+                                      </a>
+                                    {% endif %}
+                                  {% endfor %}
                                 </div>
                             {% endcase %}
 
                           {% endif %}
                         {% endfor %}
+
+                        <!-- Custom Apparel Button -->
+                        {% if section.settings.show_custom_apparel %}
+                          <div class="mt-6 pt-4">
+                            <a
+                              href="{{ section.settings.custom_apparel_url | default: '#' }}"
+                              class="inline-block px-6 py-2 border-2 text-sm font-medium uppercase tracking-wider transition-colors hover:bg-white hover:text-gray-900"
+                              style="border-color: var(--gogreek-dropdown-text); color: var(--gogreek-dropdown-text);">
+                              {{ section.settings.custom_apparel_text | default: 'Custom Apparel' }}
+                            </a>
+                          </div>
+                        {% endif %}
                       </div>
                     </div>
                   </div>
