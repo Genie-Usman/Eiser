@@ -197,6 +197,21 @@
             "section3_image": "shopify://shop_images/PhiSigmaSigmaHandSignSororityT-Shirt.webp"
           }
         },
+        "image_gallery_menu_Q9MtVY": {
+          "type": "image_gallery_menu",
+          "settings": {
+            "parent_menu": "Paddles & Wood",
+            "section1_title": "Crests & Shields",
+            "section1_url": "",
+            "section1_image": "shopify://shop_images/crests-and-shields.webp",
+            "section2_title": "Letters & Symbols",
+            "section2_url": "",
+            "section2_image": "shopify://shop_images/letters-and-symbols.webp",
+            "section3_title": "Plaques & Paddles",
+            "section3_url": "",
+            "section3_image": "shopify://shop_images/plaques-and-paddles.webp"
+          }
+        },
         "accessories_thumbnail": {
           "type": "thumbnail_grid_menu",
           "settings": {
@@ -255,6 +270,7 @@
         "fraternity_grid",
         "apparel_columns",
         "new_trending_gallery",
+        "image_gallery_menu_Q9MtVY",
         "accessories_thumbnail",
         "school_org_grid"
       ],
