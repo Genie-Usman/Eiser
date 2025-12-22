@@ -40,7 +40,15 @@
             "item11_title": "Gamma Phi Beta",
             "item11_url": "/collections/gamma-phi-beta",
             "item12_title": "Kappa Kappa Gamma",
-            "item12_url": "/collections/kappa-kappa-gamma"
+            "item12_url": "/collections/kappa-kappa-gamma",
+            "item13_title": "",
+            "item13_url": "",
+            "item14_title": "",
+            "item14_url": "",
+            "item15_title": "",
+            "item15_url": "",
+            "item16_title": "",
+            "item16_url": ""
           }
         },
         "fraternity_grid": {
@@ -48,22 +56,54 @@
           "settings": {
             "parent_menu": "Fraternity",
             "columns": 4,
-            "item1_title": "Alpha Tau Omega",
+            "item1_image": "shopify://shop_images/alpha_epsilon_pi.jpg",
+            "item1_title": "Alpha Epsilon Pi",
             "item1_url": "/collections/alpha-tau-omega",
+            "item2_image": "shopify://shop_images/Beta_theta_pi.avif",
             "item2_title": "Beta Theta Pi",
             "item2_url": "/collections/beta-theta-pi",
+            "item3_image": "shopify://shop_images/delta_chi.avif",
             "item3_title": "Delta Chi",
             "item3_url": "/collections/delta-chi",
-            "item4_title": "Delta Tau Delta",
+            "item4_image": "shopify://shop_images/delta_upsilon.avif",
+            "item4_title": "Delta Upsilon",
             "item4_url": "/collections/delta-tau-delta",
-            "item5_title": "Kappa Alpha Order",
+            "item5_image": "shopify://shop_images/delta_tau_delta.avif",
+            "item5_title": "Delta Tau Delta",
             "item5_url": "/collections/kappa-alpha-order",
-            "item6_title": "Kappa Sigma",
+            "item6_image": "shopify://shop_images/fiji.avif",
+            "item6_title": "Fiji",
             "item6_url": "/collections/kappa-sigma",
-            "item7_title": "Lambda Chi Alpha",
+            "item7_image": "shopify://shop_images/kappa_sigma.avif",
+            "item7_title": "Kappa Sigma",
             "item7_url": "/collections/lambda-chi-alpha",
-            "item8_title": "Phi Delta Theta",
-            "item8_url": "/collections/phi-delta-theta"
+            "item8_image": "shopify://shop_images/kappa_aplha.avif",
+            "item8_title": "Kappa Alpha",
+            "item8_url": "/collections/phi-delta-theta",
+            "item9_image": "shopify://shop_images/lambda_chi_alpha.avif",
+            "item9_title": "Lambda Chi Alpha",
+            "item9_url": "",
+            "item10_image": "shopify://shop_images/phi_delta_theta.avif",
+            "item10_title": "Phi Delta Theta",
+            "item10_url": "",
+            "item11_image": "shopify://shop_images/pi_kappa_alpha.avif",
+            "item11_title": "Pi Kappa Alpha",
+            "item11_url": "",
+            "item12_image": "shopify://shop_images/pi_kappa_phi.avif",
+            "item12_title": "Pi Kappa Phi",
+            "item12_url": "",
+            "item13_image": "shopify://shop_images/sigma_alpha_upsilon.avif",
+            "item13_title": "Sigma Alpha Epsilon",
+            "item13_url": "",
+            "item14_image": "shopify://shop_images/sigma_alpha_mu.avif",
+            "item14_title": "Sigma Alpha Mu",
+            "item14_url": "",
+            "item15_image": "shopify://shop_images/sigma_chi.avif",
+            "item15_title": "Sigma Chi",
+            "item15_url": "",
+            "item16_image": "shopify://shop_images/sigma_nu.avif",
+            "item16_title": "Sigma Nu",
+            "item16_url": ""
           }
         },
         "apparel_columns": {
@@ -75,7 +115,11 @@
             "col2_title": "MEN'S",
             "col2_links": "Crewneck Jerseys|/collections/mens-crewneck\nV-Neck Jerseys|/collections/mens-vneck\nPolos|/collections/mens-polos\nT-Shirts|/collections/mens-tshirts\nSweatshirts|/collections/mens-sweatshirts\nHoodies|/collections/mens-hoodies\nLong Sleeve Shirt|/collections/mens-long-sleeve\nTank Tops|/collections/mens-tank-tops\nV-Neck Shirts|/collections/mens-vneck-shirts",
             "col3_title": "FEATURED",
-            "col3_links": "Sale|/collections/sale\nBig/Little|/collections/big-little\nSets|/collections/sets\nGraduation Stoles|/collections/graduation-stoles\nBet On Yourself|/collections/bet-on-yourself\nChristmas|/collections/christmas"
+            "col3_links": "Sale|/collections/sale\nBig/Little|/collections/big-little\nSets|/collections/sets\nGraduation Stoles|/collections/graduation-stoles\nBet On Yourself|/collections/bet-on-yourself\nChristmas|/collections/christmas",
+            "col4_title": "",
+            "col4_links": "",
+            "featured_url1": "",
+            "featured_url2": ""
           }
         },
         "new_trending_gallery": {
@@ -137,7 +181,9 @@
             "item4_title": "Mater Academy Virtual",
             "item4_url": "/collections/mav",
             "item5_title": "MVA",
-            "item5_url": "/collections/mva"
+            "item5_url": "/collections/mva",
+            "item6_title": "",
+            "item6_url": ""
           }
         }
       },
@@ -150,19 +196,24 @@
         "school_org_grid"
       ],
       "settings": {
-        "show_announcement": true,
+        "show_announcement": false,
         "announcement_text": "More organizations will be added soon! If you don't find yours, just reach out to us",
         "announcement_bg": "#1a1a1a",
         "announcement_text_color": "#ffffff",
         "show_social_icons": true,
-        "header_bg": "#1a1a1a",
+        "facebook_url": "",
+        "instagram_url": "",
+        "pinterest_url": "",
+        "tiktok_url": "",
+        "logo": "shopify://shop_images/go_greek.avif",
+        "logo_width": 200,
+        "main_menu": "go-greek-menu",
+        "header_bg": "#187abf",
         "header_text": "#ffffff",
-        "nav_bg": "#1a1a1a",
+        "nav_bg": "#187abf",
         "nav_text": "#ffffff",
-        "dropdown_bg": "#1e6b9a",
-        "dropdown_text": "#ffffff",
-        "logo_width": 150,
-        "main_menu": "go-greek-menu"
+        "dropdown_bg": "#187abf",
+        "dropdown_text": "#ffffff"
       }
     }
   },
