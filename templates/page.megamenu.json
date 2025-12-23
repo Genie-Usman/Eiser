@@ -314,6 +314,21 @@
             "item6_title": "",
             "item6_url": ""
           }
+        },
+        "image_gallery_menu_DpqMin": {
+          "type": "image_gallery_menu",
+          "settings": {
+            "parent_menu": "Sports ORG",
+            "section1_title": "Hoop Dynasty",
+            "section1_url": "",
+            "section1_image": "shopify://shop_images/hoop_dynasty.webp",
+            "section2_title": "Grit & Grind",
+            "section2_url": "",
+            "section2_image": "shopify://shop_images/grit_and_grind.webp",
+            "section3_title": "Humble Skillz",
+            "section3_url": "",
+            "section3_image": "shopify://shop_images/humble_skillz.webp"
+          }
         }
       },
       "block_order": [
@@ -324,7 +339,8 @@
         "image_gallery_menu_Q9MtVY",
         "accessories_thumbnail",
         "thumbnail_grid_menu_n3QBkM",
-        "school_org_grid"
+        "school_org_grid",
+        "image_gallery_menu_DpqMin"
       ],
       "settings": {
         "show_announcement": false,
