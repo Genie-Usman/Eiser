@@ -1,10 +1,10 @@
 {% comment %} 
-                                                Go Greek Megamenu
-                                                A megamenu section matching the Go Greek store design with: 
-                                                - Announcement bar with social icons 
-                                                - Dark header with currency, centered logo, user/search/cart 
-                                                - Grid dropdowns for Fraternity/Sorority (logo + title) 
-                                                - Multiple dropdown layout types 
+                                                                Go Greek Megamenu
+                                                                A megamenu section matching the Go Greek store design with: 
+                                                                - Announcement bar with social icons 
+                                                                - Dark header with currency, centered logo, user/search/cart 
+                                                                - Grid dropdowns for Fraternity/Sorority (logo + title) 
+                                                                - Multiple dropdown layout types 
 {% endcomment %}
 
 {% schema %}
@@ -1006,7 +1006,7 @@
     bottom: 12px;
     left: 0;
     width: 0;
-    height: 2px;
+    height: 1px;
     background-color: var(--gogreek-nav-text);
     transition: width 0.2s ease;
   }
@@ -1019,6 +1019,27 @@
   .gogreek-dropdown {
     margin-top: 0 !important;
     padding-top: 0 !important;
+  }
+
+  /* Dropdown link underline hover effect */
+  .gogreek-dropdown-link {
+    position: relative;
+    display: inline-block;
+  }
+
+  .gogreek-dropdown-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: currentColor;
+    transition: width 0.2s ease;
+  }
+
+  .gogreek-dropdown-link:hover::after {
+    width: 100%;
   }
 {% endstyle %}
 
@@ -1273,7 +1294,7 @@
                                     {% assign url_key = 'item' | append: i | append: '_url' %}
 
                                     {% if block.settings[title_key] != blank %}
-                                      <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-colors group">
+                                      <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-center gap-3 p-2 rounded-lg transition-colors group">
                                         {% if block.settings[img_key] != blank %}
                                           <img
                                             src="{{ block.settings[img_key] | image_url: width: 80 }}"
@@ -1286,7 +1307,7 @@
                                             {{ block.settings[title_key] | slice: 0, 3 | upcase }}
                                           </div>
                                         {% endif %}
-                                        <span class="text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
+                                        <span class="gogreek-dropdown-link text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
                                       </a>
                                     {% endif %}
                                   {% endfor %}
@@ -1306,7 +1327,7 @@
                                             <li>
                                               <a
                                                 href="{{ parts[1] | strip }}"
-                                                class="text-sm hover:opacity-70 transition-opacity"
+                                                class="gogreek-dropdown-link text-sm transition-opacity"
                                                 style="color: var(--gogreek-dropdown-text);">{{ parts[0] | strip }}</a>
                                             </li>
                                           {% endif %}
@@ -1326,7 +1347,7 @@
                                             <li>
                                               <a
                                                 href="{{ parts[1] | strip }}"
-                                                class="text-sm hover:opacity-70 transition-opacity"
+                                                class="gogreek-dropdown-link text-sm transition-opacity"
                                                 style="color: var(--gogreek-dropdown-text);">{{ parts[0] | strip }}</a>
                                             </li>
                                           {% endif %}
@@ -1346,7 +1367,7 @@
                                             <li>
                                               <a
                                                 href="{{ parts[1] | strip }}"
-                                                class="text-sm hover:opacity-70 transition-opacity"
+                                                class="gogreek-dropdown-link text-sm transition-opacity"
                                                 style="color: var(--gogreek-dropdown-text);">{{ parts[0] | strip }}</a>
                                             </li>
                                           {% endif %}
@@ -1366,7 +1387,7 @@
                                             <li>
                                               <a
                                                 href="{{ parts[1] | strip }}"
-                                                class="text-sm hover:opacity-70 transition-opacity"
+                                                class="gogreek-dropdown-link text-sm transition-opacity"
                                                 style="color: var(--gogreek-dropdown-text);">{{ parts[0] | strip }}</a>
                                             </li>
                                           {% endif %}
@@ -1418,7 +1439,9 @@
                                 <div class="grid grid-cols-3 gap-6">
                                   {% if block.settings.section1_title != blank %}
                                     <a href="{{ block.settings.section1_url | default: '#' }}" class="block group">
-                                      <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section1_title }}</h4>
+                                      <h4 class="text-sm uppercase  mb-4" style="color: var(--gogreek-dropdown-text);">
+                                        <span class="gogreek-dropdown-link">{{ block.settings.section1_title }}</span>
+                                      </h4>
                                       {% if block.settings.section1_image != blank %}
                                         <div class="overflow-hidden">
                                           <img
@@ -1433,7 +1456,9 @@
                                   {% endif %}
                                   {% if block.settings.section2_title != blank %}
                                     <a href="{{ block.settings.section2_url | default: '#' }}" class="block group">
-                                      <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section2_title }}</h4>
+                                      <h4 class="text-sm uppercase mb-4" style="color: var(--gogreek-dropdown-text);">
+                                        <span class="gogreek-dropdown-link">{{ block.settings.section2_title }}</span>
+                                      </h4>
                                       {% if block.settings.section2_image != blank %}
                                         <div class="overflow-hidden">
                                           <img
@@ -1448,7 +1473,9 @@
                                   {% endif %}
                                   {% if block.settings.section3_title != blank %}
                                     <a href="{{ block.settings.section3_url | default: '#' }}" class="block group">
-                                      <h4 class="text-sm font-bold uppercase tracking-wider mb-4" style="color: var(--gogreek-dropdown-text);">{{ block.settings.section3_title }}</h4>
+                                      <h4 class="text-sm uppercase mb-4" style="color: var(--gogreek-dropdown-text);">
+                                        <span class="gogreek-dropdown-link">{{ block.settings.section3_title }}</span>
+                                      </h4>
                                       {% if block.settings.section3_image != blank %}
                                         <div class="overflow-hidden">
                                           <img
@@ -1492,7 +1519,7 @@
                                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                           </div>
                                         {% endif %}
-                                        <span class="text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
+                                        <span class="gogreek-dropdown-link text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
                                       </a>
                                     {% endif %}
                                   {% endfor %}
@@ -1527,7 +1554,7 @@
                                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                           </div>
                                         {% endif %}
-                                        <span class="text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
+                                        <span class="gogreek-dropdown-link text-sm" style="color: var(--gogreek-dropdown-text);">{{ block.settings[title_key] }}</span>
                                       </a>
                                     {% endif %}
                                   {% endfor %}
