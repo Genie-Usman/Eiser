@@ -1,14 +1,14 @@
 {% comment %} 
-                                                                        KIKO Cosmetics Megamenu
-                                                                        A megamenu section matching the KIKO Cosmetics store design with: 
-                                                                        - Click-to-open dropdowns (not hover) 
-                                                                        - Full-width dropdown with white/light background 
-                                                                        - "View all [Category]" button at top left 
-                                                                        - X close button at top right 
-                                                                        - Left sidebar with category links 
-                                                                        - Multiple product columns in the middle 
-                                                                        - Collections section at bottom with circular images 
-                                                                        - Different dropdown layouts for different menu items 
+                                                                            KIKO Cosmetics Megamenu
+                                                                            A megamenu section matching the KIKO Cosmetics store design with: 
+                                                                            - Click-to-open dropdowns (not hover) 
+                                                                            - Full-width dropdown with white/light background 
+                                                                            - "View all [Category]" button at top left 
+                                                                            - X close button at top right 
+                                                                            - Left sidebar with category links 
+                                                                            - Multiple product columns in the middle 
+                                                                            - Collections section at bottom with circular images 
+                                                                            - Different dropdown layouts for different menu items 
 {% endcomment %}
 
 {% schema %}
@@ -486,6 +486,10 @@
             "id": "item1_url",
             "label": "Product 1 URL"
           }, {
+            "type": "image_picker",
+            "id": "item1_hover_image",
+            "label": "Product 1 Hover Image (Right Panel)"
+          }, {
             "type": "header",
             "content": "Featured Product 2"
           }, {
@@ -514,6 +518,10 @@
             "type": "url",
             "id": "item2_url",
             "label": "Product 2 URL"
+          }, {
+            "type": "image_picker",
+            "id": "item2_hover_image",
+            "label": "Product 2 Hover Image (Right Panel)"
           }, {
             "type": "header",
             "content": "Featured Product 3"
@@ -544,6 +552,10 @@
             "id": "item3_url",
             "label": "Product 3 URL"
           }, {
+            "type": "image_picker",
+            "id": "item3_hover_image",
+            "label": "Product 3 Hover Image (Right Panel)"
+          }, {
             "type": "header",
             "content": "Featured Product 4"
           }, {
@@ -573,6 +585,10 @@
             "id": "item4_url",
             "label": "Product 4 URL"
           }, {
+            "type": "image_picker",
+            "id": "item4_hover_image",
+            "label": "Product 4 Hover Image (Right Panel)"
+          }, {
             "type": "header",
             "content": "Featured Product 5"
           }, {
@@ -601,6 +617,10 @@
             "type": "url",
             "id": "item5_url",
             "label": "Product 5 URL"
+          }, {
+            "type": "image_picker",
+            "id": "item5_hover_image",
+            "label": "Product 5 Hover Image (Right Panel)"
           }, {
             "type": "header",
             "content": "Promo Image (Right Side)"
@@ -1473,13 +1493,14 @@
                               {% when 'featured_products_menu' %}
                               {% when 'featured_products_menu' %}
                                 <!-- Featured Products Layout: interactive-new-menu -->
-                                <div class="flex gap-6 h-[450px]" x-data="{ activeImage: '{{ block.settings.promo_image | image_url: width: 800 }}' }">
+                                <div class="flex gap-6" x-data="{ activeImage: '{{ block.settings.promo_image | image_url: width: 800 }}' }">
 
-                                  <!-- Left: Featured Products List (Separate Card) -->
-                                  <div class="w-[380px] shrink-0 bg-white shadow-lg rounded-lg p-6 overflow-y-auto custom-scrollbar">
+                                  <!-- Left: Featured Products List (Separate Card) - No internal scroller -->
+                                  <div class="w-[380px] shrink-0 bg-white shadow-lg rounded-lg p-6">
                                     <div class="space-y-2">
                                       {% for i in (1..5) %}
                                         {% assign img_key = 'item' | append: i | append: '_image' %}
+                                        {% assign hover_image_key = 'item' | append: i | append: '_hover_image' %}
                                         {% assign badge_key = 'item' | append: i | append: '_badge' %}
                                         {% assign badge_color_key = 'item' | append: i | append: '_badge_color' %}
                                         {% assign title_key = 'item' | append: i | append: '_title' %}
@@ -1490,7 +1511,9 @@
                                           <a
                                             href="{{ block.settings[url_key] | default: '#' }}"
                                             class="kiko-featured-card flex items-center gap-4 group p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                                            {% if block.settings[img_key] != blank %}
+                                            {% if block.settings[hover_image_key] != blank %}
+                                            @mouseenter="activeImage = '{{ block.settings[hover_image_key] | image_url: width: 800 }}'"
+                                            {% elsif block.settings[img_key] != blank %}
                                             @mouseenter="activeImage = '{{ block.settings[img_key] | image_url: width: 800 }}'"
                                             {% endif %}>
 
