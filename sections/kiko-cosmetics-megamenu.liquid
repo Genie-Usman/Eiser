@@ -1,14 +1,14 @@
 {% comment %} 
-                                                                                                      KIKO Cosmetics Megamenu
-                                                                                                      A megamenu section matching the KIKO Cosmetics store design with: 
-                                                                                                      - Click-to-open dropdowns (not hover) 
-                                                                                                      - Full-width dropdown with white/light background 
-                                                                                                      - "View all [Category]" button at top left 
-                                                                                                      - X close button at top right 
-                                                                                                      - Left sidebar with category links 
-                                                                                                      - Multiple product columns in the middle 
-                                                                                                      - Collections section at bottom with circular images 
-                                                                                                      - Different dropdown layouts for different menu items 
+                                                                                                                            KIKO Cosmetics Megamenu
+                                                                                                                            A megamenu section matching the KIKO Cosmetics store design with: 
+                                                                                                                            - Click-to-open dropdowns (not hover) 
+                                                                                                                            - Full-width dropdown with white/light background 
+                                                                                                                            - "View all [Category]" button at top left 
+                                                                                                                            - X close button at top right 
+                                                                                                                            - Left sidebar with category links 
+                                                                                                                            - Multiple product columns in the middle 
+                                                                                                                            - Collections section at bottom with circular images 
+                                                                                                                            - Different dropdown layouts for different menu items 
 {% endcomment %}
 
 {% schema %}
@@ -391,6 +391,10 @@
             "label": "Show Bottom Features Row",
             "default": true
           }, {
+            "type": "image_picker",
+            "id": "feature1_image",
+            "label": "Feature 1 Icon/Image"
+          }, {
             "type": "text",
             "id": "feature1_title",
             "label": "Feature 1 Title",
@@ -404,6 +408,10 @@
             "type": "url",
             "id": "feature1_url",
             "label": "Feature 1 URL"
+          }, {
+            "type": "image_picker",
+            "id": "feature2_image",
+            "label": "Feature 2 Icon/Image"
           }, {
             "type": "text",
             "id": "feature2_title",
@@ -419,6 +427,10 @@
             "id": "feature2_url",
             "label": "Feature 2 URL"
           }, {
+            "type": "image_picker",
+            "id": "feature3_image",
+            "label": "Feature 3 Icon/Image"
+          }, {
             "type": "text",
             "id": "feature3_title",
             "label": "Feature 3 Title",
@@ -432,6 +444,10 @@
             "type": "url",
             "id": "feature3_url",
             "label": "Feature 3 URL"
+          }, {
+            "type": "image_picker",
+            "id": "feature4_image",
+            "label": "Feature 4 Icon/Image"
           }, {
             "type": "text",
             "id": "feature4_title",
@@ -1015,6 +1031,39 @@
   .kiko-collection-img-wrapper img {
     border-radius: 50%;
   }
+
+  /* Button hover animation - bottom to top fill */
+  .kiko-btn-fill {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: color 0.3s ease;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .kiko-btn-fill::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: #1a1a1a;
+    z-index: -1;
+    transition: height 0.3s ease;
+  }
+
+  .kiko-btn-fill:hover {
+    color: #ffffff;
+    border-color: #1a1a1a;
+  }
+
+  .kiko-btn-fill:hover::before {
+    height: 100%;
+  }
 {% endstyle %}
 
 <div
@@ -1107,7 +1156,7 @@
                 type="text"
                 name="q"
                 placeholder="Search a product..."
-                class="pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-sm w-[180px] focus:outline-none focus:border-gray-400"
+                class="pl-10 pr-4 py-2 text-sm rounded-sm w-[180px] focus:outline-none"
                 style="background: transparent;">
             </form>
           </div>
@@ -1265,8 +1314,8 @@
                               {% if block.settings.view_all_text != blank %}
                                 <a
                                   href="{{ block.settings.view_all_url | default: link.url }}"
-                                  class="bg-white border border-gray-300 px-4 py-2 text-xs font-medium uppercase tracking-wider rounded hover:bg-gray-50 transition-colors"
-                                  style="color: var(--kiko-dropdown-heading);">
+                                  class="border border-gray-300 px-4 py-2 text-xs font-medium uppercase tracking-wider rounded hover:opacity-90 transition-opacity underline"
+                                  style="background: linear-gradient(to bottom, #fce7f3 0%, #ffffff 100%); color: var(--kiko-dropdown-heading);">
                                   {{ block.settings.view_all_text }}
                                 </a>
                               {% else %}
@@ -1419,7 +1468,7 @@
                                         </span>
                                       </div>
 
-                                      <div class="flex items-center gap-6 flex-1">
+                                      <div class="flex items-center gap-10 flex-1">
                                         {% for i in (1..3) %}
                                           {% assign img_key = 'collection' | append: i | append: '_image' %}
                                           {% assign title_key = 'collection' | append: i | append: '_title' %}
@@ -1462,24 +1511,22 @@
                                         {% endfor %}
 
                                         {% if block.settings.view_all_collections_text != blank %}
-                                          <div class="ml-auto">
-                                            <a href="{{ block.settings.view_all_collections_url | default: '#' }}" class="flex items-center gap-2 pl-6 border-l border-gray-100 hover:opacity-75 transition-opacity">
-                                              <span class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-600">
-                                                <svg
-                                                  class="w-4 h-4"
-                                                  fill="none"
-                                                  stroke="currentColor"
-                                                  viewBox="0 0 24 24">
-                                                  <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M12 4v16m8-8H4" />
-                                                </svg>
-                                              </span>
-                                              <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--kiko-dropdown-heading);">{{ block.settings.view_all_collections_text }}</span>
-                                            </a>
-                                          </div>
+                                          <a href="{{ block.settings.view_all_collections_url | default: '#' }}" class="flex items-center gap-3 group">
+                                            <span class="w-9 h-9 rounded-full flex items-center justify-center bg-pink-100 text-pink-500">
+                                              <svg
+                                                class="w-4 h-4"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M12 4v16m8-8H4" />
+                                              </svg>
+                                            </span>
+                                            <span class="text-xs font-medium underline" style="color: var(--kiko-dropdown-text);">{{ block.settings.view_all_collections_text }}</span>
+                                          </a>
                                         {% endif %}
                                       </div>
                                     </div>
@@ -1494,83 +1541,93 @@
                                         {% assign feature_desc = 'feature' | append: i | append: '_description' %}
                                         {% assign feature_url = 'feature' | append: i | append: '_url' %}
                                         {% if block.settings[feature_title] != blank %}
-                                          <a href="{{ block.settings[feature_url] | default: '#' }}" class="bg-white border border-gray-200 shadow-sm rounded-lg p-5 flex items-start gap-4 hover:shadow-md hover:border-gray-300 transition-all group">
-                                            <!-- Icon -->
-                                            <div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center shrink-0 group-hover:border-black transition-colors">
-                                              {% case i %}
-                                                {% when 1 %}
-                                                  <svg
-                                                    class="w-5 h-5"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    style="color: var(--kiko-dropdown-heading);">
-                                                    <path
-                                                      stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                                  </svg>
-                                                {% when 2 %}
-                                                  <svg
-                                                    class="w-5 h-5"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    style="color: var(--kiko-dropdown-heading);">
-                                                    <path
-                                                      stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                                  </svg>
-                                                {% when 3 %}
-                                                  <svg
-                                                    class="w-5 h-5"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    style="color: var(--kiko-dropdown-heading);">
-                                                    <path
-                                                      stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    <path
-                                                      stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                  </svg>
-                                                {% when 4 %}
-                                                  <svg
-                                                    class="w-5 h-5"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                    style="color: var(--kiko-dropdown-heading);">
-                                                    <path
-                                                      stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                    <path
-                                                      stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                  </svg>
-                                              {% endcase %}
+                                          {% assign feature_image = 'feature' | append: i | append: '_image' %}
+                                            <a href="{{ block.settings[feature_url] | default: '#' }}" class="bg-white border border-gray-200 shadow-sm rounded-lg p-5 flex items-start gap-4 hover:shadow-md hover:border-gray-300 transition-all group">
+                                            <!-- Icon/Image -->
+                                            <div class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center shrink-0 overflow-hidden">
+                                              {% if block.settings[feature_image] != blank %}
+                                                <img
+                                                  src="{{ block.settings[feature_image] | image_url: width: 80 }}"
+                                                  alt="{{ block.settings[feature_title] }}"
+                                                  width="40"
+                                                  height="40"
+                                                  class="w-full h-full object-cover">
+                                              {% else %}
+                                                {% case i %}
+                                                  {% when 1 %}
+                                                    <svg
+                                                      class="w-5 h-5"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      viewBox="0 0 24 24"
+                                                      style="color: var(--kiko-dropdown-heading);">
+                                                      <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                                    </svg>
+                                                  {% when 2 %}
+                                                    <svg
+                                                      class="w-5 h-5"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      viewBox="0 0 24 24"
+                                                      style="color: var(--kiko-dropdown-heading);">
+                                                      <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                    </svg>
+                                                  {% when 3 %}
+                                                    <svg
+                                                      class="w-5 h-5"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      viewBox="0 0 24 24"
+                                                      style="color: var(--kiko-dropdown-heading);">
+                                                      <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                      <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                  {% when 4 %}
+                                                    <svg
+                                                      class="w-5 h-5"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      viewBox="0 0 24 24"
+                                                      style="color: var(--kiko-dropdown-heading);">
+                                                      <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                      <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    </svg>
+                                                {% endcase %}
+                                              {% endif %}
                                             </div>
                                             <!-- Content -->
                                             <div class="flex-1">
                                               <h5 class="text-xs font-bold uppercase mb-1" style="color: var(--kiko-dropdown-heading);">{{ block.settings[feature_title] }}</h5>
                                               <p class="text-[11px] leading-tight text-gray-500">{{ block.settings[feature_desc] }}</p>
                                             </div>
-                                            <!-- Arrow -->
-                                            <div class="mt-1">
+                                            <!-- Arrow with black circle on hover -->
+                                            <div class="mt-1 w-6 h-6 rounded-full flex items-center justify-center transition-all group-hover:bg-black">
                                               <svg
-                                                class="w-4 h-4 text-gray-300 group-hover:text-black transition-colors"
+                                                class="w-4 h-4 text-gray-800 group-hover:text-white transition-colors"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -1654,6 +1711,8 @@
                                       <img
                                         :src="activeImage"
                                         alt="Feature"
+                                        width="inherit"
+                                        height="inherit"
                                         class="w-full h-full object-cover transition-opacity duration-300">
                                     </template>
                                     <!-- Fallback if no active image -->
@@ -1691,7 +1750,7 @@
                                             alt="{{ block.settings.card1_title }}"
                                             width="400"
                                             height="400"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                            class="w-full h-full object-cover">
                                         </a>
                                       {% else %}
                                         <div class="w-full aspect-square bg-gray-100 rounded-lg mb-4"></div>
@@ -1704,7 +1763,7 @@
                                         </h4>
                                         {% if block.settings.card1_button != blank %}
                                           <div class="mt-auto pt-4 w-full px-4 pb-4">
-                                            <a href="{{ block.settings.card1_url | default: '#' }}" class="block w-full text-center bg-white border border-gray-100 shadow-md text-xs font-bold uppercase tracking-wider py-3 px-4 rounded hover:shadow-lg transition-all">
+                                            <a href="{{ block.settings.card1_url | default: '#' }}" class="kiko-btn-fill block w-full text-center text-xs font-bold uppercase tracking-wider py-3 px-4 rounded">
                                               {{ block.settings.card1_button }}
                                             </a>
                                           </div>
@@ -1742,7 +1801,7 @@
                                                   alt="{{ block.settings[title_key] }}"
                                                   width="300"
                                                   height="300"
-                                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                                  class="w-full h-full object-cover">
                                               </div>
                                             {% else %}
                                               <div class="w-full aspect-square bg-gray-100 rounded-lg mb-3"></div>
@@ -1756,7 +1815,7 @@
                                             <!-- Button -->
                                             {% if block.settings[button_key] != blank %}
                                               <div class="w-full px-2 mt-2">
-                                                <span class="block w-full bg-white border border-gray-100 shadow-md text-xs font-bold uppercase tracking-wider py-3 px-2 rounded hover:shadow-lg transition-all">
+                                                <span class="kiko-btn-fill block w-full text-center text-xs font-bold uppercase tracking-wider py-3 px-2 rounded">
                                                   {{ block.settings[button_key] }}
                                                 </span>
                                               </div>
@@ -1787,7 +1846,7 @@
                                             alt="{{ block.settings.card5_title }}"
                                             width="400"
                                             height="400"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                            class="w-full h-full object-cover">
                                         </a>
                                       {% else %}
                                         <div class="w-full aspect-square bg-gray-100 rounded-lg mb-4"></div>
@@ -1800,7 +1859,7 @@
                                         </h4>
                                         {% if block.settings.card5_button != blank %}
                                           <div class="mt-auto pt-4 w-full px-4 pb-4">
-                                            <a href="{{ block.settings.card5_url | default: '#' }}" class="block w-full text-center bg-white border border-gray-100 shadow-md text-xs font-bold uppercase tracking-wider py-3 px-4 rounded hover:shadow-lg transition-all">
+                                            <a href="{{ block.settings.card5_url | default: '#' }}" class="kiko-btn-fill block w-full text-center text-xs font-bold uppercase tracking-wider py-3 px-4 rounded">
                                               {{ block.settings.card5_button }}
                                             </a>
                                           </div>

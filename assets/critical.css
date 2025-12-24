@@ -22,6 +22,7 @@
     --color-pink-100: oklch(94.8% 0.028 342.258);
     --color-pink-200: oklch(89.9% 0.061 343.231);
     --color-pink-400: oklch(71.8% 0.202 349.761);
+    --color-pink-500: oklch(65.6% 0.241 354.308);
     --color-pink-600: oklch(59.2% 0.249 0.584);
     --color-rose-50: oklch(96.9% 0.015 12.422);
     --color-rose-600: oklch(58.6% 0.253 17.585);
@@ -2335,6 +2336,9 @@
   .text-neutral-900 {
     color: var(--color-neutral-900);
   }
+  .text-pink-500 {
+    color: var(--color-pink-500);
+  }
   .text-pink-600 {
     color: var(--color-pink-600);
   }
@@ -2643,6 +2647,13 @@
     &:is(:where(.group):hover *) {
       @media (hover: hover) {
         border-color: var(--color-pink-400);
+      }
+    }
+  }
+  .group-hover\:bg-black {
+    &:is(:where(.group):hover *) {
+      @media (hover: hover) {
+        background-color: var(--color-black);
       }
     }
   }
