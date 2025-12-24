@@ -1,14 +1,14 @@
 {% comment %} 
-                                          KIKO Cosmetics Megamenu
-                                          A megamenu section matching the KIKO Cosmetics store design with: 
-                                          - Click-to-open dropdowns (not hover) 
-                                          - Full-width dropdown with white/light background 
-                                          - "View all [Category]" button at top left 
-                                          - X close button at top right 
-                                          - Left sidebar with category links 
-                                          - Multiple product columns in the middle 
-                                          - Collections section at bottom with circular images 
-                                          - Different dropdown layouts for different menu items 
+                                                                        KIKO Cosmetics Megamenu
+                                                                        A megamenu section matching the KIKO Cosmetics store design with: 
+                                                                        - Click-to-open dropdowns (not hover) 
+                                                                        - Full-width dropdown with white/light background 
+                                                                        - "View all [Category]" button at top left 
+                                                                        - X close button at top right 
+                                                                        - Left sidebar with category links 
+                                                                        - Multiple product columns in the middle 
+                                                                        - Collections section at bottom with circular images 
+                                                                        - Different dropdown layouts for different menu items 
 {% endcomment %}
 
 {% schema %}
@@ -932,7 +932,6 @@
 <div
   x-data="{ mobileMenuOpen: false, openDropdown: null }"
   @keydown.escape.window="openDropdown = null"
-  @click.away="openDropdown = null"
   class="kiko-megamenu w-full relative z-50">
 
   <!-- Announcement Bar -->
@@ -1113,8 +1112,16 @@
       </div>
     </div>
 
+    <!-- Backdrop overlay to close dropdown when clicking outside -->
+    <div
+      x-show="openDropdown !== null"
+      @click="openDropdown = null"
+      class="fixed inset-0 z-40"
+      style="background: transparent;"
+      x-cloak></div>
+
     <!-- Navigation Bar -->
-    <nav class="hidden lg:block w-full border-t border-gray-100" style="background-color: var(--kiko-nav-bg);">
+    <nav class="hidden lg:block w-full border-t border-gray-100 relative z-50" style="background: linear-gradient(to bottom, #fce7f3 0%, #ffffff 100%);">
       <div class="max-w-[1400px] mx-auto px-4 lg:px-8">
         <div class="flex flex-row flex-nowrap items-center justify-center gap-8">
           {% if section.settings.main_menu != blank %}
@@ -1133,7 +1140,7 @@
 
               <div class="static">
                 <button
-                  @click="openDropdown = (openDropdown === '{{ link.title | handleize }}') ? null : '{{ link.title | handleize }}'"
+                  @click.stop="openDropdown = (openDropdown === '{{ link.title | handleize }}') ? null : '{{ link.title | handleize }}'"
                   class="kiko-nav-link py-4 text-xs font-medium uppercase tracking-wider transition-colors inline-block relative whitespace-nowrap"
                   :class="{ 'active': openDropdown === '{{ link.title | handleize }}' }"
                   style="color: var(--kiko-nav-text);">
@@ -1151,7 +1158,6 @@
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-2"
                     x-cloak
-                    @click.outside="openDropdown = null"
                     class="kiko-dropdown absolute left-0 right-0 top-full w-full"
                     style="z-index: 9999; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
 
@@ -1262,6 +1268,8 @@
                                               <img
                                                 src="{{ block.settings.discover_image | image_url: width: 600 }}"
                                                 alt="{{ block.settings.discover_title }}"
+                                                height="inherit"
+                                                width="inherit"
                                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                             {% else %}
                                               <div class="w-full h-full bg-linear-to-br from-pink-100 to-purple-100"></div>
@@ -1463,119 +1471,222 @@
 
 
                               {% when 'featured_products_menu' %}
-                                <!-- Featured Products Layout: Floating Card -->
-                                <div class="bg-white shadow-lg rounded-lg overflow-hidden p-8 flex gap-8">
+                              {% when 'featured_products_menu' %}
+                                <!-- Featured Products Layout: interactive-new-menu -->
+                                <div class="flex gap-6 h-[450px]" x-data="{ activeImage: '{{ block.settings.promo_image | image_url: width: 800 }}' }">
 
-                                  <!-- Left: Featured Products List -->
-                                  <div class="w-[350px] shrink-0 space-y-4">
-                                    {% for i in (1..5) %}
-                                      {% assign img_key = 'item' | append: i | append: '_image' %}
-                                      {% assign badge_key = 'item' | append: i | append: '_badge' %}
-                                      {% assign badge_color_key = 'item' | append: i | append: '_badge_color' %}
-                                      {% assign title_key = 'item' | append: i | append: '_title' %}
-                                      {% assign subtitle_key = 'item' | append: i | append: '_subtitle' %}
-                                      {% assign url_key = 'item' | append: i | append: '_url' %}
+                                  <!-- Left: Featured Products List (Separate Card) -->
+                                  <div class="w-[380px] shrink-0 bg-white shadow-lg rounded-lg p-6 overflow-y-auto custom-scrollbar">
+                                    <div class="space-y-2">
+                                      {% for i in (1..5) %}
+                                        {% assign img_key = 'item' | append: i | append: '_image' %}
+                                        {% assign badge_key = 'item' | append: i | append: '_badge' %}
+                                        {% assign badge_color_key = 'item' | append: i | append: '_badge_color' %}
+                                        {% assign title_key = 'item' | append: i | append: '_title' %}
+                                        {% assign subtitle_key = 'item' | append: i | append: '_subtitle' %}
+                                        {% assign url_key = 'item' | append: i | append: '_url' %}
 
-                                      {% if block.settings[title_key] != blank %}
-                                        <a href="{{ block.settings[url_key] | default: '#' }}" class="kiko-featured-card flex items-center gap-4 group">
-                                          {% if block.settings[img_key] != blank %}
-                                            <img
-                                              src="{{ block.settings[img_key] | image_url: width: 100 }}"
-                                              alt="{{ block.settings[title_key] }}"
-                                              width="48"
-                                              height="48"
-                                              class="w-12 h-12 rounded-full object-cover shrink-0 border border-gray-100 group-hover:border-pink-200 transition-colors">
-                                          {% else %}
-                                            <div class="w-12 h-12 rounded-full bg-gray-200 shrink-0"></div>
-                                          {% endif %}
-                                          <div>
-                                            {% if block.settings[badge_key] != blank %}
-                                              <span class="kiko-badge text-white mb-1 inline-block" style="background-color: {{ block.settings[badge_color_key] }};">
-                                                {{ block.settings[badge_key] }}
-                                              </span>
+                                        {% if block.settings[title_key] != blank %}
+                                          <a
+                                            href="{{ block.settings[url_key] | default: '#' }}"
+                                            class="kiko-featured-card flex items-center gap-4 group p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                                            {% if block.settings[img_key] != blank %}
+                                            @mouseenter="activeImage = '{{ block.settings[img_key] | image_url: width: 800 }}'"
+                                            {% endif %}>
+
+                                            {% if block.settings[img_key] != blank %}
+                                              <img
+                                                src="{{ block.settings[img_key] | image_url: width: 100 }}"
+                                                alt="{{ block.settings[title_key] }}"
+                                                width="48"
+                                                height="48"
+                                                class="w-12 h-12 rounded-full object-cover shrink-0 border border-gray-100 group-hover:border-pink-200 transition-colors">
+                                            {% else %}
+                                              <div class="w-12 h-12 rounded-full bg-gray-200 shrink-0"></div>
                                             {% endif %}
-                                            <h4 class="text-sm font-bold uppercase group-hover:text-pink-600 transition-colors" style="color: var(--kiko-dropdown-heading);">
-                                              {{ block.settings[title_key] }}
-                                            </h4>
-                                            {% if block.settings[subtitle_key] != blank %}
-                                              <span class="text-xs underline" style="color: var(--kiko-dropdown-text);">
-                                                {{ block.settings[subtitle_key] }}
-                                              </span>
-                                            {% endif %}
-                                          </div>
-                                        </a>
-                                      {% endif %}
-                                    {% endfor %}
+
+                                            <div>
+                                              {% if block.settings[badge_key] != blank %}
+                                                <span class="kiko-badge text-white mb-1 inline-block text-[10px] font-bold px-2 py-0.5 rounded" style="background-color: {{ block.settings[badge_color_key] }};">
+                                                  {{ block.settings[badge_key] }}
+                                                </span>
+                                              {% endif %}
+                                              <h4 class="text-xs font-bold uppercase group-hover:text-pink-600 transition-colors" style="color: var(--kiko-dropdown-heading);">
+                                                {{ block.settings[title_key] }}
+                                              </h4>
+                                              {% if block.settings[subtitle_key] != blank %}
+                                                <span class="text-[10px] underline block mt-0.5" style="color: var(--kiko-dropdown-text);">
+                                                  {{ block.settings[subtitle_key] }}
+                                                </span>
+                                              {% endif %}
+                                            </div>
+                                          </a>
+                                        {% endif %}
+                                      {% endfor %}
+                                    </div>
                                   </div>
 
-                                  <!-- Right: Large Promo Image -->
-                                  {% if block.settings.promo_image != blank %}
-                                    <div class="flex-1">
-                                      <a href="{{ block.settings.promo_url | default: '#' }}" class="block h-full group relative overflow-hidden rounded">
-                                        <img
-                                          src="{{ block.settings.promo_image | image_url: width: 800 }}"
-                                          alt="Promo"
-                                          width="800"
-                                          height="350"
-                                          class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-                                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
-                                      </a>
-                                    </div>
-                                  {% endif %}
+                                  <!-- Right: Dynamic Promo Image (Separate Card) -->
+                                  <div class="flex-1 bg-white shadow-lg rounded-lg overflow-hidden relative">
+                                    <template x-if="activeImage">
+                                      <img
+                                        :src="activeImage"
+                                        alt="Feature"
+                                        class="w-full h-full object-cover transition-opacity duration-300">
+                                    </template>
+                                    <!-- Fallback if no active image -->
+                                    <template x-if="!activeImage">
+                                      <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-300">
+                                        <span class="text-4xl font-bold opacity-20">Preview</span>
+                                      </div>
+                                    </template>
+                                    <div class="absolute inset-0 bg-black/10 pointer-events-none"></div>
+                                  </div>
                                 </div>
 
 
-                                <!-- Services Cards Grid: Individual Floating Cards -->
+                              {% when 'services_cards_menu' %}
+                                <!-- Services Cards: Balanced Layout [Left (20%) | Center (60%) | Right (20%)] -->
                                 <div class="grid grid-cols-5 gap-6">
-                                  {% for i in (1..5) %}
-                                    {% assign category_key = 'card' | append: i | append: '_category' %}
-                                    {% assign category_color_key = 'card' | append: i | append: '_category_color' %}
-                                    {% assign img_key = 'card' | append: i | append: '_image' %}
-                                    {% assign title_key = 'card' | append: i | append: '_title' %}
-                                    {% assign button_key = 'card' | append: i | append: '_button' %}
-                                    {% assign url_key = 'card' | append: i | append: '_url' %}
 
-                                    {% if block.settings[title_key] != blank %}
-                                      <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col items-center hover:shadow-xl transition-all h-full group">
-                                        <!-- Category Label -->
-                                        {% if block.settings[category_key] != blank %}
-                                          <div class="px-3 py-3 text-center w-full">
-                                            <span class="text-[10px] font-bold uppercase tracking-wider inline-block px-2 py-1 rounded-full" style="color: {{ block.settings[category_color_key] }}; background-color: {{ block.settings[category_color_key] | color_modify: 'alpha', 0.1 }};">
-                                              {{ block.settings[category_key] }}
-                                            </span>
+                                  <!-- Left Card (Card 1) -->
+                                  {% if block.settings.card1_title != blank %}
+                                    <div class="bg-white shadow-lg rounded-lg overflow-hidden py-8 px-6 flex flex-col items-center hover:shadow-xl transition-all h-full group">
+                                      <!-- Category Label -->
+                                      {% if block.settings.card1_category != blank %}
+                                        <div class="text-center w-full mb-6">
+                                          <span class="text-[10px] font-bold uppercase tracking-wider inline-block px-3 py-1.5 rounded-full" style="background: linear-gradient(to bottom, #fce7f3 0%, #ffffff 100%); color: var(--kiko-dropdown-heading);">
+                                            {{ block.settings.card1_category }}
+                                          </span>
+                                        </div>
+                                      {% endif %}
+
+                                      <!-- Image -->
+                                      {% if block.settings.card1_image != blank %}
+                                        <a href="{{ block.settings.card1_url | default: '#' }}" class="block w-full aspect-square overflow-hidden rounded-lg mb-4">
+                                          <img
+                                            src="{{ block.settings.card1_image | image_url: width: 400 }}"
+                                            alt="{{ block.settings.card1_title }}"
+                                            width="400"
+                                            height="400"
+                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                        </a>
+                                      {% else %}
+                                        <div class="w-full aspect-square bg-gray-100 rounded-lg mb-4"></div>
+                                      {% endif %}
+
+                                      <!-- Title + Button -->
+                                      <div class="text-center w-full flex-1 flex flex-col justify-end">
+                                        <h4 class="text-xs font-bold uppercase mb-4 px-2" style="color: var(--kiko-dropdown-heading);">
+                                          {{ block.settings.card1_title }}
+                                        </h4>
+                                        {% if block.settings.card1_button != blank %}
+                                          <div class="mt-auto pt-4 w-full px-4 pb-4">
+                                            <a href="{{ block.settings.card1_url | default: '#' }}" class="block w-full text-center bg-white border border-gray-100 shadow-md text-xs font-bold uppercase tracking-wider py-3 px-4 rounded hover:shadow-lg transition-all">
+                                              {{ block.settings.card1_button }}
+                                            </a>
                                           </div>
                                         {% endif %}
+                                      </div>
+                                    </div>
+                                  {% endif %}
 
-                                        <!-- Image -->
-                                        {% if block.settings[img_key] != blank %}
-                                          <a href="{{ block.settings[url_key] | default: '#' }}" class="block w-full aspect-square overflow-hidden">
-                                            <img
-                                              src="{{ block.settings[img_key] | image_url: width: 300 }}"
-                                              alt="{{ block.settings[title_key] }}"
-                                              width="300"
-                                              height="300"
-                                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                                          </a>
-                                        {% else %}
-                                          <div class="w-full aspect-square bg-gray-100"></div>
-                                        {% endif %}
-
-                                        <!-- Title + Button -->
-                                        <div class="p-4 text-center w-full flex-1 flex flex-col justify-end">
-                                          <h4 class="text-xs font-bold uppercase mb-3 px-2" style="color: var(--kiko-dropdown-heading);">
-                                            {{ block.settings[title_key] }}
-                                          </h4>
-                                          {% if block.settings[button_key] != blank %}
-                                            <div class="mt-auto pt-2">
-                                              <a href="{{ block.settings[url_key] | default: '#' }}" class="kiko-service-btn inline-block px-4 py-2 text-[10px] font-medium uppercase tracking-wider border border-black hover:bg-black hover:text-white transition-colors">
-                                                {{ block.settings[button_key] }}
-                                              </a>
-                                            </div>
-                                          {% endif %}
-                                        </div>
+                                  <!-- Center Card (Cards 2-4 Grouped) -->
+                                  <div class="col-span-3 bg-white shadow-lg rounded-lg overflow-hidden py-8 px-12">
+                                    <!-- Header Label -->
+                                    {% if block.settings.card2_category != blank %}
+                                      <div class="text-center mb-6">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider inline-block px-3 py-1.5 rounded-full" style="background: linear-gradient(to bottom, #fce7f3 0%, #ffffff 100%); color: var(--kiko-dropdown-heading);">
+                                          {{ block.settings.card2_category }}
+                                        </span>
                                       </div>
                                     {% endif %}
-                                  {% endfor %}
+
+                                    <!-- Grid of 3 Items -->
+                                    <div class="grid grid-cols-3 gap-4">
+                                      {% for i in (2..4) %}
+                                        {% assign img_key = 'card' | append: i | append: '_image' %}
+                                        {% assign title_key = 'card' | append: i | append: '_title' %}
+                                        {% assign button_key = 'card' | append: i | append: '_button' %}
+                                        {% assign url_key = 'card' | append: i | append: '_url' %}
+
+                                        {% if block.settings[title_key] != blank %}
+                                          <a href="{{ block.settings[url_key] | default: '#' }}" class="flex flex-col items-center text-center group">
+                                            <!-- Image -->
+                                            {% if block.settings[img_key] != blank %}
+                                              <div class="w-full aspect-square overflow-hidden rounded-lg mb-3">
+                                                <img
+                                                  src="{{ block.settings[img_key] | image_url: width: 300 }}"
+                                                  alt="{{ block.settings[title_key] }}"
+                                                  width="300"
+                                                  height="300"
+                                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                              </div>
+                                            {% else %}
+                                              <div class="w-full aspect-square bg-gray-100 rounded-lg mb-3"></div>
+                                            {% endif %}
+
+                                            <!-- Title -->
+                                            <h4 class="text-xs font-bold uppercase mb-4 px-2" style="color: var(--kiko-dropdown-heading);">
+                                              {{ block.settings[title_key] }}
+                                            </h4>
+
+                                            <!-- Button -->
+                                            {% if block.settings[button_key] != blank %}
+                                              <div class="w-full px-2 mt-2">
+                                                <span class="block w-full bg-white border border-gray-100 shadow-md text-xs font-bold uppercase tracking-wider py-3 px-2 rounded hover:shadow-lg transition-all">
+                                                  {{ block.settings[button_key] }}
+                                                </span>
+                                              </div>
+                                            {% endif %}
+                                          </a>
+                                        {% endif %}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+
+                                  <!-- Right Card (Card 5) -->
+                                  {% if block.settings.card5_title != blank %}
+                                    <div class="bg-white shadow-lg rounded-lg overflow-hidden py-8 px-6 flex flex-col items-center hover:shadow-xl transition-all h-full group">
+                                      <!-- Category Label -->
+                                      {% if block.settings.card5_category != blank %}
+                                        <div class="text-center w-full mb-6">
+                                          <span class="text-[10px] font-bold uppercase tracking-wider inline-block px-3 py-1.5 rounded-full" style="background: linear-gradient(to bottom, #fce7f3 0%, #ffffff 100%); color: var(--kiko-dropdown-heading);">
+                                            {{ block.settings.card5_category }}
+                                          </span>
+                                        </div>
+                                      {% endif %}
+
+                                      <!-- Image -->
+                                      {% if block.settings.card5_image != blank %}
+                                        <a href="{{ block.settings.card5_url | default: '#' }}" class="block w-full aspect-square overflow-hidden rounded-lg mb-4">
+                                          <img
+                                            src="{{ block.settings.card5_image | image_url: width: 400 }}"
+                                            alt="{{ block.settings.card5_title }}"
+                                            width="400"
+                                            height="400"
+                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                        </a>
+                                      {% else %}
+                                        <div class="w-full aspect-square bg-gray-100 rounded-lg mb-4"></div>
+                                      {% endif %}
+
+                                      <!-- Title + Button -->
+                                      <div class="text-center w-full flex-1 flex flex-col justify-end">
+                                        <h4 class="text-xs font-bold uppercase mb-4 px-2" style="color: var(--kiko-dropdown-heading);">
+                                          {{ block.settings.card5_title }}
+                                        </h4>
+                                        {% if block.settings.card5_button != blank %}
+                                          <div class="mt-auto pt-4 w-full px-4 pb-4">
+                                            <a href="{{ block.settings.card5_url | default: '#' }}" class="block w-full text-center bg-white border border-gray-100 shadow-md text-xs font-bold uppercase tracking-wider py-3 px-4 rounded hover:shadow-lg transition-all">
+                                              {{ block.settings.card5_button }}
+                                            </a>
+                                          </div>
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                  {% endif %}
+
                                 </div>
 
 
