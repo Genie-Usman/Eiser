@@ -1,14 +1,14 @@
 {% comment %} 
-                                                                            KIKO Cosmetics Megamenu
-                                                                            A megamenu section matching the KIKO Cosmetics store design with: 
-                                                                            - Click-to-open dropdowns (not hover) 
-                                                                            - Full-width dropdown with white/light background 
-                                                                            - "View all [Category]" button at top left 
-                                                                            - X close button at top right 
-                                                                            - Left sidebar with category links 
-                                                                            - Multiple product columns in the middle 
-                                                                            - Collections section at bottom with circular images 
-                                                                            - Different dropdown layouts for different menu items 
+                                                                                                      KIKO Cosmetics Megamenu
+                                                                                                      A megamenu section matching the KIKO Cosmetics store design with: 
+                                                                                                      - Click-to-open dropdowns (not hover) 
+                                                                                                      - Full-width dropdown with white/light background 
+                                                                                                      - "View all [Category]" button at top left 
+                                                                                                      - X close button at top right 
+                                                                                                      - Left sidebar with category links 
+                                                                                                      - Multiple product columns in the middle 
+                                                                                                      - Collections section at bottom with circular images 
+                                                                                                      - Different dropdown layouts for different menu items 
 {% endcomment %}
 
 {% schema %}
@@ -159,6 +159,11 @@
             "id": "sidebar1_url",
             "label": "Sidebar Item 1 URL"
           }, {
+            "type": "textarea",
+            "id": "sidebar1_children",
+            "label": "Sidebar 1 Children Links",
+            "info": "One per line: Link Text|URL"
+          }, {
             "type": "text",
             "id": "sidebar2_title",
             "label": "Sidebar Item 2 Title"
@@ -166,6 +171,11 @@
             "type": "url",
             "id": "sidebar2_url",
             "label": "Sidebar Item 2 URL"
+          }, {
+            "type": "textarea",
+            "id": "sidebar2_children",
+            "label": "Sidebar 2 Children Links",
+            "info": "One per line: Link Text|URL"
           }, {
             "type": "text",
             "id": "sidebar3_title",
@@ -175,6 +185,11 @@
             "id": "sidebar3_url",
             "label": "Sidebar Item 3 URL"
           }, {
+            "type": "textarea",
+            "id": "sidebar3_children",
+            "label": "Sidebar 3 Children Links",
+            "info": "One per line: Link Text|URL"
+          }, {
             "type": "text",
             "id": "sidebar4_title",
             "label": "Sidebar Item 4 Title"
@@ -182,6 +197,11 @@
             "type": "url",
             "id": "sidebar4_url",
             "label": "Sidebar Item 4 URL"
+          }, {
+            "type": "textarea",
+            "id": "sidebar4_children",
+            "label": "Sidebar 4 Children Links",
+            "info": "One per line: Link Text|URL"
           }, {
             "type": "text",
             "id": "sidebar5_title",
@@ -191,6 +211,11 @@
             "id": "sidebar5_url",
             "label": "Sidebar Item 5 URL"
           }, {
+            "type": "textarea",
+            "id": "sidebar5_children",
+            "label": "Sidebar 5 Children Links",
+            "info": "One per line: Link Text|URL"
+          }, {
             "type": "text",
             "id": "sidebar6_title",
             "label": "Sidebar Item 6 Title"
@@ -198,6 +223,11 @@
             "type": "url",
             "id": "sidebar6_url",
             "label": "Sidebar Item 6 URL"
+          }, {
+            "type": "textarea",
+            "id": "sidebar6_children",
+            "label": "Sidebar 6 Children Links",
+            "info": "One per line: Link Text|URL"
           }, {
             "type": "text",
             "id": "sidebar7_title",
@@ -207,6 +237,11 @@
             "id": "sidebar7_url",
             "label": "Sidebar Item 7 URL"
           }, {
+            "type": "textarea",
+            "id": "sidebar7_children",
+            "label": "Sidebar 7 Children Links",
+            "info": "One per line: Link Text|URL"
+          }, {
             "type": "text",
             "id": "sidebar8_title",
             "label": "Sidebar Item 8 Title"
@@ -214,6 +249,11 @@
             "type": "url",
             "id": "sidebar8_url",
             "label": "Sidebar Item 8 URL"
+          }, {
+            "type": "textarea",
+            "id": "sidebar8_children",
+            "label": "Sidebar 8 Children Links",
+            "info": "One per line: Link Text|URL"
           }, {
             "type": "header",
             "content": "Column 1"
@@ -947,6 +987,34 @@
     padding: 2px 8px;
     border-radius: 2px;
   }
+
+  /* Gradient border for collection images */
+  .kiko-collection-img-wrapper {
+    background: transparent;
+    padding: 2px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+
+  .group:hover .kiko-collection-img-wrapper {
+    background: linear-gradient(135deg, #ec4899 0%, #f97316 50%, #fbbf24 100%);
+  }
+
+  .kiko-collection-img-wrapper .inner {
+    background: white;
+    padding: 2px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .kiko-collection-img-wrapper img {
+    border-radius: 50%;
+  }
 {% endstyle %}
 
 <div
@@ -956,8 +1024,37 @@
 
   <!-- Announcement Bar -->
   {% if section.settings.show_announcement %}
-    <div class="w-full py-2 px-4 text-center text-xs font-medium" style="background-color: var(--kiko-announcement-bg); color: var(--kiko-announcement-text);">
-      {{ section.settings.announcement_text }}
+    <div class="w-full py-2 px-4 flex items-center justify-between text-xs font-medium" style="background-color: var(--kiko-announcement-bg); color: var(--kiko-announcement-text);">
+      <!-- Left: Stores Link -->
+      {% if section.settings.stores_text != blank %}
+        <a href="{{ section.settings.stores_url | default: '#' }}" class="hidden lg:flex items-center gap-1 hover:opacity-75 transition-opacity uppercase tracking-wider">
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          {{ section.settings.stores_text }}
+        </a>
+      {% else %}
+        <div></div>
+      {% endif %}
+
+      <!-- Center: Announcement Text -->
+      <span class="flex-1 text-center">{{ section.settings.announcement_text }}</span>
+
+      <!-- Right: Spacer for balance -->
+      <div class="hidden lg:block w-[80px]"></div>
     </div>
   {% endif %}
 
@@ -968,7 +1065,7 @@
       <!-- Top Row: Stores | Search | Logo | Icons | Help -->
       <div class="flex items-center justify-between py-3">
 
-        <!-- Left: Stores Link -->
+        <!-- Left: Search Bar -->
         <div class="flex items-center gap-6 w-[200px]">
           <!-- Mobile Hamburger -->
           <button
@@ -988,35 +1085,7 @@
             </svg>
           </button>
 
-          {% if section.settings.stores_text != blank %}
-            <a
-              href="{{ section.settings.stores_url | default: '#' }}"
-              class="hidden lg:flex items-center gap-1 text-xs font-medium uppercase tracking-wider hover:opacity-75 transition-opacity"
-              style="color: var(--kiko-header-text);">
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              {{ section.settings.stores_text }}
-            </a>
-          {% endif %}
-        </div>
-
-        <!-- Center: Search + Logo -->
-        <div class="flex items-center justify-center gap-6 flex-1">
-          <!-- Search -->
+          <!-- Search Bar -->
           <div class="hidden lg:block relative">
             <form
               action="{{ routes.search_url }}"
@@ -1038,11 +1107,14 @@
                 type="text"
                 name="q"
                 placeholder="Search a product..."
-                class="pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-sm w-[200px] focus:outline-none focus:border-gray-400"
+                class="pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-sm w-[180px] focus:outline-none focus:border-gray-400"
                 style="background: transparent;">
             </form>
           </div>
+        </div>
 
+        <!-- Center: Logo Only -->
+        <div class="flex items-center justify-center flex-1">
           <!-- Logo -->
           <a href="{{ routes.root_url }}" class="flex items-center justify-center">
             {% if section.settings.logo != blank %}
@@ -1161,7 +1233,7 @@
               <div class="static">
                 <button
                   @click.stop="openDropdown = (openDropdown === '{{ link.title | handleize }}') ? null : '{{ link.title | handleize }}'"
-                  class="kiko-nav-link py-4 text-xs font-medium uppercase tracking-wider transition-colors inline-block relative whitespace-nowrap"
+                  class="kiko-nav-link py-2 text-xs font-medium uppercase tracking-wider transition-colors inline-block relative whitespace-nowrap"
                   :class="{ 'active': openDropdown === '{{ link.title | handleize }}' }"
                   style="color: var(--kiko-nav-text);">
                   {{ link.title }}
@@ -1193,7 +1265,7 @@
                               {% if block.settings.view_all_text != blank %}
                                 <a
                                   href="{{ block.settings.view_all_url | default: link.url }}"
-                                  class="bg-white border border-gray-200 shadow-lg px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-md hover:bg-gray-50 transition-all hover:shadow-xl"
+                                  class="bg-white border border-gray-300 px-4 py-2 text-xs font-medium uppercase tracking-wider rounded hover:bg-gray-50 transition-colors"
                                   style="color: var(--kiko-dropdown-heading);">
                                   {{ block.settings.view_all_text }}
                                 </a>
@@ -1203,7 +1275,7 @@
 
                               <button
                                 @click="openDropdown = null"
-                                class="bg-white border border-gray-200 shadow-lg w-9 h-9 flex items-center justify-center rounded-md hover:bg-gray-50 transition-all hover:shadow-xl"
+                                class="bg-white border border-gray-300 w-8 h-8 flex items-center justify-center rounded hover:bg-gray-50 transition-colors"
                                 style="color: var(--kiko-dropdown-heading);">
                                 <svg
                                   class="w-5 h-5"
@@ -1229,18 +1301,37 @@
 
                                     <!-- Sidebar (Pink Background) -->
                                     <div class="w-60 bg-rose-50 p-8 shrink-0 flex flex-col">
-                                      <ul class="space-y-3">
+                                      <ul class="space-y-4">
                                         {% for i in (1..8) %}
                                           {% assign title_key = 'sidebar' | append: i | append: '_title' %}
                                           {% assign url_key = 'sidebar' | append: i | append: '_url' %}
+                                          {% assign children_key = 'sidebar' | append: i | append: '_children' %}
                                           {% if block.settings[title_key] != blank %}
                                             <li>
                                               <a
                                                 href="{{ block.settings[url_key] | default: '#' }}"
-                                                class="kiko-sidebar-link text-xs font-bold uppercase tracking-wider block hover:opacity-75 transition-opacity"
+                                                class="kiko-sidebar-link text-xs font-bold uppercase tracking-wider block hover:underline"
                                                 style="color: var(--kiko-dropdown-heading);">
                                                 {{ block.settings[title_key] }}
                                               </a>
+                                              {% if block.settings[children_key] != blank %}
+                                                <ul class="mt-2 space-y-1.5">
+                                                  {% assign child_lines = block.settings[children_key] | newline_to_br | split: '<br />' %}
+                                                  {% for child_line in child_lines %}
+                                                    {% assign child_parts = child_line | split: '|' %}
+                                                    {% if child_parts.size >= 2 %}
+                                                      <li>
+                                                        <a
+                                                          href="{{ child_parts[1] | strip }}"
+                                                          class="text-xs font-normal hover:underline block"
+                                                          style="color: var(--kiko-dropdown-text);">
+                                                          {{ child_parts[0] | strip }}
+                                                        </a>
+                                                      </li>
+                                                    {% endif %}
+                                                  {% endfor %}
+                                                </ul>
+                                              {% endif %}
                                             </li>
                                           {% endif %}
                                         {% endfor %}
@@ -1334,30 +1425,38 @@
                                           {% assign title_key = 'collection' | append: i | append: '_title' %}
                                           {% assign url_key = 'collection' | append: i | append: '_url' %}
                                           {% if block.settings[title_key] != blank %}
-                                            <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-center gap-3 hover:opacity-75 transition-opacity bg-white group">
+                                            <a href="{{ block.settings[url_key] | default: '#' }}" class="flex items-center gap-3 bg-white group">
                                               {% if block.settings[img_key] != blank %}
-                                                <img
-                                                  src="{{ block.settings[img_key] | image_url: width: 80 }}"
-                                                  alt="{{ block.settings[title_key] }}"
-                                                  width="40"
-                                                  height="40"
-                                                  class="rounded-full w-10 h-10 object-cover border border-gray-100 group-hover:border-pink-200 transition-colors">
+                                                <div class="kiko-collection-img-wrapper">
+                                                  <div class="inner">
+                                                    <img
+                                                      src="{{ block.settings[img_key] | image_url: width: 100 }}"
+                                                      alt="{{ block.settings[title_key] }}"
+                                                      width="36"
+                                                      height="36"
+                                                      class="w-9 h-9 object-cover">
+                                                  </div>
+                                                </div>
                                               {% else %}
-                                                <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                                                  <svg
-                                                    class="w-4 h-4 text-gray-400"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path
-                                                      stroke-linecap="round"
-                                                      stroke-linejoin="round"
-                                                      stroke-width="2"
-                                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                  </svg>
+                                                <div class="kiko-collection-img-wrapper">
+                                                  <div class="inner">
+                                                    <div class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
+                                                      <svg
+                                                        class="w-4 h-4 text-gray-400"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path
+                                                          stroke-linecap="round"
+                                                          stroke-linejoin="round"
+                                                          stroke-width="2"
+                                                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                      </svg>
+                                                    </div>
+                                                  </div>
                                                 </div>
                                               {% endif %}
-                                              <span class="text-xs font-medium" style="color: var(--kiko-dropdown-text);">{{ block.settings[title_key] }}</span>
+                                              <span class="text-xs font-medium underline" style="color: var(--kiko-dropdown-text);">{{ block.settings[title_key] }}</span>
                                             </a>
                                           {% endif %}
                                         {% endfor %}
@@ -1395,7 +1494,7 @@
                                         {% assign feature_desc = 'feature' | append: i | append: '_description' %}
                                         {% assign feature_url = 'feature' | append: i | append: '_url' %}
                                         {% if block.settings[feature_title] != blank %}
-                                          <a href="{{ block.settings[feature_url] | default: '#' }}" class="bg-white shadow-lg rounded-lg p-5 flex items-start gap-4 hover:shadow-xl transition-all transform hover:-translate-y-1 group">
+                                          <a href="{{ block.settings[feature_url] | default: '#' }}" class="bg-white border border-gray-200 shadow-sm rounded-lg p-5 flex items-start gap-4 hover:shadow-md hover:border-gray-300 transition-all group">
                                             <!-- Icon -->
                                             <div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center shrink-0 group-hover:border-black transition-colors">
                                               {% case i %}
