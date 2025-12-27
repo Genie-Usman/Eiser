@@ -430,6 +430,9 @@
   .z-9999 {
     z-index: 9999;
   }
+  .z-\[1001\] {
+    z-index: 1001;
+  }
   .order-first {
     order: -9999;
   }
@@ -952,6 +955,9 @@
   .max-w-\[380px\] {
     max-width: 380px;
   }
+  .max-w-\[400px\] {
+    max-width: 400px;
+  }
   .max-w-\[640px\] {
     max-width: 640px;
   }
@@ -1038,6 +1044,10 @@
     --tw-translate-x: calc(calc(1/2 * 100%) * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
+  .-translate-x-4 {
+    --tw-translate-x: calc(var(--spacing) * -4);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
   .-translate-x-full {
     --tw-translate-x: -100%;
     translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -1048,6 +1058,10 @@
   }
   .translate-x-1 {
     --tw-translate-x: calc(var(--spacing) * 1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .translate-x-4 {
+    --tw-translate-x: calc(var(--spacing) * 4);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .translate-x-full {
@@ -2075,6 +2089,9 @@
   .text-xs {
     font-size: var(--text-xs);
     line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+  .text-\[8px\] {
+    font-size: 8px;
   }
   .text-\[9px\] {
     font-size: 9px;

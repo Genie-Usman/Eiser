@@ -72,12 +72,10 @@
                   <div class=" overflow-hidden">
                     <div class="h-2 bg-white"></div>
                     {% for child_link in link.links %}
-                      <a href="{{ child_link.url }}" class="border-gray-200 border-b h-12 p-4 flex bg-white items-start hover:text-white hover:bg-[#71cd13]">
-                        <div class="ml-3">
-                          <p class="text-gray-900 text-[13px] uppercase">
-                            {{ child_link.title }}
-                          </p>
-                        </div>
+                      <a href="{{ child_link.url }}" class="border-gray-200 border-b py-3 px-4 flex bg-white items-center hover:text-white hover:bg-[#71cd13]">
+                        <p class="text-gray-900 text-[13px] uppercase leading-tight">
+                          {{ child_link.title }}
+                        </p>
                       </a>
                     {% endfor %}
                   </div>
