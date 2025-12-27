@@ -1,7 +1,52 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "elite-athletic-gear-megamenu": {
       "type": "elite-athletic-gear-megamenu",
+      "blocks": {
+        "mobile_menu_image_j8GY8D": {
+          "type": "mobile_menu_image",
+          "settings": {
+            "menu_title": "Add Your Logo",
+            "mobile_image": "shopify://shop_images/add-your-logo.png"
+          }
+        },
+        "mobile_menu_image_F7hHqG": {
+          "type": "mobile_menu_image",
+          "settings": {
+            "menu_title": "Best Selling Bundles",
+            "mobile_image": "shopify://shop_images/best-selling-bundles.webp"
+          }
+        },
+        "mobile_menu_image_WQzyV9": {
+          "type": "mobile_menu_image",
+          "settings": {
+            "menu_title": "Gifts By Sport",
+            "mobile_image": "shopify://shop_images/gift-by-sport.webp"
+          }
+        },
+        "mobile_menu_image_3QXRg6": {
+          "type": "mobile_menu_image",
+          "settings": {
+            "menu_title": "Shop By Product",
+            "mobile_image": "shopify://shop_images/all-products.webp"
+          }
+        }
+      },
+      "block_order": [
+        "mobile_menu_image_j8GY8D",
+        "mobile_menu_image_F7hHqG",
+        "mobile_menu_image_WQzyV9",
+        "mobile_menu_image_3QXRg6"
+      ],
       "settings": {
         "show_announcement": true,
         "announcement_text": "ORDERS SHIP WITHIN 1 BUSINESS DAY",
