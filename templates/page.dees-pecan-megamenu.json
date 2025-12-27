@@ -1,0 +1,52 @@
+{
+  "sections": {
+    "dees-pecan-megamenu": {
+      "type": "dees-pecan-megamenu",
+      "blocks": {
+        "products_menu": {
+          "type": "menu_group",
+          "settings": {
+            "parent_menu": "Products",
+            "item1_title": "coffee",
+            "item1_url": "shopify://pages/mega-menus",
+            "item1_image": "shopify://shop_images/coffee.webp",
+            "item2_title": "pecans",
+            "item2_url": "shopify://pages/mega-menus",
+            "item2_image": "shopify://shop_images/pecans.webp",
+            "item3_title": "pecan candies & confections",
+            "item3_url": "shopify://pages/mega-menus",
+            "item3_image": "shopify://shop_images/pecan_candies___confections.webp",
+            "item4_title": "sauces & seasonings",
+            "item4_url": "shopify://pages/mega-menus",
+            "item4_image": "shopify://shop_images/sauces___seasonings.webp",
+            "item5_title": "honey & pantry essentials",
+            "item5_url": "shopify://pages/mega-menus",
+            "item5_image": "shopify://shop_images/honey___pantry_essentials.webp",
+            "item6_title": "all products",
+            "item6_url": "shopify://pages/mega-menus",
+            "item6_image": "shopify://shop_images/all_products.webp",
+            "item7_title": "",
+            "item7_url": "",
+            "item8_title": "",
+            "item8_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "products_menu"
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/Pecan-logo.avif",
+        "logo_width": 100,
+        "main_menu": "dees-pecan-menu",
+        "header_bg": "#321e00",
+        "header_text": "#ffffff",
+        "accent_color": "#b8860b",
+        "dropdown_bg": "#7B4A00"
+      }
+    }
+  },
+  "order": [
+    "dees-pecan-megamenu"
+  ]
+}
