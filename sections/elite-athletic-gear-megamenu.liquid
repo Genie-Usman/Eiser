@@ -116,6 +116,23 @@
             "label": "Sidebar Image"
           }
         ]
+      },
+      {
+        "type": "mobile_menu_image",
+        "name": "Mobile Menu Image",
+        "settings": [
+          {
+            "type": "text",
+            "id": "menu_title",
+            "label": "Menu Title (Exact Match)",
+            "info": "Enter the exact menu title, e.g. 'SHOP BY PRODUCT'"
+          },
+          {
+            "type": "image_picker",
+            "id": "mobile_image",
+            "label": "Mobile Menu Image"
+          }
+        ]
       }
     ],
     "presets": [
@@ -576,7 +593,21 @@
                       {% for link in linklists[section.settings.main_menu].links %}
                         {% comment %} Get image for this menu item {% endcomment %}
                         {% assign menu_image = blank %}
-                        {% if link.object != blank %}
+                        {% assign link_title_down = link.title | downcase | strip %}
+                        
+                        {% comment %} 1. First check for mobile_menu_image blocks (Theme Editor) {% endcomment %}
+                        {% for block in section.blocks %}
+                          {% if block.type == 'mobile_menu_image' %}
+                            {% assign block_title = block.settings.menu_title | downcase | strip %}
+                            {% if block_title == link_title_down and block.settings.mobile_image != blank %}
+                              {% assign menu_image = block.settings.mobile_image %}
+                              {% break %}
+                            {% endif %}
+                          {% endif %}
+                        {% endfor %}
+                        
+                        {% comment %} 2. Fallback to metafields/object images {% endcomment %}
+                        {% if menu_image == blank and link.object != blank %}
                           {% if link.object.metafields.custom.menu_image != blank %}
                             {% assign menu_image = link.object.metafields.custom.menu_image %}
                           {% elsif link.object.image != blank %}
@@ -586,9 +617,8 @@
                           {% endif %}
                         {% endif %}
                         
-                        {% comment %} Fallback: Check blocks for matching sidebar image {% endcomment %}
+                        {% comment %} 3. Fallback to sidebar_image blocks {% endcomment %}
                         {% if menu_image == blank %}
-                          {% assign link_title_down = link.title | downcase | strip %}
                           {% for block in section.blocks %}
                             {% if block.type == 'menu_sidebar_image' %}
                               {% assign block_title = block.settings.menu_title | downcase | strip %}
