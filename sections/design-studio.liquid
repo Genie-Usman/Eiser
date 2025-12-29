@@ -1,15 +1,28 @@
 {% comment %} 
-  Design Studio - Necklace Customization Page
-  Allows customers to build custom necklaces by selecting: 
-  1. Base necklace 
-  2. Middle charm 
-  3. Left charm 
-  4. Right charm 
+                                                Design Studio - Necklace Customization Page
+                                                Allows customers to build custom necklaces by selecting: 
+                                                1. Base necklace 
+                                                2. Middle charm 
+                                                3. Left charm 
+                                                4. Right charm 
 {% endcomment %}
 
 <style>
+  /* Hide footer on design studio page */
+  .design-studio-section ~ footer,
+  .design-studio-section ~ .footer,
+  .design-studio-section ~ [class*="footer"],
+  body:has(.design-studio-section) footer,
+  body:has(.design-studio-section) .footer-group,
+  body:has(.design-studio) #shopify-section-footer,
+  body:has(.design-studio) [id*="footer"] {
+    display: none !important;
+  }
+
   .design-studio {
     min-height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
     background-color: #f5f0e8;
   }
 
@@ -36,8 +49,9 @@
 
   .design-studio__container {
     display: grid;
-    grid-template-columns: 1fr 400px;
-    min-height: calc(100vh - 60px);
+    grid-template-columns: 1fr 420px;
+    height: calc(100vh - 56px);
+    overflow: hidden;
   }
 
   @media (max-width: 1024px) {
@@ -46,7 +60,7 @@
     }
   }
 
-  /* Preview Area */
+  /* Preview Area - Static, no scroll */
   .design-studio__preview {
     display: flex;
     align-items: center;
@@ -59,6 +73,57 @@
     max-width: 100%;
     max-height: 70vh;
     object-fit: contain;
+  }
+
+  /* Composite Preview - Charms overlaid on necklace */
+  .design-studio__preview-composite {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+  }
+
+  .design-studio__preview-charm {
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    object-fit: contain;
+    z-index: 10;
+    pointer-events: none;
+    /* Prevent blocking clicks */
+  }
+
+  .design-studio__preview-charm--middle {
+    top: 50%;
+    left: 49.8%;
+    transform: translate(-50%, -50%);
+  }
+
+  .design-studio__preview-charm--left {
+    top: 47%;
+    left: 40.8%;
+    transform: translate(-50%, -50%) rotate(15deg);
+  }
+
+  .design-studio__preview-charm--right {
+    top: 47%;
+    right: 40.8%;
+    transform: translate(50%, -50%) rotate(-15deg);
+  }
+
+  .design-studio__preview-charm--extension-left {
+    top: 50%;
+    left: 49.8%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    /* Between necklace and middle charm */
+  }
+
+  .design-studio__preview-charm--extension-charm {
+    top: 72.5%;
+    left: 50.4%;
+    transform: translate(-50%, -50%);
+    z-index: 6;
+    /* On top of extension chain */
   }
 
   .design-studio__preview-placeholder {
@@ -86,12 +151,14 @@
     border: none;
   }
 
-  /* Panel */
+  /* Panel - Scrollable */
   .design-studio__panel {
     background-color: #fff;
     border-left: 1px solid #e5e5e5;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+    max-height: 100%;
   }
 
   .design-studio__panel-header {
@@ -128,14 +195,16 @@
     background-color: #333;
   }
 
-  /* Slots Grid */
+  /* Slots Grid - 3 rows x 2 columns for 6 slots */
   .design-studio__slots {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     gap: 0.5rem;
     padding: 0.5rem;
     flex: 1;
     overflow-y: auto;
+    max-height: 100%;
   }
 
   .design-studio__slot {
@@ -186,19 +255,21 @@
 
   .design-studio__slot-edit {
     position: absolute;
-    bottom: 0.5rem;
-    right: 0.5rem;
+    bottom: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
     background: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.65rem;
+    font-weight: 500;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
   }
 
   /* Product Selection View */
@@ -396,10 +467,46 @@
 
       <template x-if="selections.necklace">
         <div class="design-studio__preview-composite">
+            <!-- Base Necklace -->
           <img
-            :src="selections.necklace.image"
+            :src="selections.necklace.thumbnailImage || selections.necklace.image"
             :alt="selections.necklace.title"
             class="design-studio__preview-image">
+
+            <!-- Middle Charm Overlay -->
+          <img
+            x-show="selections.middleCharm"
+            :src="selections.middleCharm ? (selections.middleCharm.thumbnailImage || selections.middleCharm.image) : ''"
+            :alt="selections.middleCharm ? selections.middleCharm.title : ''"
+            class="design-studio__preview-charm design-studio__preview-charm--middle">
+
+            <!-- Left Charm Overlay -->
+          <img
+            x-show="selections.leftCharm"
+            :src="selections.leftCharm ? (selections.leftCharm.thumbnailImage || selections.leftCharm.image) : ''"
+            :alt="selections.leftCharm ? selections.leftCharm.title : ''"
+            class="design-studio__preview-charm design-studio__preview-charm--left">
+
+            <!-- Right Charm Overlay -->
+          <img
+            x-show="selections.rightCharm"
+            :src="selections.rightCharm ? (selections.rightCharm.thumbnailImage || selections.rightCharm.image) : ''"
+            :alt="selections.rightCharm ? selections.rightCharm.title : ''"
+            class="design-studio__preview-charm design-studio__preview-charm--right">
+
+            <!-- Extension Left (Chain) -->
+          <img
+            x-show="selections.extensionLeft"
+            :src="selections.extensionLeft ? (selections.extensionLeft.thumbnailImage || selections.extensionLeft.image) : ''"
+            :alt="selections.extensionLeft ? selections.extensionLeft.title : ''"
+            class="design-studio__preview-charm design-studio__preview-charm--extension-left">
+
+            <!-- Extension Right (Charm on Chain) -->
+          <img
+            x-show="selections.extensionRight"
+            :src="selections.extensionRight ? (selections.extensionRight.thumbnailImage || selections.extensionRight.image) : ''"
+            :alt="selections.extensionRight ? selections.extensionRight.title : ''"
+            class="design-studio__preview-charm design-studio__preview-charm--extension-charm">
         </div>
       </template>
 
@@ -520,10 +627,50 @@
               <button class="design-studio__slot-edit" @click.stop="goToStep(4)">✎ EDIT</button>
             </template>
           </div>
+
+          <!-- Extension Left Slot -->
+          <div
+            class="design-studio__slot"
+            :class="{ 'design-studio__slot--selected': selections.extensionLeft }"
+            @click="goToStep(5)">
+            <template x-if="selections.extensionLeft">
+              <img
+                :src="selections.extensionLeft.image"
+                class="design-studio__slot-image"
+                :alt="selections.extensionLeft.title">
+            </template>
+            <template x-if="!selections.extensionLeft">
+              <div class="design-studio__slot-add">+</div>
+            </template>
+            <span class="design-studio__slot-label">5. Add Extension Left</span>
+            <template x-if="selections.extensionLeft">
+              <button class="design-studio__slot-edit" @click.stop="goToStep(5)">✎ EDIT</button>
+            </template>
+          </div>
+
+          <!-- Extension Right Slot -->
+          <div
+            class="design-studio__slot"
+            :class="{ 'design-studio__slot--selected': selections.extensionRight }"
+            @click="goToStep(6)">
+            <template x-if="selections.extensionRight">
+              <img
+                :src="selections.extensionRight.image"
+                class="design-studio__slot-image"
+                :alt="selections.extensionRight.title">
+            </template>
+            <template x-if="!selections.extensionRight">
+              <div class="design-studio__slot-add">+</div>
+            </template>
+            <span class="design-studio__slot-label">6. Add Extension Charm</span>
+            <template x-if="selections.extensionRight">
+              <button class="design-studio__slot-edit" @click.stop="goToStep(6)">✎ EDIT</button>
+            </template>
+          </div>
         </div>
       </template>
 
-      <!-- Product Selection View (Steps 1-4) -->
+      <!-- Product Selection View (Steps 1-6) -->
       <template x-if="currentStep > 0">
         <div class="design-studio__selection">
           <div class="design-studio__selection-header">
@@ -615,16 +762,18 @@
   function designStudio() {
     return {
       // State
-      currentStep: 0, // 0=overview, 1=necklace, 2=middle, 3=left, 4=right
+      currentStep: 0, // 0=overview, 1=necklace, 2=middle, 3=left, 4=right, 5=ext-left, 6=ext-right
       loading: false,
       activeFilter: 'all',
       
-      // Selections
+      // Selections (6 slots)
       selections: {
         necklace: null,
         middleCharm: null,
         leftCharm: null,
-        rightCharm: null
+        rightCharm: null,
+        extensionLeft: null,
+        extensionRight: null
       },
       
       // Products
@@ -648,12 +797,15 @@
         if (this.selections.middleCharm) total += this.selections.middleCharm.price;
         if (this.selections.leftCharm) total += this.selections.leftCharm.price;
         if (this.selections.rightCharm) total += this.selections.rightCharm.price;
+        if (this.selections.extensionLeft) total += this.selections.extensionLeft.price;
+        if (this.selections.extensionRight) total += this.selections.extensionRight.price;
         return total;
       },
       
       get hasAnySelection() {
         return this.selections.necklace || this.selections.middleCharm || 
-               this.selections.leftCharm || this.selections.rightCharm;
+               this.selections.leftCharm || this.selections.rightCharm ||
+               this.selections.extensionLeft || this.selections.extensionRight;
       },
       
       // Methods
@@ -692,6 +844,11 @@
       
       mapProduct(product) {
         const variant = product.variants[0];
+        // Get all images - use 1st for preview, 2nd/3rd for slot thumbnail
+        const images = product.images || [];
+        const primaryImage = images[0]?.src || '';
+        const thumbnailImage = images[1]?.src || images[2]?.src || primaryImage;
+        
         return {
           id: product.id,
           variantId: variant.id,
@@ -699,21 +856,32 @@
           handle: product.handle,
           price: parseFloat(variant.price) * 100, // Convert to cents
           comparePrice: variant.compare_at_price ? parseFloat(variant.compare_at_price) * 100 : null,
-          image: product.images[0]?.src || '',
+          image: primaryImage,
+          thumbnailImage: thumbnailImage,
           available: variant.available !== false,
           tags: product.tags || []
         };
       },
       
       formatMoney(cents) {
-        if (!cents) return this.config.moneyFormat.replace('{{amount}}', '0.00').replace('{{amount_no_decimals}}', '0');
+        if (!cents && cents !== 0) return this.config.currency + ' 0.00';
+        
         const amount = (cents / 100).toFixed(2);
-        const amountNoDecimals = Math.round(cents / 100);
-        return this.config.moneyFormat
-          .replace('{{amount}}', amount)
-          .replace('{{amount_with_comma_separator}}', amount.replace('.', ','))
-          .replace('{{amount_no_decimals}}', amountNoDecimals)
-          .replace('{{amount_with_apostrophe_separator}}', amount.replace('.', "'"));
+        const amountNoDecimals = Math.round(cents / 100).toString();
+        const amountWithComma = amount.replace('.', ',');
+        const amountWithApostrophe = amount.replace('.', "'");
+        
+        // Handle various Shopify money format patterns
+        let formatted = this.config.moneyFormat;
+        
+        // Replace all possible placeholders
+        formatted = formatted.replace(/\{\{\s*amount_with_comma_separator\s*\}\}/g, amountWithComma);
+        formatted = formatted.replace(/\{\{\s*amount_with_apostrophe_separator\s*\}\}/g, amountWithApostrophe);
+        formatted = formatted.replace(/\{\{\s*amount_no_decimals_with_comma_separator\s*\}\}/g, amountNoDecimals.replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+        formatted = formatted.replace(/\{\{\s*amount_no_decimals\s*\}\}/g, amountNoDecimals);
+        formatted = formatted.replace(/\{\{\s*amount\s*\}\}/g, amount);
+        
+        return formatted;
       },
       
       goToStep(step) {
@@ -728,7 +896,7 @@
       },
       
       nextStep() {
-        if (this.currentStep < 4) {
+        if (this.currentStep < 6) {
           this.currentStep++;
         } else {
           this.currentStep = 0;
@@ -742,6 +910,8 @@
           case 2: return 'Select Your Middle Charms';
           case 3: return 'Select Your Left Charms';
           case 4: return 'Select Your Right Charms';
+          case 5: return 'Select Extension Left';
+          case 6: return 'Select Extension Charm';
           default: return '';
         }
       },
@@ -751,7 +921,11 @@
         
         if (this.currentStep === 1) {
           products = this.necklaces;
+        } else if (this.currentStep === 5) {
+          // Extensions for slot 5 (Chain)
+          products = this.extensions;
         } else {
+          // Charms for slots 2, 3, 4 AND 6 (Extension Charm)
           products = this.charms;
           
           // Apply filter
@@ -771,6 +945,8 @@
           case 2: return this.selections.middleCharm;
           case 3: return this.selections.leftCharm;
           case 4: return this.selections.rightCharm;
+          case 5: return this.selections.extensionLeft;
+          case 6: return this.selections.extensionRight;
           default: return null;
         }
       },
@@ -790,6 +966,8 @@
           case 2: this.selections.middleCharm = selection; break;
           case 3: this.selections.leftCharm = selection; break;
           case 4: this.selections.rightCharm = selection; break;
+          case 5: this.selections.extensionLeft = selection; break;
+          case 6: this.selections.extensionRight = selection; break;
         }
       },
       
@@ -799,6 +977,8 @@
           case 2: this.selections.middleCharm = null; break;
           case 3: this.selections.leftCharm = null; break;
           case 4: this.selections.rightCharm = null; break;
+          case 5: this.selections.extensionLeft = null; break;
+          case 6: this.selections.extensionRight = null; break;
         }
       },
       
@@ -845,6 +1025,22 @@
             id: this.selections.rightCharm.variantId,
             quantity: 1,
             properties: { 'Position': 'Right Charm' }
+          });
+        }
+        
+        if (this.selections.extensionLeft) {
+          items.push({
+            id: this.selections.extensionLeft.variantId,
+            quantity: 1,
+            properties: { 'Position': 'Extension Left' }
+          });
+        }
+        
+        if (this.selections.extensionRight) {
+          items.push({
+            id: this.selections.extensionRight.variantId,
+            quantity: 1,
+            properties: { 'Position': 'Extension Right' }
           });
         }
         
