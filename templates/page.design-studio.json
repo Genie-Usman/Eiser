@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "design-studio": {
+      "type": "design-studio",
+      "settings": {
+        "necklace_collection": "necklaces",
+        "charm_collection": "charms",
+        "extension_collection": "extensions"
+      }
+    }
+  },
+  "order": ["design-studio"]
+}

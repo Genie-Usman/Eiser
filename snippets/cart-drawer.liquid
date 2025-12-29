@@ -88,6 +88,16 @@
                         <div class="text-right text-sm font-semibold" data-cart-line-price>{{ item.final_line_price | money }}</div>
                       </div>
 
+                      {% comment %} Line Item Properties (e.g., Position: Base Necklace) {% endcomment %}
+                      {% if item.properties.size > 0 %}
+                        <div class="flex flex-wrap gap-1">
+                          {% for property in item.properties %}
+                            {% unless property.last == blank %}
+                              <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{{ property.first }}: {{ property.last }}</span>
+                            {% endunless %}
+                          {% endfor %}
+                        </div>
+                      {% endif %}
 
                       <div class="flex items-center justify-between mt-2">
                         <div class="relative w-20">
@@ -125,7 +135,7 @@
                               }
                             }"
                             @click.away="open = false">
-                            
+
                             <!-- Trigger -->
                             <button
                               type="button"
@@ -133,7 +143,16 @@
                               class="w-full flex items-center justify-between appearance-none rounded border border-gray-300 bg-white py-1.5 pl-3 pr-2 text-xs text-gray-700 hover:border-[#71cd13] transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#71cd13]"
                               :class="{ 'border-[#71cd13] ring-1 ring-[#71cd13]': open }">
                               <span class="truncate block max-w-[85%]" x-text="label"></span>
-                              <svg class="h-3 w-3 text-gray-500 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                              <svg
+                                class="h-3 w-3 text-gray-500 transition-transform duration-200"
+                                :class="{ 'rotate-180': open }"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"><path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M19 9l-7 7-7-7" /></svg>
                             </button>
 
                             <!-- Custom Options -->
@@ -152,15 +171,23 @@
                                   @click="select('{{ variant.id }}', '{{ variant.title | escape }}')"
                                   class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-[#eafce3] hover:text-[#71cd13] text-gray-900"
                                   :class="{ 'text-[#71cd13] bg-[#eafce3] font-medium': selected == '{{ variant.id }}' }"
-                                  {% unless variant.available %}class="opacity-50 cursor-not-allowed bg-gray-50"{% endunless %}>
+                                  {% unless variant.available %}
+                                  class="opacity-50 cursor-not-allowed bg-gray-50"
+                                  {% endunless %}>
                                   <span class="block truncate">
                                     {{ variant.title }}
                                   </span>
-                                  <span
-                                    x-show="selected == '{{ variant.id }}'"
-                                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-[#71cd13]">
-                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                  <span x-show="selected == '{{ variant.id }}'" class="absolute inset-y-0 right-0 flex items-center pr-3 text-[#71cd13]">
+                                    <svg
+                                      class="h-4 w-4"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor">
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
                                     </svg>
                                   </span>
                                 </div>
@@ -176,8 +203,10 @@
                               {% for variant in item.product.variants %}
                                 <option
                                   value="{{ variant.id }}"
-                                  {% if variant.id == item.variant.id %}selected{% endif %}
-                                  {% unless variant.available %}disabled{% endunless %}>
+                                  {% if variant.id == item.variant.id %}
+                                  selected{% endif %}
+                                  {% unless variant.available %}
+                                  disabled{% endunless %}>
                                   {{ variant.title }}
                                 </option>
                               {% endfor %}
@@ -185,12 +214,12 @@
                           </div>
                         {% endunless %}
                       {% comment %} <button
-                                                                                                                                                type="button"
-                                                                                                                                                class="text-[10px] uppercase tracking-wide text-rose-600 hover:text-rose-700 underline"
-                                                                                                                                                data-cart-remove>
-                                                                                                                                                {% render 'icon-trash' %}
-                                                                                                                                                </button>
-                                                                                                                                    {% endcomment %}
+                                                                                                                                                                        type="button"
+                                                                                                                                                                        class="text-[10px] uppercase tracking-wide text-rose-600 hover:text-rose-700 underline"
+                                                                                                                                                                        data-cart-remove>
+                                                                                                                                                                        {% render 'icon-trash' %}
+                                                                                                                                                                        </button>
+                                                                                                                                                          {% endcomment %}
                       </div>
 
                     </div>

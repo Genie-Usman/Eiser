@@ -1,0 +1,927 @@
+{% comment %} 
+  Design Studio - Necklace Customization Page
+  Allows customers to build custom necklaces by selecting: 
+  1. Base necklace 
+  2. Middle charm 
+  3. Left charm 
+  4. Right charm 
+{% endcomment %}
+
+<style>
+  .design-studio {
+    min-height: 100vh;
+    background-color: #f5f0e8;
+  }
+
+  .design-studio__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #1a1a1a;
+    color: #fff;
+  }
+
+  .design-studio__title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .design-studio__total {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .design-studio__container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    min-height: calc(100vh - 60px);
+  }
+
+  @media (max-width: 1024px) {
+    .design-studio__container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Preview Area */
+  .design-studio__preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+  }
+
+  .design-studio__preview-image {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+  }
+
+  .design-studio__preview-placeholder {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 1rem;
+  }
+
+  /* Inspiration Button */
+  .design-studio__inspiration {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border: none;
+  }
+
+  /* Panel */
+  .design-studio__panel {
+    background-color: #fff;
+    border-left: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .design-studio__panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .design-studio__nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 1px solid #e5e5e5;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .design-studio__nav-btn:hover {
+    background-color: #f5f5f5;
+  }
+
+  .design-studio__nav-btn--primary {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-color: #1a1a1a;
+  }
+
+  .design-studio__nav-btn--primary:hover {
+    background-color: #333;
+  }
+
+  /* Slots Grid */
+  .design-studio__slots {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0.5rem;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .design-studio__slot {
+    aspect-ratio: 1;
+    background-color: #f5f0e8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: box-shadow 0.2s;
+    border: 2px solid transparent;
+  }
+
+  .design-studio__slot:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .design-studio__slot--selected {
+    border-color: #1a1a1a;
+  }
+
+  .design-studio__slot-image {
+    max-width: 80%;
+    max-height: 60%;
+    object-fit: contain;
+  }
+
+  .design-studio__slot-add {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+  }
+
+  .design-studio__slot-label {
+    font-size: 0.75rem;
+    color: #666;
+    text-align: center;
+  }
+
+  .design-studio__slot-edit {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Product Selection View */
+  .design-studio__selection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .design-studio__selection-header {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .design-studio__selection-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .design-studio__selection-title h3 {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .design-studio__remove-btn {
+    font-size: 0.75rem;
+    color: #666;
+    background: none;
+    border: 1px solid #e5e5e5;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+  }
+
+  /* Filters */
+  .design-studio__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .design-studio__filter {
+    background: none;
+    border: 1px solid #1a1a1a;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .design-studio__filter--active {
+    background-color: #1a1a1a;
+    color: #fff;
+  }
+
+  /* Products Grid */
+  .design-studio__products {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .design-studio__product {
+    background-color: #f5f0e8;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+    position: relative;
+  }
+
+  .design-studio__product:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .design-studio__product--selected {
+    outline: 2px solid #1a1a1a;
+  }
+
+  .design-studio__product-image-wrap {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .design-studio__product-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .design-studio__product-info {
+    padding: 0.75rem;
+    background: #fff;
+  }
+
+  .design-studio__product-title {
+    font-size: 0.7rem;
+    color: #333;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+  }
+
+  .design-studio__product-price {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .design-studio__product-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    color: #666;
+  }
+
+  .design-studio__product-details {
+    display: inline-block;
+    border: 1px solid #1a1a1a;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.7rem;
+    background: none;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .design-studio__product-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #1a1a1a;
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  /* Loading State */
+  .design-studio__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #666;
+  }
+
+  .design-studio__spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #e5e5e5;
+    border-top-color: #1a1a1a;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 0.5rem;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Empty State */
+  .design-studio__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+  }
+</style>
+
+<div
+  class="design-studio"
+  x-data="designStudio()"
+  x-init="init()">
+  <!-- Header -->
+  <div class="design-studio__header">
+    <span class="design-studio__title">Design Your Necklace</span>
+    <span class="design-studio__total" x-text="formatMoney(totalPrice)"></span>
+  </div>
+
+  <div class="design-studio__container">
+    <!-- Preview Area -->
+    <div class="design-studio__preview">
+      <button class="design-studio__inspiration">Design Inspiration</button>
+
+      <template x-if="selections.necklace">
+        <div class="design-studio__preview-composite">
+          <img
+            :src="selections.necklace.image"
+            :alt="selections.necklace.title"
+            class="design-studio__preview-image">
+        </div>
+      </template>
+
+      <template x-if="!selections.necklace">
+        <div class="design-studio__preview-placeholder">
+          Select a necklace to begin
+        </div>
+      </template>
+    </div>
+
+    <!-- Panel -->
+    <div class="design-studio__panel">
+      <!-- Panel Header -->
+      <div class="design-studio__panel-header">
+        <template x-if="currentStep > 0">
+          <button class="design-studio__nav-btn" @click="goBack()">
+            <span>←</span>
+          </button>
+        </template>
+        <template x-if="currentStep === 0">
+          <span></span>
+        </template>
+
+        <template x-if="currentStep === 0 && hasAnySelection">
+          <button class="design-studio__nav-btn design-studio__nav-btn--primary" @click="addToCart()">
+            Add to Cart →
+          </button>
+        </template>
+        <template x-if="currentStep > 0">
+          <button class="design-studio__nav-btn design-studio__nav-btn--primary" @click="nextStep()">
+            <span x-text="currentStep < 4 ? 'Next Step →' : 'Done'"></span>
+          </button>
+        </template>
+        <template x-if="currentStep === 0 && !hasAnySelection">
+          <span class="design-studio__nav-btn" style="opacity: 0.5; cursor: default;">Select Option</span>
+        </template>
+      </div>
+
+      <!-- Slot Overview (Step 0) -->
+      <template x-if="currentStep === 0">
+        <div class="design-studio__slots">
+          <!-- Necklace Slot -->
+          <div
+            class="design-studio__slot"
+            :class="{ 'design-studio__slot--selected': selections.necklace }"
+            @click="goToStep(1)">
+            <template x-if="selections.necklace">
+              <img
+                :src="selections.necklace.image"
+                class="design-studio__slot-image"
+                :alt="selections.necklace.title">
+            </template>
+            <template x-if="!selections.necklace">
+              <div class="design-studio__slot-add">+</div>
+            </template>
+            <span class="design-studio__slot-label">1. Add Necklace</span>
+            <template x-if="selections.necklace">
+              <button class="design-studio__slot-edit" @click.stop="goToStep(1)">✎ EDIT</button>
+            </template>
+          </div>
+
+          <!-- Middle Charm Slot -->
+          <div
+            class="design-studio__slot"
+            :class="{ 'design-studio__slot--selected': selections.middleCharm }"
+            @click="goToStep(2)">
+            <template x-if="selections.middleCharm">
+              <img
+                :src="selections.middleCharm.image"
+                class="design-studio__slot-image"
+                :alt="selections.middleCharm.title">
+            </template>
+            <template x-if="!selections.middleCharm">
+              <div class="design-studio__slot-add">+</div>
+            </template>
+            <span class="design-studio__slot-label">2. Add Middle Charm</span>
+            <template x-if="selections.middleCharm">
+              <button class="design-studio__slot-edit" @click.stop="goToStep(2)">✎ EDIT</button>
+            </template>
+          </div>
+
+          <!-- Left Charm Slot -->
+          <div
+            class="design-studio__slot"
+            :class="{ 'design-studio__slot--selected': selections.leftCharm }"
+            @click="goToStep(3)">
+            <template x-if="selections.leftCharm">
+              <img
+                :src="selections.leftCharm.image"
+                class="design-studio__slot-image"
+                :alt="selections.leftCharm.title">
+            </template>
+            <template x-if="!selections.leftCharm">
+              <div class="design-studio__slot-add">+</div>
+            </template>
+            <span class="design-studio__slot-label">3. Add Left Charm</span>
+            <template x-if="selections.leftCharm">
+              <button class="design-studio__slot-edit" @click.stop="goToStep(3)">✎ EDIT</button>
+            </template>
+          </div>
+
+          <!-- Right Charm Slot -->
+          <div
+            class="design-studio__slot"
+            :class="{ 'design-studio__slot--selected': selections.rightCharm }"
+            @click="goToStep(4)">
+            <template x-if="selections.rightCharm">
+              <img
+                :src="selections.rightCharm.image"
+                class="design-studio__slot-image"
+                :alt="selections.rightCharm.title">
+            </template>
+            <template x-if="!selections.rightCharm">
+              <div class="design-studio__slot-add">+</div>
+            </template>
+            <span class="design-studio__slot-label">4. Add Right Charm</span>
+            <template x-if="selections.rightCharm">
+              <button class="design-studio__slot-edit" @click.stop="goToStep(4)">✎ EDIT</button>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- Product Selection View (Steps 1-4) -->
+      <template x-if="currentStep > 0">
+        <div class="design-studio__selection">
+          <div class="design-studio__selection-header">
+            <div class="design-studio__selection-title">
+              <h3 x-text="getStepTitle()"></h3>
+              <button
+                class="design-studio__remove-btn"
+                @click="removeSelection()"
+                x-show="getCurrentSelection()">Remove Charm</button>
+            </div>
+
+            <!-- Filters (for charm steps) -->
+            <template x-if="currentStep > 1">
+              <div class="design-studio__filters">
+                <button
+                  class="design-studio__filter"
+                  :class="{ 'design-studio__filter--active': activeFilter === 'all' }"
+                  @click="activeFilter = 'all'">All charms</button>
+                <button
+                  class="design-studio__filter"
+                  :class="{ 'design-studio__filter--active': activeFilter === 'micro' }"
+                  @click="activeFilter = 'micro'">Micro Charms</button>
+                <button
+                  class="design-studio__filter"
+                  :class="{ 'design-studio__filter--active': activeFilter === 'small' }"
+                  @click="activeFilter = 'small'">Small Charms</button>
+                <button
+                  class="design-studio__filter"
+                  :class="{ 'design-studio__filter--active': activeFilter === 'large' }"
+                  @click="activeFilter = 'large'">Large Charms</button>
+                <button
+                  class="design-studio__filter"
+                  :class="{ 'design-studio__filter--active': activeFilter === 'letter' }"
+                  @click="activeFilter = 'letter'">Letter Charms</button>
+                <button
+                  class="design-studio__filter"
+                  :class="{ 'design-studio__filter--active': activeFilter === 'zodiac' }"
+                  @click="activeFilter = 'zodiac'">Zodiac Charms</button>
+              </div>
+            </template>
+          </div>
+
+          <!-- Products -->
+          <div class="design-studio__products">
+            <template x-if="loading">
+              <div class="design-studio__loading" style="grid-column: span 2;">
+                <div class="design-studio__spinner"></div>
+                <span>Loading products...</span>
+              </div>
+            </template>
+
+            <template x-if="!loading && getFilteredProducts().length === 0">
+              <div class="design-studio__empty" style="grid-column: span 2;">
+                <p>No products found</p>
+              </div>
+            </template>
+
+            <template x-for="product in getFilteredProducts()" :key="product.id">
+              <div
+                class="design-studio__product"
+                :class="{ 'design-studio__product--selected': isProductSelected(product) }"
+                @click="selectProduct(product)">
+                <template x-if="!product.available">
+                  <div class="design-studio__product-badge">Out Of Stock</div>
+                </template>
+
+                <div class="design-studio__product-image-wrap">
+                  <img
+                    :src="product.image"
+                    :alt="product.title"
+                    class="design-studio__product-image">
+                </div>
+
+                <div class="design-studio__product-info">
+                  <p class="design-studio__product-title" x-text="product.title"></p>
+                  <p class="design-studio__product-price" x-text="formatMoney(product.price)"></p>
+                  <button class="design-studio__product-details" @click.stop="openQuickview(product)">Details</button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+
+<script>
+  function designStudio() {
+    return {
+      // State
+      currentStep: 0, // 0=overview, 1=necklace, 2=middle, 3=left, 4=right
+      loading: false,
+      activeFilter: 'all',
+      
+      // Selections
+      selections: {
+        necklace: null,
+        middleCharm: null,
+        leftCharm: null,
+        rightCharm: null
+      },
+      
+      // Products
+      necklaces: [],
+      charms: [],
+      extensions: [],
+      
+      // Config
+      config: {
+        necklaceCollection: '{{ section.settings.necklace_collection | default: "necklaces" }}',
+        charmCollection: '{{ section.settings.charm_collection | default: "charms" }}',
+        extensionCollection: '{{ section.settings.extension_collection | default: "extensions" }}',
+        currency: '{{ shop.currency }}',
+        moneyFormat: {{ shop.money_format | json }}
+      },
+      
+      // Computed
+      get totalPrice() {
+        let total = 0;
+        if (this.selections.necklace) total += this.selections.necklace.price;
+        if (this.selections.middleCharm) total += this.selections.middleCharm.price;
+        if (this.selections.leftCharm) total += this.selections.leftCharm.price;
+        if (this.selections.rightCharm) total += this.selections.rightCharm.price;
+        return total;
+      },
+      
+      get hasAnySelection() {
+        return this.selections.necklace || this.selections.middleCharm || 
+               this.selections.leftCharm || this.selections.rightCharm;
+      },
+      
+      // Methods
+      async init() {
+        await this.fetchProducts();
+      },
+      
+      async fetchProducts() {
+        this.loading = true;
+        try {
+          // Fetch necklaces
+          const necklaceRes = await fetch(`/collections/${this.config.necklaceCollection}/products.json`);
+          if (necklaceRes.ok) {
+            const necklaceData = await necklaceRes.json();
+            this.necklaces = necklaceData.products.map(p => this.mapProduct(p));
+          }
+          
+          // Fetch charms
+          const charmRes = await fetch(`/collections/${this.config.charmCollection}/products.json`);
+          if (charmRes.ok) {
+            const charmData = await charmRes.json();
+            this.charms = charmData.products.map(p => this.mapProduct(p));
+          }
+          
+          // Fetch extensions
+          const extRes = await fetch(`/collections/${this.config.extensionCollection}/products.json`);
+          if (extRes.ok) {
+            const extData = await extRes.json();
+            this.extensions = extData.products.map(p => this.mapProduct(p));
+          }
+        } catch (err) {
+          console.error('Failed to fetch products:', err);
+        }
+        this.loading = false;
+      },
+      
+      mapProduct(product) {
+        const variant = product.variants[0];
+        return {
+          id: product.id,
+          variantId: variant.id,
+          title: product.title,
+          handle: product.handle,
+          price: parseFloat(variant.price) * 100, // Convert to cents
+          comparePrice: variant.compare_at_price ? parseFloat(variant.compare_at_price) * 100 : null,
+          image: product.images[0]?.src || '',
+          available: variant.available !== false,
+          tags: product.tags || []
+        };
+      },
+      
+      formatMoney(cents) {
+        if (!cents) return this.config.moneyFormat.replace('{{amount}}', '0.00').replace('{{amount_no_decimals}}', '0');
+        const amount = (cents / 100).toFixed(2);
+        const amountNoDecimals = Math.round(cents / 100);
+        return this.config.moneyFormat
+          .replace('{{amount}}', amount)
+          .replace('{{amount_with_comma_separator}}', amount.replace('.', ','))
+          .replace('{{amount_no_decimals}}', amountNoDecimals)
+          .replace('{{amount_with_apostrophe_separator}}', amount.replace('.', "'"));
+      },
+      
+      goToStep(step) {
+        this.currentStep = step;
+        this.activeFilter = 'all';
+      },
+      
+      goBack() {
+        if (this.currentStep > 0) {
+          this.currentStep = 0;
+        }
+      },
+      
+      nextStep() {
+        if (this.currentStep < 4) {
+          this.currentStep++;
+        } else {
+          this.currentStep = 0;
+        }
+        this.activeFilter = 'all';
+      },
+      
+      getStepTitle() {
+        switch (this.currentStep) {
+          case 1: return 'Select Your Necklace';
+          case 2: return 'Select Your Middle Charms';
+          case 3: return 'Select Your Left Charms';
+          case 4: return 'Select Your Right Charms';
+          default: return '';
+        }
+      },
+      
+      getFilteredProducts() {
+        let products = [];
+        
+        if (this.currentStep === 1) {
+          products = this.necklaces;
+        } else {
+          products = this.charms;
+          
+          // Apply filter
+          if (this.activeFilter !== 'all') {
+            products = products.filter(p => 
+              p.tags.some(tag => tag.toLowerCase().includes(this.activeFilter))
+            );
+          }
+        }
+        
+        return products;
+      },
+      
+      getCurrentSelection() {
+        switch (this.currentStep) {
+          case 1: return this.selections.necklace;
+          case 2: return this.selections.middleCharm;
+          case 3: return this.selections.leftCharm;
+          case 4: return this.selections.rightCharm;
+          default: return null;
+        }
+      },
+      
+      isProductSelected(product) {
+        const current = this.getCurrentSelection();
+        return current && current.id === product.id;
+      },
+      
+      selectProduct(product) {
+        if (!product.available) return;
+        
+        const selection = { ...product };
+        
+        switch (this.currentStep) {
+          case 1: this.selections.necklace = selection; break;
+          case 2: this.selections.middleCharm = selection; break;
+          case 3: this.selections.leftCharm = selection; break;
+          case 4: this.selections.rightCharm = selection; break;
+        }
+      },
+      
+      removeSelection() {
+        switch (this.currentStep) {
+          case 1: this.selections.necklace = null; break;
+          case 2: this.selections.middleCharm = null; break;
+          case 3: this.selections.leftCharm = null; break;
+          case 4: this.selections.rightCharm = null; break;
+        }
+      },
+      
+      openQuickview(product) {
+        // Dispatch quickview event if available
+        if (window.dispatchEvent) {
+          window.dispatchEvent(new CustomEvent('quickview:open', { 
+            detail: { handle: product.handle } 
+          }));
+        }
+      },
+      
+      async addToCart() {
+        if (!this.hasAnySelection) return;
+        
+        const items = [];
+        
+        if (this.selections.necklace) {
+          items.push({
+            id: this.selections.necklace.variantId,
+            quantity: 1,
+            properties: { 'Position': 'Base Necklace' }
+          });
+        }
+        
+        if (this.selections.middleCharm) {
+          items.push({
+            id: this.selections.middleCharm.variantId,
+            quantity: 1,
+            properties: { 'Position': 'Middle Charm' }
+          });
+        }
+        
+        if (this.selections.leftCharm) {
+          items.push({
+            id: this.selections.leftCharm.variantId,
+            quantity: 1,
+            properties: { 'Position': 'Left Charm' }
+          });
+        }
+        
+        if (this.selections.rightCharm) {
+          items.push({
+            id: this.selections.rightCharm.variantId,
+            quantity: 1,
+            properties: { 'Position': 'Right Charm' }
+          });
+        }
+        
+        try {
+          if (window.ShopCart && window.ShopCart.add) {
+            await window.ShopCart.add({ items });
+          } else {
+            // Fallback to fetch
+            await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ items })
+            });
+            window.dispatchEvent(new CustomEvent('cart-open'));
+          }
+        } catch (err) {
+          console.error('Failed to add to cart:', err);
+        }
+      }
+    };
+  }
+</script>
+
+{% schema %}
+  {
+    "name": "Design Studio",
+    "tag": "section",
+    "class": "design-studio-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Collections"
+      },
+      {
+        "type": "text",
+        "id": "necklace_collection",
+        "label": "Necklace Collection Handle",
+        "default": "necklaces",
+        "info": "The handle of the collection containing base necklaces"
+      },
+      {
+        "type": "text",
+        "id": "charm_collection",
+        "label": "Charm Collection Handle",
+        "default": "charms",
+        "info": "The handle of the collection containing charms"
+      },
+      {
+        "type": "text",
+        "id": "extension_collection",
+        "label": "Extension Collection Handle",
+        "default": "extensions",
+        "info": "The handle of the collection containing extensions"
+      }, {
+        "type": "header",
+        "content": "Styling"
+      }, {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#f5f0e8"
+      }, {
+        "type": "color",
+        "id": "header_bg",
+        "label": "Header Background",
+        "default": "#1a1a1a"
+      }, {
+        "type": "color",
+        "id": "header_text",
+        "label": "Header Text Color",
+        "default": "#ffffff"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Design Studio"
+      }
+    ]
+  }
+{% endschema %}
