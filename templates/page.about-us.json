@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "about-us",
+      "settings": {
+        "main_heading": "Passion For Excellence Since Day One",
+        "accent_color": "#a52a2a"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

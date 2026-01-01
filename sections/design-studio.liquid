@@ -640,7 +640,8 @@
           <!-- Necklace Slot -->
           <div class="design-studio__slot" @click="goToStep(1)">
             <template x-if="selections.necklace">
-              <img :src="selections.necklace.image" class="design-studio__slot-image" :alt="selections.necklace.title">
+              <img :src="selections.necklace.image" class="design-studio__slot-image" :alt="selections.necklace.title" height="inherit"
+                    width="inherit">
             </template>
             <span class="design-studio__slot-label" x-text="selections.necklace ? '' : '1. Add Necklace'"></span>
             
@@ -655,7 +656,8 @@
           <!-- Middle Charm Slot -->
           <div class="design-studio__slot" @click="goToStep(2)">
             <template x-if="selections.middleCharm">
-              <img :src="selections.middleCharm.image" class="design-studio__slot-image" :alt="selections.middleCharm.title">
+              <img :src="selections.middleCharm.image" class="design-studio__slot-image" :alt="selections.middleCharm.title" height="inherit"
+                    width="inherit">
             </template>
             <span class="design-studio__slot-label" x-text="selections.middleCharm ? '' : '2. Add Middle Charm'"></span>
             
@@ -670,7 +672,8 @@
           <!-- Left Charm Slot -->
           <div class="design-studio__slot" @click="goToStep(3)">
             <template x-if="selections.leftCharm">
-              <img :src="selections.leftCharm.image" class="design-studio__slot-image" :alt="selections.leftCharm.title">
+              <img :src="selections.leftCharm.image" class="design-studio__slot-image" :alt="selections.leftCharm.title" height="inherit"
+                    width="inherit">
             </template>
             <span class="design-studio__slot-label" x-text="selections.leftCharm ? '' : '3. Add Left Charm'"></span>
             
@@ -685,7 +688,8 @@
           <!-- Right Charm Slot -->
           <div class="design-studio__slot" @click="goToStep(4)">
             <template x-if="selections.rightCharm">
-              <img :src="selections.rightCharm.image" class="design-studio__slot-image" :alt="selections.rightCharm.title">
+              <img :src="selections.rightCharm.image" class="design-studio__slot-image" :alt="selections.rightCharm.title" height="inherit"
+                    width="inherit">
             </template>
             <span class="design-studio__slot-label" x-text="selections.rightCharm ? '' : '4. Add Right Charm'"></span>
             
@@ -700,7 +704,8 @@
           <!-- Extension Left Slot -->
           <div class="design-studio__slot" @click="goToStep(5)">
             <template x-if="selections.extension">
-              <img :src="selections.extension.image" class="design-studio__slot-image" :alt="selections.extension.title">
+              <img :src="selections.extension.image" class="design-studio__slot-image" :alt="selections.extension.title" height="inherit"
+                    width="inherit">
             </template>
             <span class="design-studio__slot-label" x-text="selections.extension ? '' : '5. Add Extension Chain'"></span>
             
@@ -715,7 +720,8 @@
           <!-- Extension Right Slot -->
           <div class="design-studio__slot" @click="goToStep(6)">
             <template x-if="selections.extensionCharm">
-              <img :src="selections.extensionCharm.image" class="design-studio__slot-image" :alt="selections.extensionCharm.title">
+              <img :src="selections.extensionCharm.image" class="design-studio__slot-image" :alt="selections.extensionCharm.title" height="inherit"
+                    width="inherit">
             </template>
             <span class="design-studio__slot-label" x-text="selections.extensionCharm ? '' : '6. Add Extension Charm'"></span>
             
@@ -801,6 +807,8 @@
                   <img
                     :src="product.image"
                     :alt="product.title"
+                    height="inherit"
+                    width="inherit"
                     class="design-studio__product-image">
                 </div>
 
@@ -880,7 +888,7 @@
         if (type === 'charm') collectionHandle = this.config.charmCollection;
         if (type === 'extension') collectionHandle = this.config.extensionCollection;
 
-        fetch(`/collections/${collectionHandle}/products.json`)
+        fetch(`/collections/${collectionHandle}/products.json?limit=250`)
           .then(res => res.json())
           .then(data => {
             const products = data.products.map(p => ({
