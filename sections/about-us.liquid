@@ -149,9 +149,6 @@
         {% for content in section.settings.content_blocks %}
           <div class="about-us-content-block">
             <div class="about-us-text-content">
-              {% if content.heading != blank %}
-                <p class="about-us-main-heading" style="text-align: left; margin-bottom: 20px;">{{ content.heading.value }}</p>
-              {% endif %}
               
               {% if content.title != blank %}
                 <h3 class="about-us-section-title">{{ content.title.value }}</h3>
