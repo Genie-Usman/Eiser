@@ -11,7 +11,13 @@
   "sections": {
     "about-us": {
       "type": "about-us",
-      "settings": {}
+      "settings": {
+        "main_heading": "Passion For Excellence Since Day One",
+        "accent_color": "#a52a2a",
+        "content_blocks": [
+          "the-evolution-of-auto-atlanta"
+        ]
+      }
     }
   },
   "order": [
