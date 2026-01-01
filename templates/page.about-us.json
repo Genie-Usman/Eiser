@@ -1,6 +1,6 @@
 {
   "sections": {
-    "main": {
+    "about-us": {
       "type": "about-us",
       "settings": {
         "main_heading": "Passion For Excellence Since Day One",
@@ -9,6 +9,6 @@
     }
   },
   "order": [
-    "main"
+    "about-us"
   ]
 }
