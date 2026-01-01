@@ -1,14 +1,14 @@
 {% comment %} 
-      Models Landing Page
-      Displays vehicle models with multi-step hover: 
-      1. Default: Model name + image 
-      2. Hover Step 1: Select Year (year range buttons) 
-      3. Hover Step 2: Browse By (Accessory/Factory with icons)
-       
-      Metaobjects required: 
-      - vehicle_model: title, image 
-      - year_range: title, model_parent (ref to vehicle_model) 
-      - accessory_type: title, year_parent (ref to year_range) 
+          Models Landing Page
+          Displays vehicle models with multi-step hover: 
+          1. Default: Model name + image 
+          2. Hover Step 1: Select Year (year range buttons) 
+          3. Hover Step 2: Browse By (Accessory/Factory with icons)
+           
+          Metaobjects required: 
+          - vehicle_model: title, image 
+          - year_range: title, model_parent (ref to vehicle_model) 
+          - accessory_type: title, year_parent (ref to year_range) 
 {% endcomment %}
 
 <style>
@@ -303,8 +303,8 @@
                       type="button"
                       class="year-btn"
                       data-year-handle="{{ year.system.handle }}"
-                      data-year-title="{{ year.title.value }}">
-                      {{ year.title.value }}
+                      data-year-title="{{ year.title_e_g_1967_1969.value }}">
+                      {{ year.title_e_g_1967_1969.value }}
                     </button>
                   {% endif %}
                 {% endfor %}
@@ -352,9 +352,9 @@
     {% for type in shop.metaobjects.accessory_type.values %}
       {
         id: "{{ type.id }}",
-        title: "{{ type.title.value | escape }}",
+        title: "{{ type.title_factory_accessory.value | escape }}",
         url: "{{ type.system.url }}",
-        yearParentId: "{{ type.year_parent.value.id }}"
+        yearParentId: "{{ type.parent_year.value.id }}"
       }{% unless forloop.last %},{% endunless %}
     {% endfor %}
   ];
@@ -365,7 +365,7 @@
       {
         handle: "{{ year.system.handle }}",
         id: "{{ year.id }}",
-        title: "{{ year.title.value | escape }}"
+        title: "{{ year.title_e_g_1967_1969.value | escape }}"
       }{% unless forloop.last %},{% endunless %}
     {% endfor %}
   ];
