@@ -29,20 +29,10 @@
           "restoration-growth"
         ]
       }
-    },
-    "about_us_BCUqn9": {
-      "type": "about-us",
-      "name": "About Us",
-      "settings": {
-        "main_heading": "Passion For Excellence Since Day One",
-        "accent_color": "#a52a2a",
-        "content_blocks": []
-      }
     }
   },
   "order": [
     "about-us",
-    "about_us_VfdENp",
-    "about_us_BCUqn9"
+    "about_us_VfdENp"
   ]
 }
