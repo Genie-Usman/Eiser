@@ -1,17 +1,20 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "about-us": {
-      "type": "about-us",
-      "settings": {
-        "main_heading": "Passion For Excellence Since Day One",
-        "accent_color": "#a52a2a"
-      }
+    "main": {
+      "type": "page",
+      "settings": {}
     }
   },
   "order": [
-    "about-us"
+    "main"
   ]
 }
- 
-
-
