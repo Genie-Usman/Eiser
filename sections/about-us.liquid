@@ -159,7 +159,7 @@
               
               {% if content.body != blank %}
                 <div class="about-us-body">
-                  {{ content.body.value }}
+                  {{ content.body | metafield_tag }}
                 </div>
               {% endif %}
             </div>
