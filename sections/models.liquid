@@ -1,14 +1,14 @@
 {% comment %} 
-  Models Landing Page
-  Displays vehicle models with multi-step hover: 
-  1. Default: Model name + image 
-  2. Hover Step 1: Select Year (year range buttons) 
-  3. Hover Step 2: Browse By (Accessory/Factory with icons)
-   
-  Metaobjects required: 
-  - vehicle_model: title, image 
-  - year_range: title, model_parent (ref to vehicle_model) 
-  - accessory_type: title, year_parent (ref to year_range) 
+      Models Landing Page
+      Displays vehicle models with multi-step hover: 
+      1. Default: Model name + image 
+      2. Hover Step 1: Select Year (year range buttons) 
+      3. Hover Step 2: Browse By (Accessory/Factory with icons)
+       
+      Metaobjects required: 
+      - vehicle_model: title, image 
+      - year_range: title, model_parent (ref to vehicle_model) 
+      - accessory_type: title, year_parent (ref to year_range) 
 {% endcomment %}
 
 <style>
@@ -293,8 +293,12 @@
               <h4 class="hover-step__title">Select Year</h4>
               <div class="year-buttons">
                 {% assign years = shop.metaobjects.year_range.values %}
+                {% assign found_years = false %}
                 {% for year in years %}
-                  {% if year.model_parent.value.id == model.id %}
+                  {% assign year_parent_handle = year.parent_model.value.system.handle %}
+                  {% assign model_handle = model.system.handle %}
+                  {% if year_parent_handle == model_handle %}
+                    {% assign found_years = true %}
                     <button
                       type="button"
                       class="year-btn"
@@ -304,6 +308,9 @@
                     </button>
                   {% endif %}
                 {% endfor %}
+                {% unless found_years %}
+                  <p style="color: #888; font-size: 0.9rem;">No years available</p>
+                {% endunless %}
               </div>
             </div>
 

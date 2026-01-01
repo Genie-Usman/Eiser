@@ -1025,6 +1025,9 @@
   .grow {
     flex-grow: 1;
   }
+  .border-collapse {
+    border-collapse: collapse;
+  }
   .origin-center {
     transform-origin: center;
   }
