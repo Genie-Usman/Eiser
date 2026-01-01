@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": {
+      "type": "category-selector",
+      "settings": {
+        "heading": "Select Category",
+        "background_color": "#1a1a1a",
+        "text_color": "#ffffff",
+        "accent_color": "#a52a2a"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

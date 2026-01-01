@@ -1,0 +1,246 @@
+{% comment %} 
+  Category Selector Page
+  Shows accessory types (Factory vs Accessory) for a selected year range.
+   
+  Expects URL parameter: ?year_id=<year_range_handle>
+   
+  Metaobjects required: 
+  - year_range: title, model_parent 
+  - accessory_type: title, year_parent (ref to year_range) 
+{% endcomment %}
+
+<style>
+  .category-selector {
+    padding: 60px 0;
+    background-color: {{ section.settings.background_color }};
+    min-height: 50vh;
+  }
+
+  .category-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .category-heading {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: {{ section.settings.text_color }};
+  }
+
+  .category-subheading {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 50px;
+  }
+
+  .category-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    transition: transform 0.3s ease
+    , box-shadow 0.3s ease;
+  }
+
+  .category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  }
+
+  .category-card__icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    background: {{ section.settings.accent_color }};
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .category-card__icon svg {
+    width: 40px;
+    height: 40px;
+    fill: #fff;
+  }
+
+  .category-card__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  .category-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+  }
+
+  .category-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+    color: {{ section.settings.accent_color }};
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .category-back:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .category-selector {
+      padding: 40px 0;
+    }
+
+    .category-heading {
+      font-size: 1.75rem;
+    }
+
+    .category-options {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .category-card {
+      padding: 40px 25px;
+    }
+  }
+</style>
+
+<section class="category-selector">
+  <div class="category-container">
+    {% if section.settings.back_url != blank %}
+      <a href="{{ section.settings.back_url }}" class="category-back">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Back to Models
+      </a>
+    {% endif %}
+
+    {% assign year_handle = request.path | split: 'year_id=' | last | split: '&' | first %}
+    {% if year_handle == blank %}
+      {% assign year_handle = request.url | split: 'year_id=' | last | split: '&' | first %}
+    {% endif %}
+
+    {% assign current_year = nil %}
+    {% for year in shop.metaobjects.year_range.values %}
+      {% if year.system.handle == year_handle %}
+        {% assign current_year = year %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+
+    {% if current_year != blank %}
+      <h1 class="category-heading">{{ section.settings.heading }}</h1>
+      <p class="category-subheading">{{ current_year.title.value }}</p>
+
+      <div class="category-options">
+        {% assign types = shop.metaobjects.accessory_type.values %}
+        {% assign found_types = false %}
+
+        {% for type in types %}
+          {% if type.year_parent.value.id == current_year.id %}
+            {% assign found_types = true %}
+            <a href="{{ type.system.url }}" class="category-card">
+              <div class="category-card__icon">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+              </div>
+              <h2 class="category-card__title">{{ type.title.value }}</h2>
+            </a>
+          {% endif %}
+        {% endfor %}
+
+        {% unless found_types %}
+          <div class="category-empty">
+            <p>No categories found for this year range.</p>
+          </div>
+        {% endunless %}
+      </div>
+    {% else %}
+      <div class="category-empty">
+        <p>Please select a year range from the models page.</p>
+        {% if section.settings.back_url != blank %}
+          <a
+            href="{{ section.settings.back_url }}"
+            class="category-back"
+            style="margin-top: 20px;">
+            Go to Models
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Category Selector",
+    "tag": "section",
+    "class": "category-selector-wrapper",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Select Category"
+      },
+      {
+        "type": "url",
+        "id": "back_url",
+        "label": "Back to Models URL"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#f5f5f5"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color",
+        "default": "#1a1a1a"
+      }, {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent Color",
+        "default": "#a52a2a"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Category Selector"
+      }
+    ]
+  }
+{% endschema %}

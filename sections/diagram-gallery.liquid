@@ -1,0 +1,312 @@
+{% comment %} 
+  Diagram Gallery Page
+  Displays diagrams filtered by category tabs (Engine, Fuel/Exhaust, etc.)
+  Title appears ABOVE the diagram image.
+   
+  This section is meant to be used in a metaobject template for "accessory_type".
+   
+  Metaobjects required: 
+  - accessory_type: title, year_parent 
+  - diagram_page: title, image, system_category, type_parent (ref to accessory_type) 
+{% endcomment %}
+
+<style>
+  .diagram-gallery {
+    padding: 40px 0 60px;
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .diagram-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .diagram-heading {
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: {{ section.settings.text_color }};
+    margin-bottom: 30px;
+  }
+
+  /* Category Tabs - Pill Style */
+  .diagram-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .diagram-tab {
+    padding: 10px 20px;
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .diagram-tab:hover {
+    background: #f5f5f5;
+  }
+
+  .diagram-tab.active {
+    background: {{ section.settings.tab_active_color }};
+    border-color: {{ section.settings.tab_active_color }};
+    color: #1a1a1a;
+  }
+
+  /* Diagram Grid - 2 columns */
+  .diagram-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .diagram-item {
+    display: block;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    transition: transform 0.3s ease
+    , box-shadow 0.3s ease;
+  }
+
+  .diagram-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .diagram-item[data-category] {
+    display: block;
+  }
+
+  .diagram-item.hidden {
+    display: none;
+  }
+
+  /* Title ABOVE image */
+  .diagram-item__header {
+    padding: 20px 25px 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .diagram-item__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .diagram-item__image-wrapper {
+    padding: 20px;
+    background: #fff;
+  }
+
+  .diagram-item__image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .diagram-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+  }
+
+  @media (max-width: 768px) {
+    .diagram-gallery {
+      padding: 30px 0 50px;
+    }
+
+    .diagram-heading {
+      font-size: 1.75rem;
+      margin-bottom: 25px;
+    }
+
+    .diagram-tabs {
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+
+    .diagram-tab {
+      padding: 8px 14px;
+      font-size: 0.8rem;
+    }
+
+    .diagram-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .diagram-item__header {
+      padding: 15px 20px 12px;
+    }
+
+    .diagram-item__title {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<section class="diagram-gallery">
+  <div class="diagram-container">
+    {% if metaobject != blank %}
+      <h1 class="diagram-heading">{{ metaobject.title.value }} Parts</h1>
+    {% else %}
+      <h1 class="diagram-heading">{{ section.settings.heading }}</h1>
+  {% endif %}
+
+    {% comment %} Collect all diagrams and unique categories {% endcomment %}
+    {% assign all_diagrams = shop.metaobjects.diagram_page.values %}
+    {% assign current_diagrams = '' | split: '' %}
+    {% assign categories = '' | split: '' %}
+
+    {% for diagram in all_diagrams %}
+      {% if metaobject != blank %}
+        {% if diagram.type_parent.value.id == metaobject.id %}
+          {% assign current_diagrams = current_diagrams | push: diagram %}
+          {% if diagram.system_category.value != blank %}
+            {% unless categories contains diagram.system_category.value %}
+              {% assign categories = categories | push: diagram.system_category.value %}
+            {% endunless %}
+          {% endif %}
+        {% endif %}
+      {% else %}
+        {% assign current_diagrams = current_diagrams | push: diagram %}
+        {% if diagram.system_category.value != blank %}
+          {% unless categories contains diagram.system_category.value %}
+            {% assign categories = categories | push: diagram.system_category.value %}
+          {% endunless %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% comment %} Tab Filters {% endcomment %}
+    {% if categories.size > 0 %}
+      <div class="diagram-tabs" id="diagram-tabs">
+        {% for category in categories %}
+          <button class="diagram-tab{% if forloop.first %} active{% endif %}" data-filter="{{ category | handleize }}">
+            {{ category }}
+          </button>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% comment %} Diagram Grid {% endcomment %}
+    <div class="diagram-grid" id="diagram-grid">
+      {% for diagram in current_diagrams %}
+        <a
+          href="{{ diagram.system.url }}"
+          class="diagram-item{% unless forloop.first %} hidden{% endunless %}"
+          data-category="{{ diagram.system_category.value | handleize }}">
+          <div class="diagram-item__header">
+            <h3 class="diagram-item__title">{{ diagram.title.value }}</h3>
+          </div>
+          <div class="diagram-item__image-wrapper">
+            {% if diagram.image.value != blank %}
+              <img
+                src="{{ diagram.image.value | image_url: width: 600 }}"
+                alt="{{ diagram.title.value | escape }}"
+                class="diagram-item__image"
+                loading="lazy">
+            {% else %}
+              <div style="padding: 60px; text-align: center; color: #999;">
+                No Image
+              </div>
+            {% endif %}
+          </div>
+        </a>
+      {% else %}
+        <div class="diagram-empty">
+          <p>No diagrams found for this category.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.diagram-tab');
+    const items = document.querySelectorAll('.diagram-item');
+    
+    // Initial state - show first category's items
+    if (tabs.length > 0) {
+      const firstFilter = tabs[0].getAttribute('data-filter');
+      items.forEach(item => {
+        if (item.getAttribute('data-category') === firstFilter) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+        
+        // Update active tab
+        tabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Filter items - show only matching category
+        items.forEach(item => {
+          if (item.getAttribute('data-category') === filter) {
+            item.classList.remove('hidden');
+          } else {
+            item.classList.add('hidden');
+          }
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "Diagram Gallery",
+    "tag": "section",
+    "class": "diagram-gallery-wrapper",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Parts Diagrams",
+        "info": "Used when not on a metaobject page"
+      }, {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#ffffff"
+      }, {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color",
+        "default": "#1a1a1a"
+      }, {
+        "type": "color",
+        "id": "tab_active_color",
+        "label": "Active Tab Color",
+        "default": "#f5c518"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Diagram Gallery"
+      }
+    ]
+  }
+{% endschema %}

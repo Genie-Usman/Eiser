@@ -1,0 +1,464 @@
+{% comment %} 
+  Models Landing Page
+  Displays vehicle models with multi-step hover: 
+  1. Default: Model name + image 
+  2. Hover Step 1: Select Year (year range buttons) 
+  3. Hover Step 2: Browse By (Accessory/Factory with icons)
+   
+  Metaobjects required: 
+  - vehicle_model: title, image 
+  - year_range: title, model_parent (ref to vehicle_model) 
+  - accessory_type: title, year_parent (ref to year_range) 
+{% endcomment %}
+
+<style>
+  .models-section {
+    padding: 60px 0;
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .models-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .models-heading {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+    color: {{ section.settings.text_color }};
+  }
+
+  .model-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+
+  .model-card {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    min-height: 280px;
+  }
+
+  /* Default State - Model Name + Image */
+  .model-card__default {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    height: 100%;
+  }
+
+  .model-card__title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .model-card__title span {
+    color: {{ section.settings.accent_color }};
+    font-weight: 700;
+    font-size: 1.4rem;
+  }
+
+  .model-card__image {
+    max-width: 90%;
+    height: auto;
+    max-height: 150px;
+    object-fit: contain;
+  }
+
+  /* Hover States Container */
+  .model-card__hover {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .model-card:hover .model-card__hover {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Step 1: Select Year */
+  .hover-step {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    transition: opacity 0.2s ease;
+  }
+
+  .hover-step--years {
+    opacity: 1;
+  }
+
+  .hover-step--categories {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .model-card__hover.step-2 .hover-step--years {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .model-card__hover.step-2 .hover-step--categories {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hover-step__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+  }
+
+  .hover-step__back {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .hover-step__back:hover {
+    background: #e5e5e5;
+  }
+
+  .hover-step__back svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hover-step__year-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: {{ section.settings.accent_color }};
+    color: #fff;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+
+  /* Year Buttons */
+  .year-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .year-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .year-btn:hover {
+    border-color: {{ section.settings.accent_color }};
+    color: {{ section.settings.accent_color }};
+  }
+
+  /* Category Buttons */
+  .category-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .category-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 25px;
+    background: transparent;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.2s ease;
+  }
+
+  .category-btn:hover {
+    border-color: {{ section.settings.accent_color }};
+    color: {{ section.settings.accent_color }};
+  }
+
+  .category-btn__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .category-btn__label {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .models-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+  }
+
+  @media (max-width: 992px) {
+    .model-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .models-section {
+      padding: 40px 0;
+    }
+
+    .models-heading {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+
+    .model-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .model-card {
+      min-height: 250px;
+    }
+  }
+</style>
+
+<section class="models-section">
+  <div class="models-container">
+    {% if section.settings.heading != blank %}
+      <h1 class="models-heading">{{ section.settings.heading }}</h1>
+    {% endif %}
+
+    <div class="model-grid">
+      {% for model in shop.metaobjects.vehicle_model.values %}
+        <div class="model-card" data-model-id="{{ model.id }}">
+          <!-- Default State -->
+          <div class="model-card__default">
+            <h3 class="model-card__title">
+              {{ section.settings.brand_prefix }}
+              <span>{{ model.title.value }}</span>
+            </h3>
+            {% if model.image.value != blank %}
+              <img
+                src="{{ model.image.value | image_url: width: 400 }}"
+                alt="{{ model.title.value | escape }}"
+                class="model-card__image"
+                loading="lazy">
+            {% endif %}
+          </div>
+
+          <!-- Hover States -->
+          <div class="model-card__hover" data-hover-container>
+            <!-- Step 1: Select Year -->
+            <div class="hover-step hover-step--years">
+              <h4 class="hover-step__title">Select Year</h4>
+              <div class="year-buttons">
+                {% assign years = shop.metaobjects.year_range.values %}
+                {% for year in years %}
+                  {% if year.model_parent.value.id == model.id %}
+                    <button
+                      type="button"
+                      class="year-btn"
+                      data-year-handle="{{ year.system.handle }}"
+                      data-year-title="{{ year.title.value }}">
+                      {{ year.title.value }}
+                    </button>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Step 2: Browse By Category -->
+            <div class="hover-step hover-step--categories">
+              <button
+                type="button"
+                class="hover-step__back"
+                data-back-btn>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <span class="hover-step__year-badge" data-selected-year></span>
+              <h4 class="hover-step__title">Browse By</h4>
+              <div class="category-buttons" data-category-container>
+                <!-- Categories will be populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="models-empty">
+          <p>No vehicle models found. Add entries to the "vehicle_model" metaobject.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+  // Store accessory types data for JS access
+  const accessoryTypes = [
+    {% for type in shop.metaobjects.accessory_type.values %}
+      {
+        id: "{{ type.id }}",
+        title: "{{ type.title.value | escape }}",
+        url: "{{ type.system.url }}",
+        yearParentId: "{{ type.year_parent.value.id }}"
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+  
+  // Year ranges data
+  const yearRanges = [
+    {% for year in shop.metaobjects.year_range.values %}
+      {
+        handle: "{{ year.system.handle }}",
+        id: "{{ year.id }}",
+        title: "{{ year.title.value | escape }}"
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+  
+  document.querySelectorAll('.model-card').forEach(card => {
+    const hoverContainer = card.querySelector('[data-hover-container]');
+    const yearButtons = card.querySelectorAll('.year-btn');
+    const backBtn = card.querySelector('[data-back-btn]');
+    const selectedYearBadge = card.querySelector('[data-selected-year]');
+    const categoryContainer = card.querySelector('[data-category-container]');
+  
+    // Year button click - go to Step 2
+    yearButtons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const yearHandle = this.dataset.yearHandle;
+        const yearTitle = this.dataset.yearTitle;
+        
+        // Find the year's ID
+        const yearData = yearRanges.find(y => y.handle === yearHandle);
+        if (!yearData) return;
+  
+        selectedYearBadge.textContent = yearTitle;
+        
+        // Find categories for this year
+        const categories = accessoryTypes.filter(t => t.yearParentId === yearData.id);
+        
+        // Populate category buttons
+        categoryContainer.innerHTML = categories.map(cat => `
+          <a href="${cat.url}" class="category-btn">
+            <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              ${cat.title.toLowerCase().includes('factory') 
+                ? '<path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>'
+                : '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>'}
+            </svg>
+            <span class="category-btn__label">${cat.title}</span>
+          </a>
+        `).join('');
+  
+        hoverContainer.classList.add('step-2');
+      });
+    });
+  
+    // Back button - go to Step 1
+    if (backBtn) {
+      backBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        hoverContainer.classList.remove('step-2');
+      });
+    }
+  
+    // Reset on mouse leave
+    card.addEventListener('mouseleave', function() {
+      hoverContainer.classList.remove('step-2');
+    });
+  });
+  })();
+</script>
+
+{% schema %}
+  {
+    "name": "Vehicle Models Grid",
+    "tag": "section",
+    "class": "models-section-wrapper",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Models"
+      },
+      {
+        "type": "text",
+        "id": "brand_prefix",
+        "label": "Brand Prefix",
+        "default": "PORSCHE",
+        "info": "Text before model name (e.g., PORSCHE 356)"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#f5f5f5"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color",
+        "default": "#1a1a1a"
+      }, {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent Color",
+        "default": "#c41e3a"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Vehicle Models Grid"
+      }
+    ]
+  }
+{% endschema %}
