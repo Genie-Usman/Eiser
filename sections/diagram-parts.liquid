@@ -1,11 +1,11 @@
 {% comment %} 
-  Diagram Parts Table
-  Displays the diagram image with a parts table below.
-  This section is meant to be used in a metaobject template for "diagram_page".
-   
-  Metaobjects required: 
-  - diagram_page: title, image, system_category, type_parent 
-  - part_entry: pos, part_number, description, price, diagram_parent (ref to diagram_page) 
+              Diagram Parts Table
+              Displays the diagram image with a parts table below.
+              This section is meant to be used in a metaobject template for "diagram_page".
+               
+              Metaobjects required: 
+              - diagram_page: title, image, system_category, type_parent 
+              - part_entry: pos, part_number, description, price, diagram_parent (ref to diagram_page) 
 {% endcomment %}
 
 <style>
@@ -235,15 +235,18 @@
         </div>
 
         {% assign all_parts = shop.metaobjects.part_entry.values %}
-        {% assign current_parts = '' | split: '' %}
+      {% assign current_metaobject_handle = metaobject.system.handle %}
 
+        {% comment %} Count matching parts {% endcomment %}
+        {% assign parts_count = 0 %}
         {% for part in all_parts %}
-          {% if metaobject != blank and part.diagram_parent.value.id == metaobject.id %}
-            {% assign current_parts = current_parts | push: part %}
+          {% assign part_parent_handle = part.parent_diagram.value.system.handle %}
+          {% if metaobject == blank or part_parent_handle == current_metaobject_handle %}
+            {% assign parts_count = parts_count | plus: 1 %}
           {% endif %}
         {% endfor %}
 
-        {% if current_parts.size > 0 %}
+        {% if parts_count > 0 %}
           <table class="parts-table">
             <thead>
               <tr>
@@ -256,21 +259,32 @@
               </tr>
             </thead>
             <tbody>
-              {% for part in current_parts %}
-                <tr>
-                  <td class="parts-table__pos">{{ part.pos.value }}</td>
-                  <td class="parts-table__part-number">{{ part.part_number.value }}</td>
-                  <td>{{ part.description.value }}</td>
-                  {% if section.settings.show_price %}
-                    <td class="parts-table__price">
-                      {% if part.price.value != blank %}
-                        {{ part.price.value | money }}
+              {% for part in all_parts %}
+                {% assign part_parent_handle = part.parent_diagram.value.system.handle %}
+                {% if metaobject == blank or part_parent_handle == current_metaobject_handle %}
+                  <tr>
+                    <td class="parts-table__pos">{{ part.pos.value }}</td>
+                    <td class="parts-table__part-number">{{ part.part.value }}</td>
+                    <td>
+                      {% assign desc_parts = part.description.value | split: '"value"=>"' %}
+                      {% if desc_parts.size > 1 %}
+                        {% assign desc_text = desc_parts[1] | split: '"}' | first %}
+                        {{ desc_text }}
                       {% else %}
-                        -
+                        {{ part.description.value }}
                       {% endif %}
                     </td>
-                  {% endif %}
-                </tr>
+                    {% if section.settings.show_price %}
+                      <td class="parts-table__price">
+                        {% if part.price.value != blank %}
+                          {{ part.price.value }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                    {% endif %}
+                  </tr>
+                {% endif %}
               {% endfor %}
             </tbody>
           </table>

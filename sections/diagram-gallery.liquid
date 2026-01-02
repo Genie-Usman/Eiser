@@ -1,13 +1,13 @@
 {% comment %} 
-  Diagram Gallery Page
-  Displays diagrams filtered by category tabs (Engine, Fuel/Exhaust, etc.)
-  Title appears ABOVE the diagram image.
-   
-  This section is meant to be used in a metaobject template for "accessory_type".
-   
-  Metaobjects required: 
-  - accessory_type: title, year_parent 
-  - diagram_page: title, image, system_category, type_parent (ref to accessory_type) 
+                  Diagram Gallery Page
+                  Displays diagrams filtered by category tabs (Engine, Fuel/Exhaust, etc.)
+                  Title appears ABOVE the diagram image.
+                   
+                  This section is meant to be used in a metaobject template for "accessory_type".
+                   
+                  Metaobjects required: 
+                  - accessory_type: title, year_parent 
+                  - diagram_page: title, image, system_category, type_parent (ref to accessory_type) 
 {% endcomment %}
 
 <style>
@@ -162,35 +162,44 @@
 <section class="diagram-gallery">
   <div class="diagram-container">
     {% if metaobject != blank %}
-      <h1 class="diagram-heading">{{ metaobject.title.value }} Parts</h1>
+      <h1 class="diagram-heading">{{ metaobject.title_factory_accessory.value }} Parts</h1>
+    <!-- Debug: metaobject.system.id = {{ metaobject.system.id }} -->
     {% else %}
       <h1 class="diagram-heading">{{ section.settings.heading }}</h1>
+      <!-- Debug: metaobject is blank -->
   {% endif %}
 
-    {% comment %} Collect all diagrams and unique categories {% endcomment %}
+    {% comment %} Get current metaobject handle for filtering {% endcomment %}
     {% assign all_diagrams = shop.metaobjects.diagram_page.values %}
-    {% assign current_diagrams = '' | split: '' %}
-    {% assign categories = '' | split: '' %}
+  {% assign current_metaobject_handle = metaobject.system.handle %}
+    <!-- Debug: all_diagrams.size = {{ all_diagrams.size }}, current_metaobject_handle = {{ current_metaobject_handle }} -->
 
+    {% comment %} First pass: collect unique categories {% endcomment %}
+    {% assign categories_string = '' %}
     {% for diagram in all_diagrams %}
-      {% if metaobject != blank %}
-        {% if diagram.type_parent.value.id == metaobject.id %}
-          {% assign current_diagrams = current_diagrams | push: diagram %}
-          {% if diagram.system_category.value != blank %}
-            {% unless categories contains diagram.system_category.value %}
-              {% assign categories = categories | push: diagram.system_category.value %}
-            {% endunless %}
-          {% endif %}
-        {% endif %}
-      {% else %}
-        {% assign current_diagrams = current_diagrams | push: diagram %}
+      {% assign diagram_parent_handle = diagram.parent_type.value.system.handle %}
+      {% if metaobject == blank or diagram_parent_handle == current_metaobject_handle %}
         {% if diagram.system_category.value != blank %}
-          {% unless categories contains diagram.system_category.value %}
-            {% assign categories = categories | push: diagram.system_category.value %}
+          {% unless categories_string contains diagram.system_category.value %}
+            {% if categories_string != '' %}
+              {% assign categories_string = categories_string | append: '|||' %}
+            {% endif %}
+            {% assign categories_string = categories_string | append: diagram.system_category.value %}
           {% endunless %}
         {% endif %}
       {% endif %}
     {% endfor %}
+  {% assign categories = categories_string | split: '|||' %}
+
+    {% comment %} Count matching diagrams {% endcomment %}
+    {% assign matching_count = 0 %}
+    {% for diagram in all_diagrams %}
+      {% assign diagram_parent_handle = diagram.parent_type.value.system.handle %}
+      {% if metaobject == blank or diagram_parent_handle == current_metaobject_handle %}
+        {% assign matching_count = matching_count | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+    <!-- Debug: matching_count = {{ matching_count }}, categories.size = {{ categories.size }} -->
 
     {% comment %} Tab Filters {% endcomment %}
     {% if categories.size > 0 %}
@@ -203,38 +212,50 @@
       </div>
     {% endif %}
 
-    {% comment %} Diagram Grid {% endcomment %}
+    {% comment %} Diagram Grid - render matching diagrams directly {% endcomment %}
     <div class="diagram-grid" id="diagram-grid">
-      {% for diagram in current_diagrams %}
-        <a
-          href="{{ diagram.system.url }}"
-          class="diagram-item{% unless forloop.first %} hidden{% endunless %}"
-          data-category="{{ diagram.system_category.value | handleize }}">
-          <div class="diagram-item__header">
-            <h3 class="diagram-item__title">{{ diagram.title.value }}</h3>
-          </div>
-          <div class="diagram-item__image-wrapper">
-            {% if diagram.image.value != blank %}
-              <img
-                src="{{ diagram.image.value | image_url: width: 600 }}"
-                alt="{{ diagram.title.value | escape }}"
-                class="diagram-item__image"
-                loading="lazy">
-            {% else %}
-              <div style="padding: 60px; text-align: center; color: #999;">
-                No Image
-              </div>
-            {% endif %}
-          </div>
-        </a>
-      {% else %}
+      {% assign first_diagram = true %}
+      {% assign has_diagrams = false %}
+        {% for diagram in all_diagrams %}
+        {% assign diagram_parent_handle = diagram.parent_type.value.system.handle %}
+        <!-- Debug: Checking diagram "{{ diagram.title.value }}" with parent_handle="{{ diagram_parent_handle }}" -->
+        {% if metaobject == blank or diagram_parent_handle == current_metaobject_handle %}
+          {% assign has_diagrams = true %}
+          <a
+            href="{{ diagram.system.url }}"
+            class="diagram-item{% unless first_diagram %} hidden{% endunless %}"
+            data-category="{{ diagram.system_category.value | handleize }}">
+            <div class="diagram-item__header">
+              <h3 class="diagram-item__title">{{ diagram.title.value }}</h3>
+            </div>
+            <div class="diagram-item__image-wrapper">
+              {% if diagram.image.value != blank %}
+                <img
+                  src="{{ diagram.image.value | image_url: width: 600 }}"
+                  alt="{{ diagram.title.value | escape }}"
+                  class="diagram-item__image"
+                  loading="lazy"
+                  height="inherit"
+                  width="inherit">
+              {% else %}
+                <div style="padding: 60px; text-align: center; color: #999;">
+                  No Image
+                </div>
+              {% endif %}
+            </div>
+          </a>
+          {% assign first_diagram = false %}
+        {% endif %}
+      {% endfor %}
+      {% unless has_diagrams %}
         <div class="diagram-empty">
           <p>No diagrams found for this category.</p>
         </div>
-      {% endfor %}
+      {% endunless %}
     </div>
   </div>
 </section>
+
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
