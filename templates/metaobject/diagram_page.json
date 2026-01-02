@@ -8,6 +8,20 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "diagram_parts_wQKNed": {
+      "type": "diagram-parts",
+      "name": "Diagram Parts Table",
+      "settings": {
+        "heading": "Diagram",
+        "show_price": true,
+        "background_color": "#f5f5f5",
+        "text_color": "#1a1a1a",
+        "accent_color": "#a52a2a"
+      }
+    }
+  },
+  "order": [
+    "diagram_parts_wQKNed"
+  ]
 }
