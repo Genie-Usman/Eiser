@@ -1,9 +1,33 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "diagram-gallery": {
+    "accessory_collections_main": {
+      "type": "accessory-collections",
+      "settings": {
+        "brand_prefix": "PORSCHE",
+        "accent_color": "#dc2626"
+      }
+    },
+    "diagram_gallery_NX6ar9": {
       "type": "diagram-gallery",
-      "settings": {}
+      "settings": {
+        "heading": "Parts Diagrams",
+        "background_color": "#ffffff",
+        "text_color": "#1a1a1a",
+        "tab_active_color": "#f5c518"
+      }
     }
   },
-  "order": ["diagram-gallery"]
+  "order": [
+    "accessory_collections_main",
+    "diagram_gallery_NX6ar9"
+  ]
 }

@@ -1,0 +1,191 @@
+{% comment %}
+  Accessory Type Collections Page
+  Displays the car model header with year range and a grid of part collections.
+  This section is designed for the accessory_type metaobject template.
+  
+  Expected metaobject fields:
+  - display_name: Title of the accessory type (e.g., "Factory Accessories")
+  - parent_year: Reference to year_range metaobject
+  
+  Required metaobjects:
+  - accessory_type: Current page metaobject
+  - year_range: Contains display_name, parent_model reference
+  - vehicle_model: Contains title, image
+  - collection references or system_category filtering
+{% endcomment %}
+
+{% comment %} Get parent data from metaobject hierarchy {% endcomment %}
+{% assign current_accessory = metaobject %}
+{% assign parent_year = current_accessory.parent_year.value %}
+{% assign parent_model = parent_year.parent_model.value %}
+
+<section class="bg-gray-50 py-8 md:py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    {% comment %} Header Card with Car Image and Info {% endcomment %}
+    <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      {% comment %} Car Image {% endcomment %}
+      <div class="flex-shrink-0">
+        {% if parent_model.image.value != blank %}
+          <img 
+            src="{{ parent_model.image.value | image_url: width: 300 }}"
+            alt="{{ parent_model.title.value | escape }}"
+            class="h-24 md:h-32 w-auto object-contain"
+            width="300"
+            height="128"
+            loading="eager">
+        {% else %}
+          <div class="h-24 md:h-32 w-48 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+            No Image
+          </div>
+        {% endif %}
+      </div>
+      
+      {% comment %} Model Info {% endcomment %}
+      <div class="text-center md:text-right">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
+          {{ section.settings.brand_prefix }}
+          <span class="text-red-600">{{ parent_model.title.value }}</span>
+        </h1>
+        <p class="text-lg text-gray-600 mt-1">{{ parent_year.display_name.value }}</p>
+      </div>
+    </div>
+
+    {% comment %} Collections Grid {% endcomment %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+      
+      {% comment %} Get collections linked to this accessory type {% endcomment %}
+      {% comment %} Option 1: Use linked collections from metaobject {% endcomment %}
+      {% if current_accessory.collections.value != blank %}
+        {% for collection in current_accessory.collections.value %}
+          <a href="{{ collection.url }}" class="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+            {% comment %} Background Image {% endcomment %}
+            <div class="aspect-square relative overflow-hidden">
+              {% if collection.image != blank %}
+                <img 
+                  src="{{ collection.image | image_url: width: 400 }}"
+                  alt="{{ collection.title | escape }}"
+                  class="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300"
+                  width="400"
+                  height="400"
+                  loading="lazy">
+              {% else %}
+                <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+              {% endif %}
+              
+              {% comment %} Overlay Content {% endcomment %}
+              <div class="absolute inset-0 flex flex-col items-center justify-between p-4">
+                <h3 class="text-sm md:text-base font-bold text-gray-900 text-center uppercase tracking-wide leading-tight">
+                  {{ collection.title }}
+                </h3>
+                <span class="inline-block px-4 py-2 border-2 border-red-600 text-red-600 text-xs font-semibold rounded hover:bg-red-600 hover:text-white transition-colors">
+                  Explore
+                </span>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        {% comment %} Option 2: Use diagram categories as fallback {% endcomment %}
+        {% assign all_diagrams = shop.metaobjects.diagram_page.values %}
+        {% assign current_handle = current_accessory.system.handle %}
+        
+        {% comment %} Collect unique categories {% endcomment %}
+        {% assign categories_string = '' %}
+        {% for diagram in all_diagrams %}
+          {% assign diagram_parent_handle = diagram.parent_type.value.system.handle %}
+          {% if diagram_parent_handle == current_handle %}
+            {% if diagram.system_category.value != blank %}
+              {% unless categories_string contains diagram.system_category.value %}
+                {% if categories_string != '' %}
+                  {% assign categories_string = categories_string | append: '|||' %}
+                {% endif %}
+                {% assign categories_string = categories_string | append: diagram.system_category.value %}
+              {% endunless %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        {% assign categories = categories_string | split: '|||' %}
+        
+        {% for category in categories %}
+          {% comment %} Find first diagram with this category for image {% endcomment %}
+          {% assign category_image = nil %}
+          {% for diagram in all_diagrams %}
+            {% assign diagram_parent_handle = diagram.parent_type.value.system.handle %}
+            {% if diagram_parent_handle == current_handle and diagram.system_category.value == category %}
+              {% if diagram.image.value != blank %}
+                {% assign category_image = diagram.image.value %}
+                {% break %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          
+          <a href="#" 
+             class="category-card group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+             data-category="{{ category | handleize }}">
+            {% comment %} Background Image {% endcomment %}
+            <div class="aspect-square relative overflow-hidden">
+              {% if category_image != blank %}
+                <img 
+                  src="{{ category_image | image_url: width: 400 }}"
+                  alt="{{ category | escape }}"
+                  class="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300"
+                  width="400"
+                  height="400"
+                  loading="lazy">
+              {% else %}
+                <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
+              {% endif %}
+              
+              {% comment %} Overlay Content {% endcomment %}
+              <div class="absolute inset-0 flex flex-col items-center justify-between p-4">
+                <h3 class="text-sm md:text-base font-bold text-gray-900 text-center uppercase tracking-wide leading-tight">
+                  {{ category }}
+                </h3>
+                <span class="inline-block px-4 py-2 border-2 border-red-600 text-red-600 text-xs font-semibold rounded group-hover:bg-red-600 group-hover:text-white transition-colors">
+                  Explore
+                </span>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+        
+        {% if categories.size == 0 %}
+          <div class="col-span-full text-center py-12 text-gray-500">
+            <p>No collections found for this category.</p>
+          </div>
+        {% endif %}
+      {% endif %}
+      
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Accessory Collections",
+  "tag": "section",
+  "class": "accessory-collections-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_prefix",
+      "label": "Brand Prefix",
+      "default": "PORSCHE",
+      "info": "Text before model name (e.g., PORSCHE 911)"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#dc2626",
+      "info": "Color for the Explore buttons and model name highlight"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accessory Collections"
+    }
+  ]
+}
+{% endschema %}

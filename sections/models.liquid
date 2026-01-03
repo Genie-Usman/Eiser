@@ -16,6 +16,9 @@
     padding: 60px 0;
     background-color: {{ section.settings.background_color }};
   }
+  @media (max-width: 768px) {
+    .models-section { padding: 40px 0; }
+  }
 
   .models-container {
     max-width: 1200px;
@@ -30,11 +33,20 @@
     margin-bottom: 50px;
     color: {{ section.settings.text_color }};
   }
+  @media (max-width: 768px) {
+    .models-heading { font-size: 2rem; margin-bottom: 30px; }
+  }
 
   .model-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 25px;
+  }
+  @media (max-width: 992px) {
+    .model-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .model-grid { grid-template-columns: 1fr; gap: 20px; }
   }
 
   .model-card {
@@ -45,8 +57,10 @@
     overflow: hidden;
     min-height: 280px;
   }
+  @media (max-width: 600px) {
+    .model-card { min-height: 250px; }
+  }
 
-  /* Default State - Model Name + Image */
   .model-card__default {
     display: flex;
     flex-direction: column;
@@ -63,11 +77,11 @@
     margin-bottom: 15px;
     text-align: center;
   }
-
   .model-card__title span {
-    color: {{ section.settings.accent_color }};
+    display: block; /* Ensure it stays on its own line if needed, or inline */
     font-weight: 700;
     font-size: 1.4rem;
+    color: {{ section.settings.accent_color }};
   }
 
   .model-card__image {
@@ -77,7 +91,7 @@
     object-fit: contain;
   }
 
-  /* Hover States Container */
+  /* Hover States */
   .model-card__hover {
     position: absolute;
     inset: 0;
@@ -86,13 +100,11 @@
     pointer-events: none;
     transition: opacity 0.3s ease;
   }
-
   .model-card:hover .model-card__hover {
     opacity: 1;
     pointer-events: auto;
   }
 
-  /* Step 1: Select Year */
   .hover-step {
     position: absolute;
     inset: 0;
@@ -103,21 +115,13 @@
     padding: 25px;
     transition: opacity 0.2s ease;
   }
-
-  .hover-step--years {
-    opacity: 1;
-  }
-
-  .hover-step--categories {
-    opacity: 0;
-    pointer-events: none;
-  }
+  .hover-step--years { opacity: 1; }
+  .hover-step--categories { opacity: 0; pointer-events: none; }
 
   .model-card__hover.step-2 .hover-step--years {
     opacity: 0;
     pointer-events: none;
   }
-
   .model-card__hover.step-2 .hover-step--categories {
     opacity: 1;
     pointer-events: auto;
@@ -130,6 +134,62 @@
     margin-bottom: 20px;
   }
 
+  /* Year Buttons */
+  .year-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  .year-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .year-btn:hover {
+    color: {{ section.settings.accent_color }};
+    border-color: {{ section.settings.accent_color }};
+  }
+
+  /* Category Buttons */
+  .category-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+  .category-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 25px;
+    background: transparent;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.2s ease;
+  }
+  .category-btn:hover {
+    color: {{ section.settings.accent_color }};
+    border-color: {{ section.settings.accent_color }};
+  }
+  .category-btn__icon {
+    width: 40px;
+    height: 40px;
+  }
+  .category-btn__label {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  /* Back Button */
   .hover-step__back {
     position: absolute;
     top: 15px;
@@ -145,15 +205,8 @@
     cursor: pointer;
     transition: background 0.2s;
   }
-
-  .hover-step__back:hover {
-    background: #e5e5e5;
-  }
-
-  .hover-step__back svg {
-    width: 16px;
-    height: 16px;
-  }
+  .hover-step__back:hover { background: #e5e5e5; }
+  .hover-step__back svg { width: 16px; height: 16px; }
 
   .hover-step__year-badge {
     display: inline-block;
@@ -164,101 +217,6 @@
     font-size: 0.85rem;
     font-weight: 500;
     margin-bottom: 15px;
-  }
-
-  /* Year Buttons */
-  .year-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-  }
-
-  .year-btn {
-    padding: 10px 20px;
-    background: transparent;
-    border: 2px solid #ddd;
-    border-radius: 25px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #333;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-  }
-
-  .year-btn:hover {
-    border-color: {{ section.settings.accent_color }};
-    color: {{ section.settings.accent_color }};
-  }
-
-  /* Category Buttons */
-  .category-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-  }
-
-  .category-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 25px;
-    background: transparent;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    text-decoration: none;
-    color: #333;
-    transition: all 0.2s ease;
-  }
-
-  .category-btn:hover {
-    border-color: {{ section.settings.accent_color }};
-    color: {{ section.settings.accent_color }};
-  }
-
-  .category-btn__icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .category-btn__label {
-    font-size: 0.85rem;
-    font-weight: 500;
-  }
-
-  .models-empty {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px 20px;
-    color: #888;
-  }
-
-  @media (max-width: 992px) {
-    .model-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 600px) {
-    .models-section {
-      padding: 40px 0;
-    }
-
-    .models-heading {
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
-
-    .model-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    .model-card {
-      min-height: 250px;
-    }
   }
 </style>
 
@@ -282,7 +240,9 @@
                 src="{{ model.image.value | image_url: width: 400 }}"
                 alt="{{ model.title.value | escape }}"
                 class="model-card__image"
-                loading="lazy">
+                loading="lazy"
+                width="400"
+                height="300">
             {% endif %}
           </div>
 
@@ -303,8 +263,8 @@
                       type="button"
                       class="year-btn"
                       data-year-handle="{{ year.system.handle }}"
-                      data-year-title="{{ year.title_e_g_1967_1969.value }}">
-                      {{ year.title_e_g_1967_1969.value }}
+                      data-year-title="{{ year.display_name.value }}">
+                      {{ year.display_name.value }}
                     </button>
                   {% endif %}
                 {% endfor %}
@@ -337,7 +297,7 @@
           </div>
         </div>
       {% else %}
-        <div class="models-empty">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #888;">
           <p>No vehicle models found. Add entries to the "vehicle_model" metaobject.</p>
         </div>
       {% endfor %}
@@ -352,9 +312,9 @@
     {% for type in shop.metaobjects.accessory_type.values %}
       {
         id: "{{ type.id }}",
-        title: "{{ type.title_factory_accessory.value | escape }}",
+        title: "{{ type.display_name.value | default: type.system.handle | replace: '-', ' ' | capitalize | escape }}",
         url: "{{ type.system.url }}",
-        yearParentId: "{{ type.parent_year.value.id }}"
+        yearParentId: "{{ type.parent_year.value.system.id }}"
       }{% unless forloop.last %},{% endunless %}
     {% endfor %}
   ];
@@ -364,8 +324,8 @@
     {% for year in shop.metaobjects.year_range.values %}
       {
         handle: "{{ year.system.handle }}",
-        id: "{{ year.id }}",
-        title: "{{ year.title_e_g_1967_1969.value | escape }}"
+        id: "{{ year.system.id }}",
+        title: "{{ year.display_name.value | escape }}"
       }{% unless forloop.last %},{% endunless %}
     {% endfor %}
   ];
@@ -390,17 +350,21 @@
   
         selectedYearBadge.textContent = yearTitle;
         
-        // Find categories for this year
+        // Find categories for this year - strict match only
         const categories = accessoryTypes.filter(t => t.yearParentId === yearData.id);
         
-        // Populate category buttons
+        // Populate category buttons with asset images
+        const accessoryIcon = '{{ "accessory.webp" | asset_url }}';
+        const factoryIcon = '{{ "factory.webp" | asset_url }}';
+        
         categoryContainer.innerHTML = categories.map(cat => `
           <a href="${cat.url}" class="category-btn">
-            <svg class="category-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              ${cat.title.toLowerCase().includes('factory') 
-                ? '<path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>'
-                : '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>'}
-            </svg>
+            <img 
+              src="${cat.title.toLowerCase().includes('factory') ? factoryIcon : accessoryIcon}" 
+              alt="${cat.title}"
+              class="category-btn__icon"
+              width="40"
+              height="40">
             <span class="category-btn__label">${cat.title}</span>
           </a>
         `).join('');
@@ -448,7 +412,7 @@
         "type": "color",
         "id": "background_color",
         "label": "Background Color",
-        "default": "#f5f5f5"
+        "default": "#ffffff"
       },
       {
         "type": "color",
@@ -459,7 +423,7 @@
         "type": "color",
         "id": "accent_color",
         "label": "Accent Color",
-        "default": "#c41e3a"
+        "default": "#71cd13"
       }
     ],
     "presets": [

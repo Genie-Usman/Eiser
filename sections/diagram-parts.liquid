@@ -13,6 +13,9 @@
     padding: 60px 0;
     background-color: {{ section.settings.background_color }};
   }
+  @media (max-width: 768px) {
+    .diagram-parts { padding: 40px 0; }
+  }
 
   .diagram-parts-container {
     max-width: 1200px;
@@ -29,7 +32,6 @@
     text-decoration: none;
     font-weight: 500;
   }
-
   .diagram-parts__back:hover {
     text-decoration: underline;
   }
@@ -45,6 +47,9 @@
     color: {{ section.settings.text_color }};
     margin: 0 0 10px;
   }
+  @media (max-width: 768px) {
+    .diagram-parts__title { font-size: 1.5rem; }
+  }
 
   .diagram-parts__category {
     font-size: 1rem;
@@ -57,6 +62,9 @@
     gap: 40px;
     align-items: start;
   }
+  @media (max-width: 992px) {
+    .diagram-parts__layout { grid-template-columns: 1fr; gap: 30px; }
+  }
 
   .diagram-parts__image-wrapper {
     background: #fff;
@@ -65,6 +73,9 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 20px;
+  }
+  @media (max-width: 992px) {
+    .diagram-parts__image-wrapper { position: relative; top: 0; }
   }
 
   .diagram-parts__image {
@@ -75,113 +86,125 @@
 
   .diagram-parts__table-wrapper {
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-  }
-
-  .diagram-parts__table-header {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-  }
-
-  .diagram-parts__table-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin: 0;
   }
 
   .parts-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* Ensure borders can be styled */
+    font-family: 'Heebo', sans-serif; /* Match site font */
+  }
+  @media (max-width: 768px) {
+    .parts-table { display: block; overflow-x: auto; }
   }
 
   .parts-table thead {
-    background: #f9f9f9;
+    background-color: #2a7b8c; /* Teal header */
   }
 
   .parts-table th {
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 2px solid #eee;
+    padding: 8px 6px; /* Reduced padding */
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 700;
+    font-size: 0.75rem; /* Reduced font size */
+    color: #fff;
+    text-transform: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    line-height: 1.2;
+  }
+  .parts-table th:last-child {
+    border-right: none;
+  }
+  @media (max-width: 768px) {
+    .parts-table th { padding: 8px 4px; font-size: 0.7rem; }
   }
 
   .parts-table td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    font-size: 0.95rem;
+    padding: 8px 6px; /* Reduced padding */
+    vertical-align: top;
+    font-size: 0.8rem; /* Reduced font size */
     color: #333;
+    border-right: 1px solid #fff;
+    line-height: 1.3;
+  }
+  .parts-table td:last-child {
+    border-right: none;
+  }
+  @media (max-width: 768px) {
+    .parts-table td { padding: 8px 4px; }
   }
 
+  /* Alternating Row Colors */
+  .parts-table tbody tr:nth-child(odd) {
+    background-color: #eef5f6; /* Light teal/grey for odd rows (1, 3, etc. in list) - check reference. Reference shows first data row as light. */
+  }
+  .parts-table tbody tr:nth-child(even) {
+    background-color: #fff; /* White for even rows */
+  }
+  /* Wait, usually it's even/odd. Let's look at image:
+     Row 1 (6161...) is Light.
+     Row 2 (M >>...) is Light (wait, is it same row?).
+     Row 3 (M >>...) is Light.
+     Row 4 (6161...) is Light.
+     Actually, looks like the grouped items share spacing?
+     Let's stick to simple alternating for now: Odd = Light, Even = White?
+     Or maybe all are light blueish?
+     Reference image "uploaded_image_1767442566068.png":
+     Row 1: Light Blue/Grey.
+     Row 2: Light Blue/Grey.
+     Row 3: Light Blue/Grey.
+     Row 4: Light Blue/Grey.
+     Wait, looking at the very bottom, next "6161..." block is also Light Blue/Grey.
+     It seems logical they use alternating colors for *distinct parts*?
+     Let's use `nth-child(odd)` as light blue `#eef5f6` and `even` as white for standard striping.
+  */
+  .parts-table tbody tr:nth-child(odd) {
+    background-color: #e0ecef; /* Slightly darker than white, matching the reference's light blueish tone */
+  }
+  .parts-table tbody tr:nth-child(even) {
+    background-color: #fff;
+  }
+  
+  /* Hover Effect */
   .parts-table tbody tr:hover {
-    background: #f9f9f9;
+    background-color: #dbe9ed;
   }
 
   .parts-table tbody tr:last-child td {
-    border-bottom: none;
+    border-bottom: 2px solid #2a7b8c; /* Optional: bottom border for table */
   }
 
+  /* Column Specifics */
   .parts-table__pos {
-    font-weight: 600;
-    color: {{ section.settings.accent_color }};
-    width: 60px;
+    font-weight: 700;
+    text-align: center;
+    width: 50px;
   }
-
+  
   .parts-table__part-number {
-    font-family: monospace;
-    font-size: 0.9rem;
-    width: 120px;
+    font-family: inherit; /* Use main font */
+    font-weight: 700;
+    text-decoration: underline;
+    color: #000;
+    width: 140px;
+  }
+  
+  .parts-table__qty,
+  .parts-table__price,
+  .parts-table__info {
+    text-align: center;
   }
 
-  .parts-table__price {
-    font-weight: 600;
-    color: #1a1a1a;
-    width: 100px;
+  .parts-table__description {
+    font-weight: 500;
   }
 
   .parts-empty {
     padding: 40px;
     text-align: center;
     color: #888;
-  }
-
-  @media (max-width: 992px) {
-    .diagram-parts__layout {
-      grid-template-columns: 1fr;
-      gap: 30px;
-    }
-
-    .diagram-parts__image-wrapper {
-      position: relative;
-      top: 0;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .diagram-parts {
-      padding: 40px 0;
-    }
-
-    .diagram-parts__title {
-      font-size: 1.5rem;
-    }
-
-    .parts-table th,
-    .parts-table td {
-      padding: 12px 10px;
-      font-size: 0.85rem;
-    }
-
-    .parts-table {
-      display: block;
-      overflow-x: auto;
-    }
   }
 </style>
 
@@ -220,9 +243,12 @@
           <img
             src="{{ metaobject.image.value | image_url: width: 1000 }}"
             alt="{{ metaobject.title.value | escape }}"
-            class="diagram-parts__image">
+            class="diagram-parts__image"
+            height="inherit"
+            width="inherit"
+            >
         {% else %}
-          <div style="padding: 60px; text-align: center; color: #888;">
+          <div class="parts-empty">
             No diagram image available
           </div>
         {% endif %}
@@ -230,12 +256,8 @@
 
       {% comment %} Parts Table {% endcomment %}
       <div class="diagram-parts__table-wrapper">
-        <div class="diagram-parts__table-header">
-          <h2 class="diagram-parts__table-title">Parts List</h2>
-        </div>
-
         {% assign all_parts = shop.metaobjects.part_entry.values %}
-      {% assign current_metaobject_handle = metaobject.system.handle %}
+        {% assign current_metaobject_handle = metaobject.system.handle %}
 
         {% comment %} Count matching parts {% endcomment %}
         {% assign parts_count = 0 %}
@@ -253,9 +275,11 @@
                 <th>POS</th>
                 <th>Part Number</th>
                 <th>Description</th>
+                <th>Qty. Needed</th>
                 {% if section.settings.show_price %}
                   <th>Price</th>
                 {% endif %}
+                <th>Model/Option Info</th>
               </tr>
             </thead>
             <tbody>
@@ -263,9 +287,9 @@
                 {% assign part_parent_handle = part.parent_diagram.value.system.handle %}
                 {% if metaobject == blank or part_parent_handle == current_metaobject_handle %}
                   <tr>
-                    <td class="parts-table__pos">{{ part.pos.value }}</td>
+                    <td class="parts-table__pos">{{ part.pos.value | default: '-' }}</td>
                     <td class="parts-table__part-number">{{ part.part.value }}</td>
-                    <td>
+                    <td class="parts-table__description">
                       {% assign desc_parts = part.description.value | split: '"value"=>"' %}
                       {% if desc_parts.size > 1 %}
                         {% assign desc_text = desc_parts[1] | split: '"}' | first %}
@@ -274,6 +298,7 @@
                         {{ part.description.value }}
                       {% endif %}
                     </td>
+                    <td class="parts-table__qty">{{ part.qty.value | default: '1' }}</td>
                     {% if section.settings.show_price %}
                       <td class="parts-table__price">
                         {% if part.price.value != blank %}
@@ -283,6 +308,7 @@
                         {% endif %}
                       </td>
                     {% endif %}
+                    <td class="parts-table__info">{{ part.model_option_info.value | default: '-' }}</td>
                   </tr>
                 {% endif %}
               {% endfor %}
