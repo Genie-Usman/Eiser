@@ -164,6 +164,15 @@
           yearHandle = carYear.trim().toLowerCase().replace(/\s+/g, '-');
         }
         
+        // Strip brand prefix from modelHandle (e.g., "porsche-356" -> "356")
+        // Extract just the numeric model number
+        if (modelHandle) {
+          const modelMatch = modelHandle.match(/(\d+)$/);
+          if (modelMatch) {
+            modelHandle = modelMatch[1];
+          }
+        }
+        
         // Debug: Log params to console
         console.log('URL Params:', { carModel, carYear, modelHandle, yearHandle, modelParam });
         

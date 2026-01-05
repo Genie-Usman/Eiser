@@ -86,40 +86,57 @@
     {% comment %} Main Content: Sidebar + Products {% endcomment %}
     <div class="flex flex-col lg:flex-row gap-8">
       
-      {% comment %} Sidebar Filters {% endcomment %}
-      <aside class="w-full lg:w-64 flex-shrink-0">
+      {% comment %} Sidebar - Related Collections for Current Car {% endcomment %}
+      <aside class="w-full lg:w-64 shrink-0">
         <div class="bg-white rounded-xl shadow-sm p-6">
-          <h3 class="text-lg font-bold text-gray-900 mb-4">FILTER BY</h3>
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Browse Categories</h3>
           
-          {% comment %} Subcategory filters from products {% endcomment %}
-          <div id="subcategory-filters" class="space-y-2">
-            {% comment %} Generate unique subcategories from products {% endcomment %}
-            {% assign subcategories = '' %}
-            {% for product in collection.products %}
-              {% assign sub_cat = product.metafields.custom.sub_category.value %}
-              {% if sub_cat != blank %}
-                {% unless subcategories contains sub_cat %}
-                  {% if subcategories != '' %}
-                    {% assign subcategories = subcategories | append: '|||' %}
+          {% comment %} Related collections for this car - populated by JS {% endcomment %}
+          <div id="related-collections" class="space-y-2">
+            {% comment %} 
+              Loop through all collections and find ones matching the current car pattern
+              Will be filtered by JS to show only matching model-year collections
+            {% endcomment %}
+            {% for coll in collections %}
+              {% comment %} Extract category from collection handle (last part after model-year) {% endcomment %}
+              {% assign handle_parts = coll.handle | split: '-' %}
+              {% assign part_count = handle_parts.size %}
+              
+              {% comment %} Get the category name (capitalize and replace hyphens with spaces) {% endcomment %}
+              {% assign category_name = '' %}
+              {% assign model_year_prefix = '' %}
+              
+              {% comment %} Assume format: model-year-year-category or model-year-category {% endcomment %}
+              {% if part_count >= 4 %}
+                {% comment %} Handle format like: 356-1950-1959-body or 356-1950-1959-brakes-and-wheels {% endcomment %}
+                {% assign model_year_prefix = handle_parts[0] | append: '-' | append: handle_parts[1] | append: '-' | append: handle_parts[2] %}
+                
+                {% comment %} Get category parts (everything after model-year) {% endcomment %}
+                {% assign category_parts = '' %}
+                {% for i in (3..part_count) %}
+                  {% assign idx = i | minus: 1 %}
+                  {% if idx >= 3 and idx < part_count %}
+                    {% if category_parts != '' %}
+                      {% assign category_parts = category_parts | append: ' ' %}
+                    {% endif %}
+                    {% assign category_parts = category_parts | append: handle_parts[idx] | capitalize %}
                   {% endif %}
-                  {% assign subcategories = subcategories | append: sub_cat %}
-                {% endunless %}
+                {% endfor %}
+                {% assign category_name = category_parts %}
+              {% endif %}
+              
+              {% if category_name != blank %}
+                <a href="{{ coll.url }}" 
+                   class="related-collection-link block text-sm text-gray-600 hover:text-red-600 py-1 border-l-2 border-transparent hover:border-red-500 pl-3 transition-colors"
+                   data-collection-handle="{{ coll.handle }}"
+                   data-model-year-prefix="{{ model_year_prefix }}"
+                   style="display: none;">
+                  {{ category_name }}
+                </a>
               {% endif %}
             {% endfor %}
             
-            {% assign subcategory_array = subcategories | split: '|||' | sort %}
-            
-            {% for subcat in subcategory_array %}
-              <a href="#" 
-                 class="subcategory-link block text-sm text-gray-600 hover:text-red-600 py-1"
-                 data-subcategory="{{ subcat | handleize }}">
-                {{ subcat }}
-              </a>
-            {% endfor %}
-            
-            {% if subcategory_array.size == 0 %}
-              <p class="text-sm text-gray-400 italic">No filters available</p>
-            {% endif %}
+            <p id="no-related-collections" class="text-sm text-gray-400 italic hidden">No categories found</p>
           </div>
         </div>
       </aside>
@@ -266,6 +283,49 @@
     yearHandle = carYear.trim().toLowerCase().replace(/\s+/g, '-');
   }
   
+  // Strip brand prefix from modelHandle (e.g., "porsche-356" -> "356")
+  if (modelHandle) {
+    const modelMatch = modelHandle.match(/(\d+)$/);
+    if (modelMatch) {
+      modelHandle = modelMatch[1];
+    }
+  }
+  
+  // Build the current car's model-year prefix for filtering
+  const currentCarPrefix = modelHandle && yearHandle ? `${modelHandle}-${yearHandle}` : null;
+  
+  // Filter sidebar links to show only collections matching current car
+  const relatedCollectionLinks = document.querySelectorAll('.related-collection-link');
+  let visibleCollections = 0;
+  
+  relatedCollectionLinks.forEach(link => {
+    const prefix = link.dataset.modelYearPrefix;
+    
+    if (currentCarPrefix && prefix === currentCarPrefix) {
+      // Show this collection and update the URL with params
+      link.style.display = '';
+      visibleCollections++;
+      
+      // Append URL params to the link
+      const linkUrl = new URL(link.href, window.location.origin);
+      if (carModel) linkUrl.searchParams.set('car_model', carModel.trim());
+      if (carYear) linkUrl.searchParams.set('car_year', carYear);
+      if (modelHandle) linkUrl.searchParams.set('model_handle', modelHandle);
+      if (yearHandle) linkUrl.searchParams.set('year_handle', yearHandle);
+      if (modelParam) linkUrl.searchParams.set('model', modelParam);
+      if (carImage) linkUrl.searchParams.set('image', carImage);
+      link.href = linkUrl.toString();
+    } else {
+      link.style.display = 'none';
+    }
+  });
+  
+  // Show "no collections" message if none visible
+  const noCollectionsMsg = document.getElementById('no-related-collections');
+  if (visibleCollections === 0 && noCollectionsMsg) {
+    noCollectionsMsg.classList.remove('hidden');
+  }
+  
   if (modelHandle && yearHandle) {
     categoryBtns.forEach(btn => {
       const category = btn.dataset.category;
@@ -284,15 +344,6 @@
       btn.href = url.toString();
     });
   }
-  
-  // Subcategory filter links
-  const subcatLinks = document.querySelectorAll('.subcategory-link');
-  subcatLinks.forEach(link => {
-    const subcat = link.dataset.subcategory;
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('filter.p.m.custom.sub_category', link.textContent.trim());
-    link.href = currentUrl.toString();
-  });
   
   // Sort select handler
   document.getElementById('sort-select').addEventListener('change', function() {
