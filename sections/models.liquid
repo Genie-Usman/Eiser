@@ -314,7 +314,12 @@
         id: "{{ type.id }}",
         title: "{{ type.display_name.value | default: type.system.handle | replace: '-', ' ' | capitalize | escape }}",
         url: "{{ type.system.url }}",
-        yearParentId: "{{ type.parent_year.value.system.id }}"
+        handle: "{{ type.system.handle }}",
+        yearParentId: "{{ type.parent_year.value.system.id }}",
+        yearTitle: "{{ type.parent_year.value.display_name.value | escape }}",
+        modelName: "{{ type.parent_year.value.parent_model.value.title.value | escape }}",
+        modelHandle: "{{ type.parent_year.value.parent_model.value.system.handle }}",
+        modelImage: "{{ type.parent_year.value.parent_model.value.image.value | image_url: width: 300 }}"
       }{% unless forloop.last %},{% endunless %}
     {% endfor %}
   ];
@@ -358,11 +363,23 @@
         const factoryIcon = '{{ "factory.webp" | asset_url }}';
         
         categoryContainer.innerHTML = categories.map(cat => {
-          // Accessory types go to collections page, Factory types go to metaobject page
+          // Accessory types go to collections page with URL params, Factory types go to metaobject page
           const isAccessory = cat.title.toLowerCase().includes('accessory');
-          const href = isAccessory 
-            ? `/pages/accessory-parts?car=${cat.url.split('/').pop()}` 
-            : cat.url;
+          
+          let href;
+          if (isAccessory) {
+            // Build URL with model and year parameters like reference site
+            const params = new URLSearchParams({
+              model: `${cat.modelHandle}-${cat.yearTitle}`.replace(/\s+/g, '-').toLowerCase(),
+              car_model: cat.modelName,
+              car_year: cat.yearTitle,
+              title: cat.title,
+              image: cat.modelImage
+            });
+            href = `/pages/accessory-parts?${params.toString()}`;
+          } else {
+            href = cat.url;
+          }
           
           return `
             <a href="${href}" class="category-btn">

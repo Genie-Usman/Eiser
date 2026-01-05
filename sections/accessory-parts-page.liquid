@@ -171,41 +171,62 @@
 <section class="accessory-parts-section">
   <div class="accessory-parts-container">
     
-    {% comment %} Get car handle from URL parameter {% endcomment %}
-    {% assign car_handle = '' %}
+    {% comment %} 
+      Extract parameters from URL like reference site:
+      ?model=356-1960-1965&car_model=356&car_year=1960-1965&title=Accessory&image=...
+    {% endcomment %}
     
-    {% comment %} Parse URL parameters {% endcomment %}
-    {% for param in request.query_string %}
-      {% assign param_parts = param | split: '=' %}
-      {% if param_parts[0] == 'car' %}
-        {% assign car_handle = param_parts[1] %}
+    {% assign full_path = request.fullpath | default: '' %}
+    
+    {% comment %} Extract car_model parameter {% endcomment %}
+    {% assign car_model = '' %}
+    {% if full_path contains 'car_model=' %}
+      {% assign temp = full_path | split: 'car_model=' %}
+      {% if temp.size > 1 %}
+        {% assign car_model = temp[1] | split: '&' | first | url_decode %}
       {% endif %}
-    {% endfor %}
-    
-    {% comment %} Alternative: get from page handle or use all collections {% endcomment %}
-    {% assign current_accessory = nil %}
-    {% assign parent_year = nil %}
-    {% assign parent_model = nil %}
-    
-    {% if car_handle != blank %}
-      {% comment %} Find the accessory_type metaobject by handle {% endcomment %}
-      {% for type in shop.metaobjects.accessory_type.values %}
-        {% if type.system.handle == car_handle %}
-          {% assign current_accessory = type %}
-          {% assign parent_year = type.parent_year.value %}
-          {% assign parent_model = parent_year.parent_model.value %}
-          {% break %}
-        {% endif %}
-      {% endfor %}
     {% endif %}
+    
+    {% comment %} Extract car_year parameter {% endcomment %}
+    {% assign car_year = '' %}
+    {% if full_path contains 'car_year=' %}
+      {% assign temp = full_path | split: 'car_year=' %}
+      {% if temp.size > 1 %}
+        {% assign car_year = temp[1] | split: '&' | first | url_decode %}
+      {% endif %}
+    {% endif %}
+    
+    {% comment %} Extract title parameter {% endcomment %}
+    {% assign page_title = '' %}
+    {% if full_path contains 'title=' %}
+      {% assign temp = full_path | split: 'title=' %}
+      {% if temp.size > 1 %}
+        {% assign page_title = temp[1] | split: '&' | first | url_decode %}
+      {% endif %}
+    {% endif %}
+    
+    {% comment %} Extract image parameter {% endcomment %}
+    {% assign car_image = '' %}
+    {% if full_path contains 'image=' %}
+      {% assign temp = full_path | split: 'image=' %}
+      {% if temp.size > 1 %}
+        {% assign car_image = temp[1] | split: '&' | first | url_decode %}
+      {% endif %}
+    {% endif %}
+    
+    {% comment %} Debug output {% endcomment %}
+    <!-- Debug: full_path = {{ full_path }} -->
+    <!-- Debug: car_model = {{ car_model }} -->
+    <!-- Debug: car_year = {{ car_year }} -->
+    <!-- Debug: page_title = {{ page_title }} -->
 
-    {% comment %} Header with car info if available {% endcomment %}
-    {% if current_accessory != blank %}
+    {% comment %} Header with car info from URL params {% endcomment %}
+    {% if car_model != blank %}
       <div class="accessory-header">
-        {% if parent_model.image.value != blank %}
+        {% if car_image != blank %}
           <img 
-            src="{{ parent_model.image.value | image_url: width: 250 }}"
-            alt="{{ parent_model.title.value | escape }}"
+            src="{{ car_image }}"
+            alt="{{ car_model | escape }}"
             class="accessory-header__image"
             width="250"
             height="100"
@@ -214,9 +235,9 @@
         <div>
           <h1 class="accessory-header__title">
             {{ section.settings.brand_prefix }}
-            <span>{{ parent_model.title.value }}</span>
+            <span>{{ car_model }}</span>
           </h1>
-          <p class="accessory-header__subtitle">{{ parent_year.display_name.value }} - {{ current_accessory.display_name.value }}</p>
+          <p class="accessory-header__subtitle">{{ car_year }}{% if page_title != blank %} - {{ page_title }}{% endif %}</p>
         </div>
       </div>
     {% else %}
@@ -228,46 +249,28 @@
       {% assign found_collections = false %}
       
       {% for collection in collections %}
-        {% comment %} Check if collection has "Relate to" metafield {% endcomment %}
-        {% assign relate_to = collection.metafields.custom.relate_to.value %}
-        {% assign show_collection = false %}
-        
-        {% comment %} If we have a car filter, match against it {% endcomment %}
-        {% if current_accessory != blank %}
-          {% assign relate_to_handle = relate_to.system.handle %}
-          {% if relate_to_handle == car_handle %}
-            {% assign show_collection = true %}
-          {% endif %}
-        {% else %}
-          {% comment %} No filter - show all collections with relate_to metafield {% endcomment %}
-          {% if relate_to != blank %}
-            {% assign show_collection = true %}
-          {% endif %}
-        {% endif %}
-        
-        {% if show_collection %}
-          {% assign found_collections = true %}
-          <a href="{{ collection.url }}" class="collection-card">
-            <div class="collection-card__image-wrapper">
-              {% if collection.image != blank %}
-                <img 
-                  src="{{ collection.image | image_url: width: 400 }}"
-                  alt="{{ collection.title | escape }}"
-                  class="collection-card__image"
-                  width="400"
-                  height="400"
-                  loading="lazy">
-              {% else %}
-                <div class="collection-card__image" style="background: linear-gradient(135deg, #e0e0e0, #c0c0c0);"></div>
-              {% endif %}
-              
-              <div class="collection-card__overlay">
-                <h3 class="collection-card__title">{{ collection.title }}</h3>
-                <span class="collection-card__btn">Explore</span>
-              </div>
+        {% comment %} Show all collections for now {% endcomment %}
+        {% assign found_collections = true %}
+        <a href="{{ collection.url }}" class="collection-card">
+          <div class="collection-card__image-wrapper">
+            {% if collection.image != blank %}
+              <img 
+                src="{{ collection.image | image_url: width: 400 }}"
+                alt="{{ collection.title | escape }}"
+                class="collection-card__image"
+                width="400"
+                height="400"
+                loading="lazy">
+            {% else %}
+              <div class="collection-card__image" style="background: linear-gradient(135deg, #e0e0e0, #c0c0c0);"></div>
+            {% endif %}
+            
+            <div class="collection-card__overlay">
+              <h3 class="collection-card__title">{{ collection.title }}</h3>
+              <span class="collection-card__btn">Explore</span>
             </div>
-          </a>
-        {% endif %}
+          </div>
+        </a>
       {% endfor %}
       
       {% unless found_collections %}
