@@ -9,18 +9,15 @@
  */
 {
   "sections": {
-    "diagram_gallery_NX6ar9": {
-      "type": "diagram-gallery",
-      "name": "Diagram Gallery",
+    "accessory_collections_main": {
+      "type": "accessory-collections",
       "settings": {
-        "heading": "Parts Diagrams",
-        "background_color": "#ffffff",
-        "text_color": "#1a1a1a",
-        "tab_active_color": "#f5c518"
+        "brand_prefix": "PORSCHE",
+        "accent_color": "#dc2626"
       }
     }
   },
   "order": [
-    "diagram_gallery_NX6ar9"
+    "accessory_collections_main"
   ]
 }

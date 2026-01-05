@@ -9,13 +9,6 @@
  */
 {
   "sections": {
-    "accessory_collections_main": {
-      "type": "accessory-collections",
-      "settings": {
-        "brand_prefix": "PORSCHE",
-        "accent_color": "#dc2626"
-      }
-    },
     "diagram_gallery_NX6ar9": {
       "type": "diagram-gallery",
       "settings": {
@@ -27,7 +20,6 @@
     }
   },
   "order": [
-    "accessory_collections_main",
     "diagram_gallery_NX6ar9"
   ]
 }
