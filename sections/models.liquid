@@ -369,10 +369,13 @@
           let href;
           if (isAccessory) {
             // Build URL with model and year parameters like reference site
+            // Use modelHandle for collection URL construction, modelName for display
             const params = new URLSearchParams({
               model: `${cat.modelHandle}-${cat.yearTitle}`.replace(/\s+/g, '-').toLowerCase(),
               car_model: cat.modelName,
               car_year: cat.yearTitle,
+              model_handle: cat.modelHandle,  // Pass handle separately for collection URL building
+              year_handle: cat.yearTitle.replace(/\s+/g, '-').toLowerCase(),
               title: cat.title,
               image: cat.modelImage
             });

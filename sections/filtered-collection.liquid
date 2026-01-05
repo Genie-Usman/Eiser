@@ -1,0 +1,346 @@
+{% comment %}
+  Filtered Collection Section
+  Displays:
+  - Car header (from URL params)
+  - Active filter chips
+  - Collection category buttons
+  - Subcategory filter sidebar
+  - Products grid
+{% endcomment %}
+
+<style>
+  /* Dynamic accent color */
+  .accent-text { color: {{ section.settings.accent_color }}; }
+  .accent-border { border-color: {{ section.settings.accent_color }}; }
+  .accent-bg { background-color: {{ section.settings.accent_color }}; }
+  
+  /* Filter chip remove button */
+  .filter-chip__remove:hover {
+    background: {{ section.settings.accent_color }};
+  }
+  
+  /* Category button hover */
+  .category-btn:hover {
+    background: {{ section.settings.accent_color }};
+    color: white;
+  }
+  
+  /* Subcategory filter hover */
+  .subcategory-link:hover,
+  .subcategory-link.active {
+    color: {{ section.settings.accent_color }};
+  }
+</style>
+
+<section class="bg-gray-50 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    
+    {% comment %} Breadcrumb {% endcomment %}
+    <nav class="text-sm text-gray-500 mb-4">
+      <a href="/" class="hover:text-gray-700">Home</a>
+      <span class="mx-2">›</span>
+      <a href="/collections" class="hover:text-gray-700">All Collections</a>
+      <span class="mx-2">›</span>
+      <span class="text-gray-900">{{ collection.title }}</span>
+    </nav>
+    
+    {% comment %} Car Header - Populated by JS {% endcomment %}
+    <div id="car-header" class="bg-white rounded-xl shadow-sm p-6 mb-6 hidden">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <img id="header-car-image" src="" alt="" class="h-20 md:h-28 w-auto object-contain" width="300" height="120">
+        <div class="text-center md:text-right">
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
+            {{ section.settings.brand_prefix }}
+            <span id="header-car-model" class="accent-text"></span>
+          </h1>
+          <p id="header-car-year" class="text-lg text-gray-600 mt-1"></p>
+        </div>
+      </div>
+    </div>
+    
+    {% comment %} Active Filters Chips {% endcomment %}
+    <div id="active-filters" class="flex flex-wrap gap-2 mb-6 hidden">
+      <div id="filter-car-model" class="filter-chip bg-gray-200 px-4 py-2 rounded-full flex items-center gap-2 text-sm hidden">
+        <span>Car Model: <strong id="chip-car-model"></strong></span>
+        <button class="filter-chip__remove w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs" data-filter="car_model">×</button>
+      </div>
+      <div id="filter-car-year" class="filter-chip bg-gray-200 px-4 py-2 rounded-full flex items-center gap-2 text-sm hidden">
+        <span>Car Year: <strong id="chip-car-year"></strong></span>
+        <button class="filter-chip__remove w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs" data-filter="car_year">×</button>
+      </div>
+    </div>
+    
+    {% comment %} Category Buttons Grid {% endcomment %}
+    <div id="category-buttons" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-8">
+      {% assign categories = "Body,Brakes and Wheels,Electrical,Engine,Front Axle and Steering,Fuel and Exhaust,Pedals and Levers,Rear Axle,Transmission" | split: ',' %}
+      {% for cat in categories %}
+        {% assign cat_slug = cat | handleize %}
+        <a href="#" 
+           class="category-btn bg-gray-800 text-white text-center py-3 px-2 rounded-lg text-xs md:text-sm font-semibold uppercase transition-colors"
+           data-category="{{ cat_slug }}">
+          {{ cat }}
+        </a>
+      {% endfor %}
+    </div>
+    
+    {% comment %} Main Content: Sidebar + Products {% endcomment %}
+    <div class="flex flex-col lg:flex-row gap-8">
+      
+      {% comment %} Sidebar Filters {% endcomment %}
+      <aside class="w-full lg:w-64 flex-shrink-0">
+        <div class="bg-white rounded-xl shadow-sm p-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">FILTER BY</h3>
+          
+          {% comment %} Subcategory filters from products {% endcomment %}
+          <div id="subcategory-filters" class="space-y-2">
+            {% comment %} Generate unique subcategories from products {% endcomment %}
+            {% assign subcategories = '' %}
+            {% for product in collection.products %}
+              {% assign sub_cat = product.metafields.custom.sub_category.value %}
+              {% if sub_cat != blank %}
+                {% unless subcategories contains sub_cat %}
+                  {% if subcategories != '' %}
+                    {% assign subcategories = subcategories | append: '|||' %}
+                  {% endif %}
+                  {% assign subcategories = subcategories | append: sub_cat %}
+                {% endunless %}
+              {% endif %}
+            {% endfor %}
+            
+            {% assign subcategory_array = subcategories | split: '|||' | sort %}
+            
+            {% for subcat in subcategory_array %}
+              <a href="#" 
+                 class="subcategory-link block text-sm text-gray-600 hover:text-red-600 py-1"
+                 data-subcategory="{{ subcat | handleize }}">
+                {{ subcat }}
+              </a>
+            {% endfor %}
+            
+            {% if subcategory_array.size == 0 %}
+              <p class="text-sm text-gray-400 italic">No filters available</p>
+            {% endif %}
+          </div>
+        </div>
+      </aside>
+      
+      {% comment %} Products Grid {% endcomment %}
+      <main class="flex-1">
+        <div class="flex items-center justify-between mb-4">
+          <p class="text-sm text-gray-600">
+            {{ collection.products_count }} results
+          </p>
+          <div class="flex items-center gap-4">
+            <label class="text-sm text-gray-600">Sort by</label>
+            <select id="sort-select" class="border rounded-lg px-3 py-2 text-sm">
+              <option value="manual" {% if collection.sort_by == 'manual' %}selected{% endif %}>Featured</option>
+              <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
+              <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>A-Z</option>
+              <option value="title-descending" {% if collection.sort_by == 'title-descending' %}selected{% endif %}>Z-A</option>
+              <option value="price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+        
+        {% comment %} Products Grid {% endcomment %}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {% paginate collection.products by section.settings.products_per_page %}
+            {% for product in collection.products %}
+              <a href="{{ product.url }}" class="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow">
+                <div class="aspect-square relative overflow-hidden bg-gray-100">
+                  {% if product.featured_image %}
+                    <img 
+                      src="{{ product.featured_image | image_url: width: 400 }}"
+                      alt="{{ product.title | escape }}"
+                      class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      width="400"
+                      height="400"
+                      loading="lazy">
+                  {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                      NO IMAGE AVAILABLE
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="p-4">
+                  <p class="text-xs text-gray-500 uppercase mb-1">{{ product.vendor }}</p>
+                  <h4 class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">{{ product.title }}</h4>
+                  <p class="text-sm font-bold text-gray-900 mt-2">{{ product.price | money }}</p>
+                </div>
+              </a>
+            {% endfor %}
+          {% endpaginate %}
+        </div>
+        
+        {% comment %} Pagination {% endcomment %}
+        {% paginate collection.products by section.settings.products_per_page %}
+          {% if paginate.pages > 1 %}
+            <nav class="flex justify-center gap-2 mt-8">
+              {% if paginate.previous %}
+                <a href="{{ paginate.previous.url }}" class="px-4 py-2 border rounded-lg hover:bg-gray-100">Previous</a>
+              {% endif %}
+              
+              {% for part in paginate.parts %}
+                {% if part.is_link %}
+                  <a href="{{ part.url }}" class="px-4 py-2 border rounded-lg hover:bg-gray-100">{{ part.title }}</a>
+                {% else %}
+                  {% if part.title == paginate.current_page %}
+                    <span class="px-4 py-2 border rounded-lg accent-bg text-white">{{ part.title }}</span>
+                  {% else %}
+                    <span class="px-4 py-2 text-gray-400">{{ part.title }}</span>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              
+              {% if paginate.next %}
+                <a href="{{ paginate.next.url }}" class="px-4 py-2 border rounded-lg hover:bg-gray-100">Next</a>
+              {% endif %}
+            </nav>
+          {% endif %}
+        {% endpaginate %}
+        
+      </main>
+    </div>
+    
+  </div>
+</section>
+
+<script>
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const carModel = params.get('car_model');
+  const carYear = params.get('car_year');
+  const carImage = params.get('image');
+  const modelParam = params.get('model');
+  
+  // Populate car header
+  if (carModel) {
+    const header = document.getElementById('car-header');
+    const activeFilters = document.getElementById('active-filters');
+    
+    document.getElementById('header-car-model').textContent = carModel;
+    document.getElementById('header-car-year').textContent = carYear || '';
+    
+    if (carImage) {
+      document.getElementById('header-car-image').src = decodeURIComponent(carImage);
+      document.getElementById('header-car-image').alt = carModel;
+    } else {
+      document.getElementById('header-car-image').style.display = 'none';
+    }
+    
+    header.classList.remove('hidden');
+    header.classList.add('flex');
+    
+    // Show filter chips
+    activeFilters.classList.remove('hidden');
+    activeFilters.classList.add('flex');
+    
+    if (carModel) {
+      document.getElementById('filter-car-model').classList.remove('hidden');
+      document.getElementById('chip-car-model').textContent = carModel;
+    }
+    if (carYear) {
+      document.getElementById('filter-car-year').classList.remove('hidden');
+      document.getElementById('chip-car-year').textContent = carYear;
+    }
+  }
+  
+  // Update category button links
+  const categoryBtns = document.querySelectorAll('.category-btn[data-category]');
+  let modelHandle = params.get('model_handle');
+  let yearHandle = params.get('year_handle');
+  
+  // Fallback: derive from modelParam or car_model/car_year
+  if (!modelHandle && modelParam) {
+    const match = modelParam.match(/(\d+)-(\d{4}-\d{4}|\d{4}-\d{2})/);
+    if (match) {
+      modelHandle = match[1];
+      yearHandle = match[2];
+    }
+  }
+  if (!modelHandle && carModel) {
+    modelHandle = carModel.trim().toLowerCase().replace(/\s+/g, '-');
+  }
+  if (!yearHandle && carYear) {
+    yearHandle = carYear.trim().toLowerCase().replace(/\s+/g, '-');
+  }
+  
+  if (modelHandle && yearHandle) {
+    categoryBtns.forEach(btn => {
+      const category = btn.dataset.category;
+      const collectionHandle = `${modelHandle}-${yearHandle}-${category}`;
+      
+      const url = new URL(`/collections/${collectionHandle}`, window.location.origin);
+      if (carModel) url.searchParams.set('filter.p.m.custom.car_model', carModel.trim());
+      if (carYear) url.searchParams.set('filter.p.m.custom.car_year', carYear);
+      if (carModel) url.searchParams.set('car_model', carModel.trim());
+      if (carYear) url.searchParams.set('car_year', carYear);
+      url.searchParams.set('model_handle', modelHandle);
+      url.searchParams.set('year_handle', yearHandle);
+      if (modelParam) url.searchParams.set('model', modelParam);
+      if (carImage) url.searchParams.set('image', carImage);
+      
+      btn.href = url.toString();
+    });
+  }
+  
+  // Subcategory filter links
+  const subcatLinks = document.querySelectorAll('.subcategory-link');
+  subcatLinks.forEach(link => {
+    const subcat = link.dataset.subcategory;
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('filter.p.m.custom.sub_category', link.textContent.trim());
+    link.href = currentUrl.toString();
+  });
+  
+  // Sort select handler
+  document.getElementById('sort-select').addEventListener('change', function() {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('sort_by', this.value);
+    window.location.href = currentUrl.toString();
+  });
+  
+  // Filter chip remove handlers
+  document.querySelectorAll('.filter-chip__remove').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const filterKey = this.dataset.filter;
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.delete(filterKey);
+      currentUrl.searchParams.delete(`filter.p.m.custom.${filterKey}`);
+      window.location.href = currentUrl.toString();
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Filtered Collection",
+  "tag": "section",
+  "class": "filtered-collection-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_prefix",
+      "label": "Brand Prefix",
+      "default": "PORSCHE"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#dc2626"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 12,
+      "max": 48,
+      "step": 12,
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

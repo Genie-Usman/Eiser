@@ -12,7 +12,7 @@
   
   /* Hover states for collection cards */
   .collection-card:hover .collection-card__image {
-    opacity: 0.9;
+    opacity: 0.5;
     transform: scale(1.05);
   }
   .collection-card:hover .collection-card__btn {
@@ -26,7 +26,7 @@
 </style>
 
 <section class="bg-gray-50 py-10 md:py-16 min-h-[50vh]">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-10 py-10 px-4 sm:px-6 lg:px-8 bg-gray-100 rounded-2xl">
     
     {% comment %} Car header - populated by JavaScript from URL parameters {% endcomment %}
     
@@ -82,50 +82,51 @@
     </script>
     
     {% comment %} Collections Grid - filter by relate_to metafield {% endcomment %}
+    {% comment %} 
+      Collections Grid - Dynamic collection handles based on model-year-category pattern
+      Uses URL params to construct collection URLs with filter parameters
+    {% endcomment %}
     <div id="collections-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
       
-      {% for collection in collections %}
+      {% comment %} Define categories that have collections {% endcomment %}
+      {% assign categories = "Body,Brakes and Wheels,Electrical,Engine,Front Axle and Steering,Fuel and Exhaust,Pedals and Levers,Rear Axle,Transmission" | split: ',' %}
+      
+      {% for cat in categories %}
+        {% assign cat_slug = cat | handleize %}
+        
         {% comment %} 
-          Get relate_to metafield - this is a TEXT field containing "cars"
-          Collections with relate_to = "cars" should be shown on this page
+          For now, show category cards - the collection URLs will be built by JavaScript
+          using the car_model and car_year from URL params
         {% endcomment %}
-        {% assign relate_to = collection.metafields.custom.relate_to.value | default: '' %}
-        
-        {% assign show_collection = true %}
-        
-        {% comment %} Skip collections without images (likely system collections) {% endcomment %}
-        {% if collection.image == blank and collection.products.size == 0 %}
-          {% assign show_collection = false %}
-        {% endif %}
-        
-        {% if show_collection %}
-          <a href="{{ collection.url }}" 
-             class="collection-card group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 no-underline"
-             data-relate-to="{{ relate_to | downcase }}">
-            <div class="aspect-square relative overflow-hidden">
-              {% if collection.image != blank %}
-                <img 
-                  src="{{ collection.image | image_url: width: 400 }}"
-                  alt="{{ collection.title | escape }}"
-                  class="collection-card__image w-full h-full object-cover opacity-70 transition-all duration-300"
-                  width="400"
-                  height="400"
-                  loading="lazy">
-              {% else %}
-                <div class="w-full h-full bg-linear-to-br from-gray-200 to-gray-300"></div>
-              {% endif %}
-              
-              <div class="absolute inset-0 flex flex-col items-center justify-between p-3 md:p-4">
-                <h3 class="text-xs md:text-sm font-bold text-gray-900 text-center uppercase tracking-wide leading-tight">
-                  {{ collection.title }}
-                </h3>
-                <span class="collection-card__btn inline-block px-4 py-2 border-2 accent-border accent-text text-xs font-semibold rounded transition-colors duration-200 uppercase">
-                  Explore
-                </span>
-              </div>
+        <a href="#" 
+           class="collection-card group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 no-underline"
+           data-category="{{ cat_slug }}"
+           data-category-name="{{ cat }}">
+          <div class="aspect-square relative overflow-hidden">
+            {% comment %} Try to find a matching collection for the image {% endcomment %}
+            {% assign sample_collection = collections[cat_slug] %}
+            {% if sample_collection.image != blank %}
+              <img 
+                src="{{ sample_collection.image | image_url: width: 400 }}"
+                alt="{{ cat | escape }}"
+                class="collection-card__image w-full h-full object-cover opacity-40 transition-all duration-300"
+                width="400"
+                height="400"
+                loading="lazy">
+            {% else %}
+              <div class="w-full h-full bg-linear-to-br from-gray-200 to-gray-300"></div>
+            {% endif %}
+            
+            <div class="absolute inset-0 flex flex-col items-center justify-between p-3 md:p-4">
+              <h3 class="text-xs md:text-xl font-extrabold text-gray-900 text-center uppercase tracking-wide leading-tight">
+                {{ cat }}
+              </h3>
+              <span class="collection-card__btn bg-white inline-block px-4 py-2 border-2 accent-border accent-text text-xs font-semibold rounded-full transition-colors duration-200 uppercase">
+                Explore
+              </span>
             </div>
-          </a>
-        {% endif %}
+          </div>
+        </a>
       {% endfor %}
       
       <div id="no-collections-message" class="col-span-full text-center py-16 text-gray-500 hidden">
@@ -135,33 +136,69 @@
     
     <script>
       (function() {
-        // Filter collections based on URL parameters
+        // Read URL parameters
         const params = new URLSearchParams(window.location.search);
         const carModel = params.get('car_model');
         const carYear = params.get('car_year');
+        let modelHandle = params.get('model_handle');
+        let yearHandle = params.get('year_handle');
+        const modelParam = params.get('model');
+        const carImage = params.get('image');
         
-        // If we have filter parameters, filter to show only collections with relate_to = "cars"
-        if (carModel || carYear) {
-          const cards = document.querySelectorAll('.collection-card');
-          let visibleCount = 0;
-          
-          cards.forEach(card => {
-            const relateTo = card.dataset.relateTo || '';
-            
-            // Show only collections where relate_to = "cars"
-            if (relateTo === 'cars') {
-              card.style.display = '';
-              visibleCount++;
-            } else {
-              card.style.display = 'none';
-            }
-          });
-          
-          // Show no collections message if none visible
-          const noCollectionsMsg = document.getElementById('no-collections-message');
-          if (visibleCount === 0) {
-            noCollectionsMsg.classList.remove('hidden');
+        // Fallback: If model_handle/year_handle not provided, derive from modelParam or car_model/car_year
+        if (!modelHandle && modelParam) {
+          // modelParam format: "porsche-356-1950-1959" or "356-1950-1959"
+          // Try to extract model number (digits at start or after hyphen)
+          const match = modelParam.match(/(\d+)-(\d{4}-\d{4}|\d{4}-\d{2})/);
+          if (match) {
+            modelHandle = match[1]; // e.g., "356"
+            yearHandle = match[2];  // e.g., "1950-1959"
           }
+        }
+        
+        // Another fallback: use car_model and car_year directly
+        if (!modelHandle && carModel) {
+          modelHandle = carModel.trim().toLowerCase().replace(/\s+/g, '-');
+        }
+        if (!yearHandle && carYear) {
+          yearHandle = carYear.trim().toLowerCase().replace(/\s+/g, '-');
+        }
+        
+        // Debug: Log params to console
+        console.log('URL Params:', { carModel, carYear, modelHandle, yearHandle, modelParam });
+        
+        // Get all category cards
+        const cards = document.querySelectorAll('.collection-card[data-category]');
+        
+        // If we have handles, construct dynamic collection URLs
+        if (modelHandle && yearHandle) {
+          cards.forEach(card => {
+            const category = card.dataset.category;
+            
+            // Construct collection handle: model-year-category (e.g., 356-1960-1965-body)
+            const collectionHandle = `${modelHandle}-${yearHandle}-${category}`;
+            
+            // Debug: Log constructed handle
+            console.log('Collection handle:', collectionHandle);
+            
+            // Build the collection URL with filter parameters
+            const collectionUrl = new URL(`/collections/${collectionHandle}`, window.location.origin);
+            
+            // Add filter parameters for sidebar chips
+            if (carModel) collectionUrl.searchParams.set('filter.p.m.custom.car_model', carModel.trim());
+            if (carYear) collectionUrl.searchParams.set('filter.p.m.custom.car_year', carYear);
+            
+            // Pass through params for display
+            if (modelParam) collectionUrl.searchParams.set('model', modelParam);
+            if (carImage) collectionUrl.searchParams.set('image', carImage);
+            if (carModel) collectionUrl.searchParams.set('car_model', carModel.trim());
+            if (carYear) collectionUrl.searchParams.set('car_year', carYear);
+            collectionUrl.searchParams.set('model_handle', modelHandle);
+            collectionUrl.searchParams.set('year_handle', yearHandle);
+            
+            // Set the href
+            card.href = collectionUrl.toString();
+          });
         }
       })();
     </script>
