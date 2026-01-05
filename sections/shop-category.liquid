@@ -16,35 +16,79 @@
                     <div class="flex justify-center">
                       <div class="border-b border-[#71CD13] w-55 mt-2 mb-2"></div>
                     </div>
-                    {% if collection %}
-                      {% for sub_collection in collections %}
-                        <label class="flex items-center gap-3 py-3 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="category"
-                            value="{{ sub_collection.handle }}"
-                            class="radio-md"
-                            data-category-radio
-                            data-href="{{ sub_collection.url }}"
-                            {% if sub_collection.handle == collection.handle %}
-                            checked{% endif %} />
-                          <span class="text-[#797979] text-sm group-hover:text-[#71cd13] transition-colors">{{ sub_collection.title }}</span>
-                        </label>
-                      {% endfor %}
-                    {% else %}
-                      {% for sub_collection in collections limit: 10 %}
-                        <label class="flex items-center gap-3 py-3 cursor-pointer group">
-                          <input
-                            type="radio"
-                            name="category"
-                            value="{{ sub_collection.handle }}"
-                            class="radio-md"
-                            data-category-radio
-                            data-href="{{ sub_collection.url }}" />
-                          <span class="text-[#797979] text-sm group-hover:text-[#71cd13] transition-colors">{{ sub_collection.title }}</span>
-                        </label>
-                      {% endfor %}
+
+                    {% comment %} Intelligent filtering logic {% endcomment %}
+                    {% assign current_parts = collection.handle | split: '-' %}
+                    {% assign is_car_collection = false %}
+                    {% assign car_prefix = '' %}
+
+                    {% comment %} Check for 356-1950-1959-body (4 parts) or 356-1950-1959-brakes-and-wheels (longer) {% endcomment %}
+                    {% if current_parts.size >= 4 %}
+                      {% assign p1 = current_parts[1] %}
+                      {% assign p1_slice = p1 | slice: 0, 2 %}
+                      {% if p1_slice == '19' or p1_slice == '20' %}
+                         {% assign is_car_collection = true %}
+                         {% assign car_prefix = current_parts[0] | append: '-' | append: current_parts[1] | append: '-' | append: current_parts[2] | append: '-' %}
+                      {% endif %}
                     {% endif %}
+                    
+                    {% assign collection_list = collections %}
+                    {% if collection_list == blank or collection_list.size == 0 %}
+                       {% assign collection_list = collections %}
+                    {% endif %}
+
+                    {% assign found_any = false %}
+                    <div class="category-list-container max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                      {% for sub_collection in collections %}
+                        {% assign show_item = true %}
+                        {% assign display_name = sub_collection.title %}
+                        
+                        {% if is_car_collection %}
+                          {% if sub_collection.handle contains car_prefix %}
+                             {% assign show_item = true %}
+                             {% assign display_name = sub_collection.handle | remove: car_prefix | replace: '-', ' ' | capitalize %}
+                          {% else %}
+                             {% assign show_item = false %}
+                          {% endif %}
+                        {% endif %}
+
+                        {% if show_item %}
+                          {% assign found_any = true %}
+                          <label class="flex items-center gap-3 py-3 cursor-pointer group">
+                            <input
+                              type="radio"
+                              name="category"
+                              value="{{ sub_collection.handle }}"
+                              class="radio-md"
+                              data-category-radio
+                              data-href="{{ sub_collection.url }}"
+                              {% if sub_collection.handle == collection.handle %}
+                              checked{% endif %} />
+                            <span class="text-[#797979] text-sm group-hover:text-[#71cd13] transition-colors">
+                                {{ display_name }}
+                            </span>
+                          </label>
+                        {% endif %}
+                      {% endfor %}
+
+                      {% if is_car_collection and found_any == false %}
+                        {% comment %} If logic failed (e.g. inconsistent naming), fallback to showing all but limited {% endcomment %}
+                        <p class="text-xs text-gray-400 mb-2">Displaying all categories</p>
+                        {% for sub_collection in collections limit: 20 %}
+                           <label class="flex items-center gap-3 py-3 cursor-pointer group">
+                            <input
+                              type="radio"
+                              name="category"
+                              value="{{ sub_collection.handle }}"
+                              class="radio-md"
+                              data-category-radio
+                              data-href="{{ sub_collection.url }}"
+                              {% if sub_collection.handle == collection.handle %}checked{% endif %} />
+                            <span class="text-[#797979] text-sm group-hover:text-[#71cd13] transition-colors">{{ sub_collection.title }}</span>
+                          </label>
+                        {% endfor %}
+                      {% endif %}
+                    </div>
                   </div>
 
                 {% when 'sidebar_brand' %}
