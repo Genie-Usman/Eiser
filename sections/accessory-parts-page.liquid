@@ -1,0 +1,316 @@
+{% comment %}
+  Accessory Parts Collections Page
+  Displays collections filtered by the "Relate to" metafield.
+  Can be accessed with URL parameter: ?car=handle-of-accessory-type
+  
+  Example: /pages/accessory-parts?car=porsche-356-1950-1959-accessory
+{% endcomment %}
+
+<style>
+  .accessory-parts-section {
+    padding: 40px 0 60px;
+    background: #f8f9fa;
+    min-height: 50vh;
+  }
+  @media (max-width: 768px) {
+    .accessory-parts-section { padding: 30px 0 50px; }
+  }
+
+  .accessory-parts-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Header Card */
+  .accessory-header {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 24px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    .accessory-header {
+      padding: 20px;
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  .accessory-header__image {
+    max-height: 100px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .accessory-header__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+  }
+  .accessory-header__title span {
+    color: {{ section.settings.accent_color }};
+  }
+
+  .accessory-header__subtitle {
+    font-size: 1rem;
+    color: #666;
+    margin: 4px 0 0;
+  }
+
+  .accessory-heading {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 30px;
+  }
+
+  /* Collections Grid */
+  .collections-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 1024px) {
+    .collections-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .collections-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; }
+  }
+  @media (max-width: 480px) {
+    .collections-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .collection-card {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .collection-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+
+  .collection-card__image-wrapper {
+    aspect-ratio: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .collection-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .collection-card:hover .collection-card__image {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+
+  .collection-card__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+  }
+
+  .collection-card__title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+  }
+  @media (max-width: 480px) {
+    .collection-card__title { font-size: 0.75rem; }
+  }
+
+  .collection-card__btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border: 2px solid {{ section.settings.accent_color }};
+    color: {{ section.settings.accent_color }};
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 4px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+  }
+  .collection-card:hover .collection-card__btn {
+    background: {{ section.settings.accent_color }};
+    color: #fff;
+  }
+
+  .no-collections-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+  }
+</style>
+
+<section class="accessory-parts-section">
+  <div class="accessory-parts-container">
+    
+    {% comment %} Get car handle from URL parameter {% endcomment %}
+    {% assign car_handle = '' %}
+    
+    {% comment %} Parse URL parameters {% endcomment %}
+    {% for param in request.query_string %}
+      {% assign param_parts = param | split: '=' %}
+      {% if param_parts[0] == 'car' %}
+        {% assign car_handle = param_parts[1] %}
+      {% endif %}
+    {% endfor %}
+    
+    {% comment %} Alternative: get from page handle or use all collections {% endcomment %}
+    {% assign current_accessory = nil %}
+    {% assign parent_year = nil %}
+    {% assign parent_model = nil %}
+    
+    {% if car_handle != blank %}
+      {% comment %} Find the accessory_type metaobject by handle {% endcomment %}
+      {% for type in shop.metaobjects.accessory_type.values %}
+        {% if type.system.handle == car_handle %}
+          {% assign current_accessory = type %}
+          {% assign parent_year = type.parent_year.value %}
+          {% assign parent_model = parent_year.parent_model.value %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% comment %} Header with car info if available {% endcomment %}
+    {% if current_accessory != blank %}
+      <div class="accessory-header">
+        {% if parent_model.image.value != blank %}
+          <img 
+            src="{{ parent_model.image.value | image_url: width: 250 }}"
+            alt="{{ parent_model.title.value | escape }}"
+            class="accessory-header__image"
+            width="250"
+            height="100"
+            loading="eager">
+        {% endif %}
+        <div>
+          <h1 class="accessory-header__title">
+            {{ section.settings.brand_prefix }}
+            <span>{{ parent_model.title.value }}</span>
+          </h1>
+          <p class="accessory-header__subtitle">{{ parent_year.display_name.value }} - {{ current_accessory.display_name.value }}</p>
+        </div>
+      </div>
+    {% else %}
+      <h1 class="accessory-heading">{{ section.settings.heading }}</h1>
+    {% endif %}
+    
+    {% comment %} Collections Grid {% endcomment %}
+    <div class="collections-grid">
+      {% assign found_collections = false %}
+      
+      {% for collection in collections %}
+        {% comment %} Check if collection has "Relate to" metafield {% endcomment %}
+        {% assign relate_to = collection.metafields.custom.relate_to.value %}
+        {% assign show_collection = false %}
+        
+        {% comment %} If we have a car filter, match against it {% endcomment %}
+        {% if current_accessory != blank %}
+          {% assign relate_to_handle = relate_to.system.handle %}
+          {% if relate_to_handle == car_handle %}
+            {% assign show_collection = true %}
+          {% endif %}
+        {% else %}
+          {% comment %} No filter - show all collections with relate_to metafield {% endcomment %}
+          {% if relate_to != blank %}
+            {% assign show_collection = true %}
+          {% endif %}
+        {% endif %}
+        
+        {% if show_collection %}
+          {% assign found_collections = true %}
+          <a href="{{ collection.url }}" class="collection-card">
+            <div class="collection-card__image-wrapper">
+              {% if collection.image != blank %}
+                <img 
+                  src="{{ collection.image | image_url: width: 400 }}"
+                  alt="{{ collection.title | escape }}"
+                  class="collection-card__image"
+                  width="400"
+                  height="400"
+                  loading="lazy">
+              {% else %}
+                <div class="collection-card__image" style="background: linear-gradient(135deg, #e0e0e0, #c0c0c0);"></div>
+              {% endif %}
+              
+              <div class="collection-card__overlay">
+                <h3 class="collection-card__title">{{ collection.title }}</h3>
+                <span class="collection-card__btn">Explore</span>
+              </div>
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
+      
+      {% unless found_collections %}
+        <div class="no-collections-message">
+          <p>No collections found for this category.</p>
+        </div>
+      {% endunless %}
+    </div>
+    
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Accessory Parts Page",
+  "tag": "section",
+  "class": "accessory-parts-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Default Heading",
+      "default": "Accessory Parts",
+      "info": "Shown when no car filter is applied"
+    },
+    {
+      "type": "text",
+      "id": "brand_prefix",
+      "label": "Brand Prefix",
+      "default": "PORSCHE",
+      "info": "Text before model name"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color",
+      "default": "#dc2626"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accessory Parts Page"
+    }
+  ]
+}
+{% endschema %}

@@ -357,17 +357,25 @@
         const accessoryIcon = '{{ "accessory.webp" | asset_url }}';
         const factoryIcon = '{{ "factory.webp" | asset_url }}';
         
-        categoryContainer.innerHTML = categories.map(cat => `
-          <a href="${cat.url}" class="category-btn">
-            <img 
-              src="${cat.title.toLowerCase().includes('factory') ? factoryIcon : accessoryIcon}" 
-              alt="${cat.title}"
-              class="category-btn__icon"
-              width="40"
-              height="40">
-            <span class="category-btn__label">${cat.title}</span>
-          </a>
-        `).join('');
+        categoryContainer.innerHTML = categories.map(cat => {
+          // Accessory types go to collections page, Factory types go to metaobject page
+          const isAccessory = cat.title.toLowerCase().includes('accessory');
+          const href = isAccessory 
+            ? `/pages/accessory-parts?car=${cat.url.split('/').pop()}` 
+            : cat.url;
+          
+          return `
+            <a href="${href}" class="category-btn">
+              <img 
+                src="${cat.title.toLowerCase().includes('factory') ? factoryIcon : accessoryIcon}" 
+                alt="${cat.title}"
+                class="category-btn__icon"
+                width="40"
+                height="40">
+              <span class="category-btn__label">${cat.title}</span>
+            </a>
+          `;
+        }).join('');
   
         hoverContainer.classList.add('step-2');
       });

@@ -86,75 +86,56 @@
           </a>
         {% endfor %}
       {% else %}
-        {% comment %} Option 2: Use diagram categories as fallback {% endcomment %}
-        {% assign all_diagrams = shop.metaobjects.diagram_page.values %}
+        {% comment %} 
+          Option 2: Filter collections by "Relate to" metafield
+          Look for collections with custom.relate_to metafield matching current accessory type
+        {% endcomment %}
         {% assign current_handle = current_accessory.system.handle %}
+        {% assign found_collections = false %}
         
-        {% comment %} Collect unique categories {% endcomment %}
-        {% assign categories_string = '' %}
-        {% for diagram in all_diagrams %}
-          {% assign diagram_parent_handle = diagram.parent_type.value.system.handle %}
-          {% if diagram_parent_handle == current_handle %}
-            {% if diagram.system_category.value != blank %}
-              {% unless categories_string contains diagram.system_category.value %}
-                {% if categories_string != '' %}
-                  {% assign categories_string = categories_string | append: '|||' %}
+        {% for collection in collections %}
+          {% comment %} Check if collection has "Relate to" metafield referencing this accessory/car {% endcomment %}
+          {% assign relate_to = collection.metafields.custom.relate_to.value %}
+          {% assign relate_to_handle = relate_to.system.handle %}
+          
+          {% comment %} Also check for cars reference in the metafield {% endcomment %}
+          {% if relate_to_handle == current_handle or relate_to contains 'cars' %}
+            {% assign found_collections = true %}
+            <a href="{{ collection.url }}" 
+               class="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+              {% comment %} Background Image {% endcomment %}
+              <div class="aspect-square relative overflow-hidden">
+                {% if collection.image != blank %}
+                  <img 
+                    src="{{ collection.image | image_url: width: 400 }}"
+                    alt="{{ collection.title | escape }}"
+                    class="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300"
+                    width="400"
+                    height="400"
+                    loading="lazy">
+                {% else %}
+                  <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
                 {% endif %}
-                {% assign categories_string = categories_string | append: diagram.system_category.value %}
-              {% endunless %}
-            {% endif %}
+                
+                {% comment %} Overlay Content {% endcomment %}
+                <div class="absolute inset-0 flex flex-col items-center justify-between p-4">
+                  <h3 class="text-sm md:text-base font-bold text-gray-900 text-center uppercase tracking-wide leading-tight">
+                    {{ collection.title }}
+                  </h3>
+                  <span class="inline-block px-4 py-2 border-2 border-red-600 text-red-600 text-xs font-semibold rounded group-hover:bg-red-600 group-hover:text-white transition-colors">
+                    Explore
+                  </span>
+                </div>
+              </div>
+            </a>
           {% endif %}
         {% endfor %}
-        {% assign categories = categories_string | split: '|||' %}
         
-        {% for category in categories %}
-          {% comment %} Find first diagram with this category for image {% endcomment %}
-          {% assign category_image = nil %}
-          {% for diagram in all_diagrams %}
-            {% assign diagram_parent_handle = diagram.parent_type.value.system.handle %}
-            {% if diagram_parent_handle == current_handle and diagram.system_category.value == category %}
-              {% if diagram.image.value != blank %}
-                {% assign category_image = diagram.image.value %}
-                {% break %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-          
-          <a href="#" 
-             class="category-card group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
-             data-category="{{ category | handleize }}">
-            {% comment %} Background Image {% endcomment %}
-            <div class="aspect-square relative overflow-hidden">
-              {% if category_image != blank %}
-                <img 
-                  src="{{ category_image | image_url: width: 400 }}"
-                  alt="{{ category | escape }}"
-                  class="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-300"
-                  width="400"
-                  height="400"
-                  loading="lazy">
-              {% else %}
-                <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300"></div>
-              {% endif %}
-              
-              {% comment %} Overlay Content {% endcomment %}
-              <div class="absolute inset-0 flex flex-col items-center justify-between p-4">
-                <h3 class="text-sm md:text-base font-bold text-gray-900 text-center uppercase tracking-wide leading-tight">
-                  {{ category }}
-                </h3>
-                <span class="inline-block px-4 py-2 border-2 border-red-600 text-red-600 text-xs font-semibold rounded group-hover:bg-red-600 group-hover:text-white transition-colors">
-                  Explore
-                </span>
-              </div>
-            </div>
-          </a>
-        {% endfor %}
-        
-        {% if categories.size == 0 %}
+        {% unless found_collections %}
           <div class="col-span-full text-center py-12 text-gray-500">
             <p>No collections found for this category.</p>
           </div>
-        {% endif %}
+        {% endunless %}
       {% endif %}
       
     </div>
