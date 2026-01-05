@@ -1,284 +1,170 @@
 {% comment %}
   Accessory Parts Collections Page
   Displays collections filtered by the "Relate to" metafield.
-  Can be accessed with URL parameter: ?car=handle-of-accessory-type
-  
-  Example: /pages/accessory-parts?car=porsche-356-1950-1959-accessory
+  Car info is populated via JavaScript from URL parameters.
 {% endcomment %}
 
 <style>
-  .accessory-parts-section {
-    padding: 40px 0 60px;
-    background: #f8f9fa;
-    min-height: 50vh;
+  /* Dynamic accent color - can't use Tailwind for this */
+  .accent-text { color: {{ section.settings.accent_color }}; }
+  .accent-border { border-color: {{ section.settings.accent_color }}; }
+  .accent-bg { background-color: {{ section.settings.accent_color }}; }
+  
+  /* Hover states for collection cards */
+  .collection-card:hover .collection-card__image {
+    opacity: 0.9;
+    transform: scale(1.05);
   }
-  @media (max-width: 768px) {
-    .accessory-parts-section { padding: 30px 0 50px; }
-  }
-
-  .accessory-parts-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  /* Header Card */
-  .accessory-header {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    padding: 24px 32px;
-    margin-bottom: 32px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-  }
-  @media (max-width: 768px) {
-    .accessory-header {
-      padding: 20px;
-      flex-direction: column;
-      text-align: center;
-    }
-  }
-
-  .accessory-header__image {
-    max-height: 100px;
-    width: auto;
-    object-fit: contain;
-  }
-
-  .accessory-header__title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 0;
-  }
-  .accessory-header__title span {
-    color: {{ section.settings.accent_color }};
-  }
-
-  .accessory-header__subtitle {
-    font-size: 1rem;
-    color: #666;
-    margin: 4px 0 0;
-  }
-
-  .accessory-heading {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin-bottom: 30px;
-  }
-
-  /* Collections Grid */
-  .collections-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
-  }
-  @media (max-width: 1024px) {
-    .collections-grid { grid-template-columns: repeat(4, 1fr); }
-  }
-  @media (max-width: 768px) {
-    .collections-grid { grid-template-columns: repeat(3, 1fr); gap: 15px; }
-  }
-  @media (max-width: 480px) {
-    .collections-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  .collection-card {
-    position: relative;
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    text-decoration: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .collection-card:hover .collection-card__btn {
+    background-color: {{ section.settings.accent_color }};
+    color: #fff;
   }
   .collection-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   }
-
-  .collection-card__image-wrapper {
-    aspect-ratio: 1;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .collection-card__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.7;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  .collection-card:hover .collection-card__image {
-    opacity: 0.9;
-    transform: scale(1.05);
-  }
-
-  .collection-card__overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-  }
-
-  .collection-card__title {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #1a1a1a;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    line-height: 1.3;
-  }
-  @media (max-width: 480px) {
-    .collection-card__title { font-size: 0.75rem; }
-  }
-
-  .collection-card__btn {
-    display: inline-block;
-    padding: 8px 20px;
-    border: 2px solid {{ section.settings.accent_color }};
-    color: {{ section.settings.accent_color }};
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 4px;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-  }
-  .collection-card:hover .collection-card__btn {
-    background: {{ section.settings.accent_color }};
-    color: #fff;
-  }
-
-  .no-collections-message {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 60px 20px;
-    color: #888;
-  }
 </style>
 
-<section class="accessory-parts-section">
-  <div class="accessory-parts-container">
+<section class="bg-gray-50 py-10 md:py-16 min-h-[50vh]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
-    {% comment %} 
-      Extract parameters from URL like reference site:
-      ?model=356-1960-1965&car_model=356&car_year=1960-1965&title=Accessory&image=...
-    {% endcomment %}
+    {% comment %} Car header - populated by JavaScript from URL parameters {% endcomment %}
     
-    {% assign full_path = request.fullpath | default: '' %}
-    
-    {% comment %} Extract car_model parameter {% endcomment %}
-    {% assign car_model = '' %}
-    {% if full_path contains 'car_model=' %}
-      {% assign temp = full_path | split: 'car_model=' %}
-      {% if temp.size > 1 %}
-        {% assign car_model = temp[1] | split: '&' | first | url_decode %}
-      {% endif %}
-    {% endif %}
-    
-    {% comment %} Extract car_year parameter {% endcomment %}
-    {% assign car_year = '' %}
-    {% if full_path contains 'car_year=' %}
-      {% assign temp = full_path | split: 'car_year=' %}
-      {% if temp.size > 1 %}
-        {% assign car_year = temp[1] | split: '&' | first | url_decode %}
-      {% endif %}
-    {% endif %}
-    
-    {% comment %} Extract title parameter {% endcomment %}
-    {% assign page_title = '' %}
-    {% if full_path contains 'title=' %}
-      {% assign temp = full_path | split: 'title=' %}
-      {% if temp.size > 1 %}
-        {% assign page_title = temp[1] | split: '&' | first | url_decode %}
-      {% endif %}
-    {% endif %}
-    
-    {% comment %} Extract image parameter {% endcomment %}
-    {% assign car_image = '' %}
-    {% if full_path contains 'image=' %}
-      {% assign temp = full_path | split: 'image=' %}
-      {% if temp.size > 1 %}
-        {% assign car_image = temp[1] | split: '&' | first | url_decode %}
-      {% endif %}
-    {% endif %}
-    
-    {% comment %} Debug output {% endcomment %}
-    <!-- Debug: full_path = {{ full_path }} -->
-    <!-- Debug: car_model = {{ car_model }} -->
-    <!-- Debug: car_year = {{ car_year }} -->
-    <!-- Debug: page_title = {{ page_title }} -->
-
-    {% comment %} Header with car info from URL params {% endcomment %}
-    {% if car_model != blank %}
-      <div class="accessory-header">
-        {% if car_image != blank %}
-          <img 
-            src="{{ car_image }}"
-            alt="{{ car_model | escape }}"
-            class="accessory-header__image"
-            width="250"
-            height="100"
-            loading="eager">
-        {% endif %}
-        <div>
-          <h1 class="accessory-header__title">
-            {{ section.settings.brand_prefix }}
-            <span>{{ car_model }}</span>
-          </h1>
-          <p class="accessory-header__subtitle">{{ car_year }}{% if page_title != blank %} - {{ page_title }}{% endif %}</p>
-        </div>
+    <!-- Car Header (populated by JS) -->
+    <div id="accessory-header" class="hidden bg-white rounded-xl shadow-sm p-6 md:p-8 mb-8 flex flex-col md:flex-row items-center justify-between gap-5">
+      <img id="car-image" src="" alt="" class="h-24 md:h-28 w-auto object-contain" width="250" height="100" loading="eager">
+      <div class="text-center md:text-right">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">
+          {{ section.settings.brand_prefix }}
+          <span id="car-model" class="accent-text"></span>
+        </h1>
+        <p class="text-base md:text-lg text-gray-600 mt-1">
+          <span id="car-year"></span>
+        </p>
       </div>
-    {% else %}
-      <h1 class="accessory-heading">{{ section.settings.heading }}</h1>
-    {% endif %}
+    </div>
     
-    {% comment %} Collections Grid {% endcomment %}
-    <div class="collections-grid">
-      {% assign found_collections = false %}
+    <!-- Fallback heading when no URL params -->
+    <h1 id="default-heading" class="text-center text-2xl md:text-3xl font-bold text-gray-900 mb-8">{{ section.settings.heading }}</h1>
+    
+    <script>
+      (function() {
+        // Read URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const carModel = params.get('car_model');
+        const carYear = params.get('car_year');
+        const carImage = params.get('image');
+        
+        // If we have car data, show the header
+        if (carModel) {
+          const header = document.getElementById('accessory-header');
+          const defaultHeading = document.getElementById('default-heading');
+          
+          // Populate header elements
+          document.getElementById('car-model').textContent = carModel;
+          document.getElementById('car-year').textContent = carYear || '';
+          
+          // Set car image
+          const imgEl = document.getElementById('car-image');
+          if (carImage) {
+            imgEl.src = decodeURIComponent(carImage);
+            imgEl.alt = carModel;
+          } else {
+            imgEl.style.display = 'none';
+          }
+          
+          // Show header, hide default heading
+          header.classList.remove('hidden');
+          header.classList.add('flex');
+          defaultHeading.style.display = 'none';
+        }
+      })();
+    </script>
+    
+    {% comment %} Collections Grid - filter by relate_to metafield {% endcomment %}
+    <div id="collections-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
       
       {% for collection in collections %}
-        {% comment %} Show all collections for now {% endcomment %}
-        {% assign found_collections = true %}
-        <a href="{{ collection.url }}" class="collection-card">
-          <div class="collection-card__image-wrapper">
-            {% if collection.image != blank %}
-              <img 
-                src="{{ collection.image | image_url: width: 400 }}"
-                alt="{{ collection.title | escape }}"
-                class="collection-card__image"
-                width="400"
-                height="400"
-                loading="lazy">
-            {% else %}
-              <div class="collection-card__image" style="background: linear-gradient(135deg, #e0e0e0, #c0c0c0);"></div>
-            {% endif %}
-            
-            <div class="collection-card__overlay">
-              <h3 class="collection-card__title">{{ collection.title }}</h3>
-              <span class="collection-card__btn">Explore</span>
+        {% comment %} 
+          Get relate_to metafield - this is a TEXT field containing "cars"
+          Collections with relate_to = "cars" should be shown on this page
+        {% endcomment %}
+        {% assign relate_to = collection.metafields.custom.relate_to.value | default: '' %}
+        
+        {% assign show_collection = true %}
+        
+        {% comment %} Skip collections without images (likely system collections) {% endcomment %}
+        {% if collection.image == blank and collection.products.size == 0 %}
+          {% assign show_collection = false %}
+        {% endif %}
+        
+        {% if show_collection %}
+          <a href="{{ collection.url }}" 
+             class="collection-card group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 no-underline"
+             data-relate-to="{{ relate_to | downcase }}">
+            <div class="aspect-square relative overflow-hidden">
+              {% if collection.image != blank %}
+                <img 
+                  src="{{ collection.image | image_url: width: 400 }}"
+                  alt="{{ collection.title | escape }}"
+                  class="collection-card__image w-full h-full object-cover opacity-70 transition-all duration-300"
+                  width="400"
+                  height="400"
+                  loading="lazy">
+              {% else %}
+                <div class="w-full h-full bg-linear-to-br from-gray-200 to-gray-300"></div>
+              {% endif %}
+              
+              <div class="absolute inset-0 flex flex-col items-center justify-between p-3 md:p-4">
+                <h3 class="text-xs md:text-sm font-bold text-gray-900 text-center uppercase tracking-wide leading-tight">
+                  {{ collection.title }}
+                </h3>
+                <span class="collection-card__btn inline-block px-4 py-2 border-2 accent-border accent-text text-xs font-semibold rounded transition-colors duration-200 uppercase">
+                  Explore
+                </span>
+              </div>
             </div>
-          </div>
-        </a>
+          </a>
+        {% endif %}
       {% endfor %}
       
-      {% unless found_collections %}
-        <div class="no-collections-message">
-          <p>No collections found for this category.</p>
-        </div>
-      {% endunless %}
+      <div id="no-collections-message" class="col-span-full text-center py-16 text-gray-500 hidden">
+        <p>No collections found for this category.</p>
+      </div>
     </div>
+    
+    <script>
+      (function() {
+        // Filter collections based on URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const carModel = params.get('car_model');
+        const carYear = params.get('car_year');
+        
+        // If we have filter parameters, filter to show only collections with relate_to = "cars"
+        if (carModel || carYear) {
+          const cards = document.querySelectorAll('.collection-card');
+          let visibleCount = 0;
+          
+          cards.forEach(card => {
+            const relateTo = card.dataset.relateTo || '';
+            
+            // Show only collections where relate_to = "cars"
+            if (relateTo === 'cars') {
+              card.style.display = '';
+              visibleCount++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+          
+          // Show no collections message if none visible
+          const noCollectionsMsg = document.getElementById('no-collections-message');
+          if (visibleCount === 0) {
+            noCollectionsMsg.classList.remove('hidden');
+          }
+        }
+      })();
+    </script>
     
   </div>
 </section>
