@@ -8,20 +8,51 @@
  * ------------------------------------------------------------
  */
 {
-    "sections": {
-      "banner": {
-        "type": "contact-banner",
-        "settings": {}
-      },
-      "main": {
-        "type": "contact-page",
-        "settings": {}
+  "sections": {
+    "banner": {
+      "type": "contact-banner",
+      "settings": {
+        "subheading": "Very us move be blessed multiply night"
       }
     },
-    "order": [
-      "banner",
-      "main"
-    ]
-  }
-  
-  
+    "main": {
+      "type": "contact-page",
+      "settings": {}
+    },
+    "1780723724ed74e9e3": {
+      "type": "apps",
+      "blocks": {
+        "formcrm_form_gpt_KF74aT": {
+          "type": "shopify://apps/formcrm/blocks/form_gpt/1e8b3e46-7a0a-4a10-b0e8-89ae67ce834b",
+          "settings": {
+            "form_id": "3b9dd904-704f-4854-889e-5bf02d532e37",
+            "section_background_color": "transparent",
+            "card_background_color": "#FFFFFF",
+            "card_width": 724,
+            "card_padding": 30,
+            "card_radius": 5,
+            "card_border_size": 1,
+            "card_border_color": "#F3F3F3",
+            "card_border_style": "solid",
+            "card_alignment": "center",
+            "card_shadow": true,
+            "block_margin_top": 50,
+            "block_margin_bottom": 100,
+            "block_margin_left": 0,
+            "block_margin_right": 0,
+            "image_position": "top"
+          }
+        }
+      },
+      "block_order": [
+        "formcrm_form_gpt_KF74aT"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "banner",
+    "main",
+    "1780723724ed74e9e3"
+  ]
+}
