@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "banner": {
@@ -7,10 +16,31 @@
     "main": {
       "type": "product",
       "settings": {}
+    },
+    "17827281911462d515": {
+      "type": "apps",
+      "blocks": {
+        "simple_bundles_kits_infinite_options_selector_FXarfd": {
+          "type": "shopify://apps/simple-bundles-kits/blocks/infinite-options-selector/e553276b-36b2-446d-b80a-aa47fe5f96ac",
+          "settings": {
+            "select_placeholder": "Please select an option",
+            "disable_oos_options": true,
+            "show_price_variance": true,
+            "rank_options_by_price_diff": true,
+            "custom_css": "",
+            "custom_js": ""
+          }
+        }
+      },
+      "block_order": [
+        "simple_bundles_kits_infinite_options_selector_FXarfd"
+      ],
+      "settings": {}
     }
   },
   "order": [
-     "banner",
-    "main"
+    "banner",
+    "main",
+    "17827281911462d515"
   ]
 }
